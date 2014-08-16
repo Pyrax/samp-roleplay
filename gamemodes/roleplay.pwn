@@ -72,8 +72,19 @@ Bootstrap() {
 }
 
 MysqlConnect() {
+	#if DEBUG_MODE == 1
+		mysql_log(LOG_ERROR | LOG_WARNING | LOG_DEBUG);
+	#else
+		mysql_log(LOG_ERROR | LOG_WARNING);
+	#endif
+	
 	printf("[SQL] Server baut eine Verbindung zum SQL Server @%s:%i (User: %s) auf", SQL_HOST, SQL_PORT, SQL_USER);
 	g_MysqlHandler = mysql_connect(SQL_HOST, SQL_USER, SQL_DB, SQL_PASSWORD, SQL_PORT);
+	
+	if(mysql_errno(g_MysqlHandler) != 0) {
+		printf("[SQL] Verbindung zum SQL Server ist fehlgeschlagen\nServer wird heruntergefahren...");
+		GameModeExit();
+	}
 }
 
 //-----------------------------------------------------
