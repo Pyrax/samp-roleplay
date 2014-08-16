@@ -1,27 +1,3 @@
-/*
-    _/_/_/              _/                      _/                      
-   _/    _/    _/_/    _/    _/_/    _/_/_/    _/    _/_/_/  _/    _/   
-  _/_/_/    _/    _/  _/  _/_/_/_/  _/    _/  _/  _/    _/  _/    _/    
- _/    _/  _/    _/  _/  _/        _/    _/  _/  _/    _/  _/    _/     
-_/    _/    _/_/    _/    _/_/_/  _/_/_/    _/    _/_/_/    _/_/_/      
-                                 _/                            _/       
-                                                            _/_/ 
-															
-	Roleplay gamemode made by Piranha
-	
-	Created at: 2014.08.02
-	
-	Plugins required:
-	- BlueG's Mysql Plugin (currently R7)
-	- sscanf
-	
-	Credits to:
-	- SAMP
-	- Y_Less (YSI, sscanf)
-	- BlueG (MySQL plugin)
-	- RyDeR` (randomString function)
-*/
-
 #define DEBUG_MODE 1
 #define MYSQL_USE_YINLINE
 
@@ -109,28 +85,3 @@ MysqlConnect() {
 
 // Load implementation of functions
 #include "./roleplay/callbacks"
-
-//-----------------------------------------------------
-
-/*
-	YSI:
-	
-	Y_FLOODING		( ),
-	Y_DEBUG			( ),
-	Y_COLOURS		( ),
-	Y_ZONEPULSE		(-),
-	Y_VA			(-),
-	
-	Y_BIT			(x),
-	Y_TIMERS		(x),
-	Y_HOOKS			(x),
-	Y_DIALOGS		(x),
-	Y_ITERATE		(x),
-	Y_COMMANDS		(x),
-	Y_INLINE		(x)
-	
-	( )	needs to be checked,
-	(-)	could be used in future,
-	-n-	won't be used,
-	(x)	is already in use
-*/
