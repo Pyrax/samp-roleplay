@@ -85,8 +85,10 @@ MysqlConnect() {
     printf("[SQL] Server baut eine Verbindung zum SQL Server @%s:%d (User: %s) auf", SQL_HOST, SQL_PORT, SQL_USER);
     g_MysqlHandler = mysql_connect(SQL_HOST, SQL_USER, SQL_DB, SQL_PASSWORD, SQL_PORT);
     
-    if(mysql_errno(g_MysqlHandler) != 0) {
-        printf("[SQL] Verbindung zum SQL Server ist fehlgeschlagen\nServer wird heruntergefahren...");
+    if(mysql_errno(g_MysqlHandler) == 0) {
+        print("[SQl] Verbindung zum SQL Server wurde erfolgreich aufgebaut");
+    } else {
+        print("[SQL] Verbindung zum SQL Server ist fehlgeschlagen\nServer wird heruntergefahren...");
         GameModeExit();
     }
 }
