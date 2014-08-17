@@ -13,7 +13,7 @@ native WP_Hash(buffer[], len, const str[]);
 
 //-----------------------------------------------------
 
-#define SERVER_NAME         "0.3x SAMP Server"
+#define SERVER_NAME         "0.3z SAMP Server"
 #define SERVER_MODE         "Blank mode"
 #define SERVER_MAP          "San Andreas"
 #define SERVER_WEBSITE      "sa-mp.com"
@@ -24,6 +24,11 @@ native WP_Hash(buffer[], len, const str[]);
 #define SQL_USER            "root"
 #define SQL_PASSWORD        ""
 #define SQL_DB              "samp"
+
+//-----------------------------------------------------
+
+// VirtualWorlds
+#define VW_DEFAULT 0
 
 //-----------------------------------------------------
 
