@@ -1,30 +1,21 @@
-#if defined _PLAYERS_INCLUDED
+#if defined _INCLUDED_PLAYERS
 	#endinput
 #endif
-#define _PLAYERS_INCLUDED
+#define _INCLUDED_PLAYERS
 
 //-----------------------------------------------------
 
 #define MIN_PW_LEN			6
-#define MAX_PW_LEN			16
+#define MAX_PW_LEN			32
 #define MAX_LOG_TRIES		3
 
 //-----------------------------------------------------
 
 enum E_PLAYER {
-	ORM:ORM_ID,
+	ORM:orm_ID,
 	ID,
-	Name[PLAYER_NAME_LEN],
-	Float:PosX,
-	Float:PosY,
-	Float:PosZ,
-	Float:Angle,
-	Float:SpawnX,
-	Float:SpawnY,
-	Float:SpawnZ,
-	SpawnInterior,
-	SpawnWorld,
-	NewbieSpawn
+	password[129],
+	name[PLAYER_NAME_LEN]
 };
 
 //-----------------------------------------------------
@@ -33,60 +24,94 @@ new g_Player[MAX_PLAYERS][E_PLAYER];
 
 //-----------------------------------------------------
 
-function OnPlayerDataLoad(playerid) {
-    switch(orm_errno(g_Player[playerid][ORM_ID])) {
-		case ERROR_OK: {
-			// LOGIN
-		}
-		case ERROR_NO_DATA: {
-			// REGISTER
+AuthenticatePlayer(playerid) {
+	new ORM:ormid = g_Player[playerid][orm_ID] = orm_create("players");
+	
+	// Only load credentials as long as player is not authenticated
+	orm_addvar_string(ormid, g_Player[playerid][name], PLAYER_NAME_LEN, "name");
+	orm_setkey(ormid, "name");
+	
+	orm_addvar_int(ormid, g_Player[playerid][ID], "ID");
+	orm_addvar_string(ormid, g_Player[playerid][password], 129, "password");
+	
+	inline CredentialsLoaded(i_playerid) {
+		switch(orm_errno(g_Player[i_playerid][orm_ID])) {
+			case ERROR_OK: {
+				// user exists, ask for password
+				#define DIALOG_LOGIN Dialog_ShowCallback(i_playerid, using inline LoginResponse, DIALOG_STYLE_PASSWORD, "Anmelden", "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
+				
+				inline LoginResponse(ii_playerid, ii_dialogid, ii_response, ii_listitem, string:ii_inputtext[]) {
+					#pragma unused ii_playerid, ii_dialogid, ii_listitem
+					if(ii_response) {
+						new hash[129];
+						WP_Hash(hash, 129, ii_inputtext);
+						
+						if(!strcmp(hash, g_Player[playerid][password])) {
+							// orm_addvar_...
+							// orm_select to load
+						} else {
+							// wrong password
+							DIALOG_LOGIN
+						}
+					} else {
+						// KICK
+					}
+				}
+				DIALOG_LOGIN
+				
+				#undef DIALOG_LOGIN
+			}
+			case ERROR_NO_DATA: {
+				// user does not exist, ask to register
+				#define DIALOG_REGISTER Dialog_ShowCallback(i_playerid, using inline RegisterResponse, DIALOG_STYLE_PASSWORD, "Registrieren", "Um auf dem Server zu spielen, benötigst du ein Benutzerkonto.\nDu kannst direkt loslegen und ein Benutzerkonto anlegen, indem du dein gewünschtes Passwort unten eingibst.", "Registrieren");
+				
+				inline RegisterResponse(ii_playerid, ii_dialogid, ii_response, ii_listitem, string:ii_inputtext[]) {
+					#pragma unused ii_playerid, ii_dialogid, ii_listitem
+					
+					if(ii_response) {
+						// validate password
+						inline ValidateResponse(iii_playerid, iii_dialogid, iii_response, iii_listitem, string:iii_inputtext[]) {
+							#pragma unused iii_dialogid, iii_listitem
+							
+							if(iii_response) {
+								if(!strcmp(ii_inputtext, iii_inputtext)) {
+									// store hashed password in g_Player
+									WP_Hash(g_Player[iii_playerid][password], 129, ii_inputtext);
+									
+									// change key to ID before inserting to automatically update it after the account has been inserted
+									orm_setkey(g_Player[iii_playerid][orm_ID], "ID");
+									orm_insert(g_Player[iii_playerid][orm_ID]);
+								} else {
+									// passwords did not match
+									DIALOG_REGISTER
+								}
+							} else {
+								DIALOG_REGISTER
+							}
+						}
+						Dialog_ShowCallback(i_playerid, using inline ValidateResponse, DIALOG_STYLE_PASSWORD, "Passwort bestätigen", "", "Spielen!");
+					} else {
+						// KICK
+					}
+				}
+				DIALOG_REGISTER
+				
+				#undef DIALOG_REGISTER
+			}
 		}
 	}
-    orm_setkey(g_Player[playerid][ORM_ID], "ID");
-    return 1;
-}
-
-AddPlayerORM(playerid) {
-	new ORM:ormid = g_Player[playerid][ORM_ID] = orm_create("players");
-
-	orm_addvar_int(ormid, g_Player[playerid][ID], "ID");
-	orm_addvar_string(ormid, g_Player[playerid][Name], PLAYER_NAME_LEN, "Name");
-	orm_addvar_float(ormid, g_Player[playerid][PosX], "PosX");
-	orm_addvar_float(ormid, g_Player[playerid][PosY], "PosY");
-	orm_addvar_float(ormid, g_Player[playerid][PosZ], "PosZ");
-	orm_addvar_float(ormid, g_Player[playerid][Angle], "Angle");
-	orm_addvar_float(ormid, g_Player[playerid][SpawnX], "SpawnX");
-	orm_addvar_float(ormid, g_Player[playerid][SpawnY], "SpawnY");
-	orm_addvar_float(ormid, g_Player[playerid][SpawnZ], "SpawnZ");
-	orm_addvar_int(ormid, g_Player[playerid][SpawnInterior], "SpawnInterior");
-	orm_addvar_int(ormid, g_Player[playerid][SpawnWorld], "SpawnWorld");
-	orm_addvar_int(ormid, g_Player[playerid][NewbieSpawn], "NewbieSpawn");
-	
-	orm_setkey(ormid, "Name");
-	orm_select(ormid, "OnPlayerDataLoad", "i", playerid);
+	orm_select_inline(ormid, using inline CredentialsLoaded, "d", playerid);
 }
 
 RemovePlayerORM(playerid) {
 	if(g_Player[playerid][ID] != 0) {
-		orm_update(g_Player[playerid][ORM_ID]);   
+		orm_update(g_Player[playerid][orm_ID]);
 	}
-
-	orm_destroy(g_Player[playerid][ORM_ID]);
+	
+	orm_destroy(g_Player[playerid][orm_ID]);
 }
 
 ResetPlayer(playerid) {
 	static blank[E_PLAYER];
 	g_Player[playerid] = blank;
-}
-
-UpdatePlayerPos(playerid) {
-	new Float:pos[3];
-	
-	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-	g_Player[playerid][PosX] = pos[0];
-	g_Player[playerid][PosY] = pos[1];
-	g_Player[playerid][PosZ] = pos[2];
-	
-	GetPlayerFacingAngle(playerid, pos[0]);
-	g_Player[playerid][Angle] = pos[0];
 }

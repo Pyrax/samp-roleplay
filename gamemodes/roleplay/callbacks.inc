@@ -17,13 +17,12 @@ public OnGameModeExit() {
 }
 
 public OnPlayerConnect(playerid) {
-	GetPlayerName(playerid, g_Player[playerid][Name], MAX_PLAYER_NAME);
-	AddPlayerORM(playerid);
+	GetPlayerName(playerid, g_Player[playerid][name], MAX_PLAYER_NAME);
+	AuthenticatePlayer(playerid);
 	return 1;
 }
 
 public OnPlayerDisconnect(playerid, reason) {
-	UpdatePlayerPos(playerid);
 	RemovePlayerORM(playerid);
 	ResetPlayer(playerid);
 	return 1;
