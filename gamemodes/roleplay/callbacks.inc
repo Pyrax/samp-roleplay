@@ -32,3 +32,13 @@ public OnPlayerSpawn(playerid) {
     PreloadAnimations(playerid);
     return 1;
 }
+
+public OnPlayerPickUpPickup(playerid, pickupid)
+{
+    // check if pickup is a house entrance
+    new nearHouse = IsHousePickup(pickupid);
+    if(nearHouse != -1) {
+        SetPVarInt(playerid, "IsAtHouseID", nearHouse);
+    }
+    return 1;
+}
