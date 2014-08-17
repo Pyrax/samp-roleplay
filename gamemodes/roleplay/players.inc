@@ -120,6 +120,23 @@ SavePlayer(playerid) {
 ResetPlayer(playerid) {
     static blank[E_PLAYER];
     g_Player[playerid] = blank;
+    
+    DeletePVars(playerid);
+}
+
+static DeletePVars(playerid) {
+    new pVarUpperIndex = GetPVarsUpperIndex(playerid) + 1;
+    
+    for(new i = 0; i != pVarUpperIndex; i++)
+    {
+        new pVarName[128];
+        GetPVarNameAtIndex(playerid, i, pVarName, sizeof pVarName);
+        
+        // delete PVar if var is set (type not null)
+        if(GetPVarType(playerid, pVarName) != 0) {
+            DeletePVar(playerid, pVarName);
+        }
+    }
 }
 
 IsPlayerLoggedIn(playerid) {
