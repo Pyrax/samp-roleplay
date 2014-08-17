@@ -47,9 +47,9 @@ enum E_SELL_HOUSE {
 
 //-----------------------------------------------------
 
-static g_House[MAX_HOUSES][E_HOUSE];
-static g_HouseOwner[MAX_HOUSES][E_HOUSE_OWNER];
-static g_SellHouse[MAX_HOUSES][E_SELL_HOUSE];
+new g_House[MAX_HOUSES][E_HOUSE];
+new g_HouseOwner[MAX_HOUSES][E_HOUSE_OWNER];
+new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE];
 
 //-----------------------------------------------------
 
