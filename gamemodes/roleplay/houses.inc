@@ -18,9 +18,11 @@ enum E_HOUSE {
     Float:entranceX,
     Float:entranceY,
     Float:entranceZ,
+    Float:entranceAngle,
     Float:exitX,
     Float:exitY,
     Float:exitZ,
+    Float:exitAngle,
     
     // variables that are only needed for the shopping menu
     model_ID,
@@ -29,7 +31,10 @@ enum E_HOUSE {
     Float:cameraPosZ,
     Float:cameraLookAtX,
     Float:cameraLookAtY,
-    Float:cameraLookAtZ
+    Float:cameraLookAtZ,
+    
+    // non-stored variables
+    pickup
 }
 
 enum E_HOUSE_OWNER {
@@ -79,9 +84,11 @@ LoadHousesFromDatabase() {
             orm_addvar_float(ormid, g_House[r][entranceX], "entranceX");
             orm_addvar_float(ormid, g_House[r][entranceY], "entranceY");
             orm_addvar_float(ormid, g_House[r][entranceZ], "entranceZ");
+            orm_addvar_float(ormid, g_House[r][entranceAngle], "entranceAngle");
             orm_addvar_float(ormid, g_House[r][exitX], "exitX");
             orm_addvar_float(ormid, g_House[r][exitY], "exitY");
             orm_addvar_float(ormid, g_House[r][exitZ], "exitZ");
+            orm_addvar_float(ormid, g_House[r][exitAngle], "exitAngle");
             
             orm_addvar_int(ormid, g_House[r][model_ID], "model_ID");
             orm_addvar_float(ormid, g_House[r][cameraPosX], "cameraPosX");
@@ -139,6 +146,15 @@ static InitHouses() {
             }
         }
         
-        CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
+        g_House[i][pickup] = CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
     }
+}
+
+IsHousePickup(pickupid) {
+    for(new i = 0; i < MAX_HOUSES; i++) {
+        if(pickupid == g_House[i][pickup]) {
+            return i;
+        }
+    }
+    return -1;
 }
