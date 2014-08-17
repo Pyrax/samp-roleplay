@@ -15,7 +15,10 @@ enum E_PLAYER {
     ORM:orm_ID,
     ID,
     password[129],
-    name[PLAYER_NAME_LEN]
+    name[PLAYER_NAME_LEN],
+    
+    // non-stored variables
+    bool:loggedIn
 };
 
 //-----------------------------------------------------
@@ -41,14 +44,15 @@ AuthenticatePlayer(playerid) {
                 #define DIALOG_LOGIN Dialog_ShowCallback(i_playerid, using inline LoginResponse, DIALOG_STYLE_PASSWORD, "Anmelden", "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
                 
                 inline LoginResponse(ii_playerid, ii_dialogid, ii_response, ii_listitem, string:ii_inputtext[]) {
-                    #pragma unused ii_playerid, ii_dialogid, ii_listitem
+                    #pragma unused ii_dialogid, ii_listitem
                     if(ii_response) {
                         new hash[129];
                         WP_Hash(hash, 129, ii_inputtext);
                         
-                        if(!strcmp(hash, g_Player[playerid][password])) {
+                        if(!strcmp(hash, g_Player[ii_playerid][password])) {
                             // orm_addvar_...
                             // orm_select to load
+                            g_Player[ii_playerid][loggedIn] = true;
                         } else {
                             // wrong password
                             DIALOG_LOGIN
@@ -81,6 +85,8 @@ AuthenticatePlayer(playerid) {
                                     // change key to ID before inserting to automatically update it after the account has been inserted
                                     orm_setkey(g_Player[iii_playerid][orm_ID], "ID");
                                     orm_insert(g_Player[iii_playerid][orm_ID]);
+                                    
+                                    g_Player[ii_playerid][loggedIn] = true;
                                 } else {
                                     // passwords did not match
                                     DIALOG_REGISTER
@@ -89,7 +95,7 @@ AuthenticatePlayer(playerid) {
                                 DIALOG_REGISTER
                             }
                         }
-                        Dialog_ShowCallback(i_playerid, using inline ValidateResponse, DIALOG_STYLE_PASSWORD, "Passwort bestätigen", "", "Spielen!");
+                        Dialog_ShowCallback(i_playerid, using inline ValidateResponse, DIALOG_STYLE_PASSWORD, "Passwort bestätigen", "Gib dein Passwort erneut ein, um es zu bestätigen.", "Spielen!");
                     } else {
                         // KICK
                     }
@@ -103,7 +109,7 @@ AuthenticatePlayer(playerid) {
     orm_select_inline(ormid, using inline CredentialsLoaded, "d", playerid);
 }
 
-RemovePlayerORM(playerid) {
+SavePlayer(playerid) {
     if(g_Player[playerid][ID] != 0) {
         orm_update(g_Player[playerid][orm_ID]);
     }
@@ -114,4 +120,8 @@ RemovePlayerORM(playerid) {
 ResetPlayer(playerid) {
     static blank[E_PLAYER];
     g_Player[playerid] = blank;
+}
+
+IsPlayerLoggedIn(playerid) {
+    return g_Player[playerid][loggedIn];
 }

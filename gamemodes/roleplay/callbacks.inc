@@ -23,7 +23,7 @@ public OnPlayerConnect(playerid) {
 }
 
 public OnPlayerDisconnect(playerid, reason) {
-    RemovePlayerORM(playerid);
+    SavePlayer(playerid);
     ResetPlayer(playerid);
     return 1;
 }
