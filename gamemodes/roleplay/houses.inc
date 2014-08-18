@@ -125,7 +125,7 @@ LoadHousesFromDatabase() {
                 // now that all our arrays are filled with the data use the data to init pickups, etc.
                 InitHouses();
             }
-            mysql_tquery_inline(g_MysqlHandler, "", using inline SellHousesLoaded, "");
+            mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM sell_houses", using inline SellHousesLoaded, "");
             
         }
         mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM house_owners", using inline HouseOwnersLoaded, "");
@@ -136,17 +136,19 @@ LoadHousesFromDatabase() {
 
 static InitHouses() {
     for(new i = 0; i < MAX_HOUSES; i++) {
-        new pickupModel = 1273;
-        
-        // check if someone owns the house
-        for(new j = 0; j < MAX_HOUSES; j++) {
-            if(g_HouseOwner[j][house_ID] == g_House[i][ID]) {
-                pickupModel = 1272;
-                break;
+        if(g_House[i][ID] != 0) {
+            new pickupModel = 1273;
+            
+            // check if someone owns the house
+            for(new j = 0; j < MAX_HOUSES; j++) {
+                if(g_HouseOwner[j][house_ID] == g_House[i][ID]) {
+                    pickupModel = 1272;
+                    break;
+                }
             }
+            
+            g_House[i][pickup] = CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
         }
-        
-        g_House[i][pickup] = CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
     }
 }
 
