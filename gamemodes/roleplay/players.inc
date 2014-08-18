@@ -142,3 +142,7 @@ static DeletePVars(playerid) {
 IsPlayerLoggedIn(playerid) {
     return g_Player[playerid][loggedIn];
 }
+
+GetPlayerID(playerid) {
+    return g_Player[playerid][ID];
+}
