@@ -15,10 +15,9 @@ enum E_PLAYER {
     ORM:orm_ID,
     ID,
     password[129],
-    name[PLAYER_NAME_LEN],
+    name[PLAYER_NAME_LEN]
     
     // non-stored variables
-    bool:loggedIn
 };
 
 //-----------------------------------------------------
@@ -34,7 +33,6 @@ AuthenticatePlayer(playerid) {
     orm_addvar_string(ormid, g_Player[playerid][name], PLAYER_NAME_LEN, "name");
     orm_setkey(ormid, "name");
     
-    orm_addvar_int(ormid, g_Player[playerid][ID], "ID");
     orm_addvar_string(ormid, g_Player[playerid][password], 129, "password");
     
     inline CredentialsLoaded(i_playerid) {
@@ -50,9 +48,10 @@ AuthenticatePlayer(playerid) {
                         WP_Hash(hash, 129, ii_inputtext);
                         
                         if(!strcmp(hash, g_Player[ii_playerid][password])) {
-                            // orm_addvar_...
+                            orm_addvar_int(ormid, g_Player[ii_playerid][ID], "ID");
+                            
+                            orm_setkey(g_Player[ii_playerid][orm_ID], "ID");
                             // orm_select to load
-                            g_Player[ii_playerid][loggedIn] = true;
                         } else {
                             // wrong password
                             DIALOG_LOGIN
@@ -82,11 +81,11 @@ AuthenticatePlayer(playerid) {
                                     // store hashed password in g_Player
                                     WP_Hash(g_Player[iii_playerid][password], 129, ii_inputtext);
                                     
+                                    orm_addvar_int(ormid, g_Player[iii_playerid][ID], "ID");
+                                    
                                     // change key to ID before inserting to automatically update it after the account has been inserted
                                     orm_setkey(g_Player[iii_playerid][orm_ID], "ID");
                                     orm_insert(g_Player[iii_playerid][orm_ID]);
-                                    
-                                    g_Player[ii_playerid][loggedIn] = true;
                                 } else {
                                     // passwords did not match
                                     DIALOG_REGISTER
@@ -110,7 +109,7 @@ AuthenticatePlayer(playerid) {
 }
 
 SavePlayer(playerid) {
-    if(g_Player[playerid][ID] != 0) {
+    if(IsPlayerLoggedIn(playerid)) {
         orm_update(g_Player[playerid][orm_ID]);
     }
     
@@ -140,7 +139,7 @@ static DeletePVars(playerid) {
 }
 
 IsPlayerLoggedIn(playerid) {
-    return g_Player[playerid][loggedIn];
+    return g_Player[playerid][ID] != 0;
 }
 
 GetPlayerID(playerid) {
