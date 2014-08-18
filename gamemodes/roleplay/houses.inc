@@ -163,12 +163,12 @@ EnterHouse(playerid, houseid) {
     SetPlayerVirtualWorld(playerid, VW_OFFSET_HOUSES + g_House[houseid][ID]);
     SetPlayerInterior(playerid, g_House[houseid][interior_ID]);
     SetPlayerPos(playerid, g_House[houseid][exitX], g_House[houseid][exitY], g_House[houseid][exitZ]);
-    SetPlayerFacingAngle(playerid, g_House[houseid][entranceAngle]);
+    SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][entranceAngle]);
 }
 
 LeaveHouse(playerid, houseid) {
     SetPlayerVirtualWorld(playerid, VW_DEFAULT);
     SetPlayerInterior(playerid, 0);
     SetPlayerPos(playerid, g_House[houseid][entranceX], g_House[houseid][entranceY], g_House[houseid][entranceZ]);
-    SetPlayerFacingAngle(playerid, g_House[houseid][exitAngle]);
+    SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][exitAngle]);
 }
