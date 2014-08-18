@@ -15,6 +15,8 @@ enum E_HOUSE {
     ORM:orm_ID,
     ID,
     interior_ID,
+    value,
+    bool:locked,
     Float:entranceX,
     Float:entranceY,
     Float:entranceZ,
@@ -34,7 +36,8 @@ enum E_HOUSE {
     Float:cameraLookAtZ,
     
     // non-stored variables
-    pickup
+    entrancePickup,
+    exitPickup
 }
 
 enum E_HOUSE_OWNER {
@@ -81,6 +84,8 @@ LoadHousesFromDatabase() {
             orm_setkey(ormid, "ID");
             
             orm_addvar_int(ormid, g_House[r][interior_ID], "interior_ID");
+            orm_addvar_int(ormid, g_House[r][value], "value");
+            orm_addvar_int(ormid, g_House[r][locked], "locked");
             orm_addvar_float(ormid, g_House[r][entranceX], "entranceX");
             orm_addvar_float(ormid, g_House[r][entranceY], "entranceY");
             orm_addvar_float(ormid, g_House[r][entranceZ], "entranceZ");
@@ -147,30 +152,56 @@ static InitHouses() {
                 }
             }
             
-            g_House[i][pickup] = CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
+            g_House[i][entrancePickup] = CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
+            g_House[i][exitPickup] = CreatePickup(19133, 1, g_House[i][exitX], g_House[i][exitY], g_House[i][exitZ], VW_OFFSET_HOUSES + g_House[i][ID]);
         }
     }
 }
 
 IsHousePickup(pickupid) {
     for(new i = 0; i < MAX_HOUSES; i++) {
-        if(pickupid == g_House[i][pickup]) {
+        if(pickupid == g_House[i][entrancePickup]) {
             return i;
         }
     }
     return -1;
 }
 
+IsAtHouseEntrance(playerid, houseid) {
+    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][entranceX], g_House[houseid][entranceY], g_House[houseid][entranceZ]);
+}
+
+IsAtHouseExit(playerid, houseid) {
+    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][exitX], g_House[houseid][exitY], g_House[houseid][exitZ]);
+}
+
 EnterHouse(playerid, houseid) {
-    SetPlayerVirtualWorld(playerid, VW_OFFSET_HOUSES + g_House[houseid][ID]);
-    SetPlayerInterior(playerid, g_House[houseid][interior_ID]);
-    SetPlayerPos(playerid, g_House[houseid][exitX], g_House[houseid][exitY], g_House[houseid][exitZ]);
-    SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][entranceAngle]);
+    if(!g_House[houseid][locked] || GetHouseOwnerByHouseID(houseid) == GetPlayerID(playerid)) {
+        SetPlayerVirtualWorld(playerid, VW_OFFSET_HOUSES + g_House[houseid][ID]);
+        SetPlayerInterior(playerid, g_House[houseid][interior_ID]);
+        SetPlayerPos(playerid, g_House[houseid][exitX], g_House[houseid][exitY], g_House[houseid][exitZ]);
+        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][entranceAngle]);
+        return 1;
+    }
+    return 0;
 }
 
 LeaveHouse(playerid, houseid) {
-    SetPlayerVirtualWorld(playerid, VW_DEFAULT);
-    SetPlayerInterior(playerid, 0);
-    SetPlayerPos(playerid, g_House[houseid][entranceX], g_House[houseid][entranceY], g_House[houseid][entranceZ]);
-    SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][exitAngle]);
+    if(!g_House[houseid][locked] || GetHouseOwnerByHouseID(houseid) == GetPlayerID(playerid)) {
+        SetPlayerVirtualWorld(playerid, VW_DEFAULT);
+        SetPlayerInterior(playerid, 0);
+        SetPlayerPos(playerid, g_House[houseid][entranceX], g_House[houseid][entranceY], g_House[houseid][entranceZ]);
+        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][exitAngle]);
+        return 1;
+    }
+    return 0;
+}
+
+GetHouseOwnerByHouseID(houseid) {
+    for(new i = 0; i < MAX_HOUSES; i++) {
+        if(g_HouseOwner[i][house_ID] == houseid) {
+            return g_HouseOwner[i][owner_ID];
+        }
+    }
+    return -1;
 }
