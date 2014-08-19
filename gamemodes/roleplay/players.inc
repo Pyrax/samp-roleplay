@@ -12,10 +12,10 @@
 //-----------------------------------------------------
 
 enum E_PLAYER {
-    ORM:orm_ID,
-    ID,
-    password[129],
-    name[PLAYER_NAME_LEN]
+    ORM:g_orm_ID,
+    g_ID,
+    g_password[129],
+    g_name[PLAYER_NAME_LEN]
     
     // non-stored variables
 };
@@ -27,16 +27,16 @@ new g_Player[MAX_PLAYERS][E_PLAYER];
 //-----------------------------------------------------
 
 AuthenticatePlayer(playerid) {
-    new ORM:ormid = g_Player[playerid][orm_ID] = orm_create("players");
+    new ORM:ormid = g_Player[playerid][g_orm_ID] = orm_create("players");
     
     // Only load credentials as long as player is not authenticated
-    orm_addvar_string(ormid, g_Player[playerid][name], PLAYER_NAME_LEN, "name");
+    orm_addvar_string(ormid, g_Player[playerid][g_name], PLAYER_NAME_LEN, "name");
     orm_setkey(ormid, "name");
     
-    orm_addvar_string(ormid, g_Player[playerid][password], 129, "password");
+    orm_addvar_string(ormid, g_Player[playerid][g_password], 129, "password");
     
     inline CredentialsLoaded(i_playerid) {
-        switch(orm_errno(g_Player[i_playerid][orm_ID])) {
+        switch(orm_errno(g_Player[i_playerid][g_orm_ID])) {
             case ERROR_OK: {
                 // user exists, ask for password
                 #define DIALOG_LOGIN Dialog_ShowCallback(i_playerid, using inline LoginResponse, DIALOG_STYLE_PASSWORD, "Anmelden", "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
@@ -47,10 +47,10 @@ AuthenticatePlayer(playerid) {
                         new hash[129];
                         WP_Hash(hash, 129, ii_inputtext);
                         
-                        if(!strcmp(hash, g_Player[ii_playerid][password])) {
-                            orm_addvar_int(ormid, g_Player[ii_playerid][ID], "ID");
+                        if(!strcmp(hash, g_Player[ii_playerid][g_password])) {
+                            orm_addvar_int(ormid, g_Player[ii_playerid][g_ID], "ID");
                             
-                            orm_setkey(g_Player[ii_playerid][orm_ID], "ID");
+                            orm_setkey(g_Player[ii_playerid][g_orm_ID], "ID");
                             // orm_select to load
                         } else {
                             // wrong password
@@ -79,13 +79,13 @@ AuthenticatePlayer(playerid) {
                             if(iii_response) {
                                 if(!strcmp(ii_inputtext, iii_inputtext)) {
                                     // store hashed password in g_Player
-                                    WP_Hash(g_Player[iii_playerid][password], 129, ii_inputtext);
+                                    WP_Hash(g_Player[iii_playerid][g_password], 129, ii_inputtext);
                                     
-                                    orm_addvar_int(ormid, g_Player[iii_playerid][ID], "ID");
+                                    orm_addvar_int(ormid, g_Player[iii_playerid][g_ID], "ID");
                                     
                                     // change key to ID before inserting to automatically update it after the account has been inserted
-                                    orm_setkey(g_Player[iii_playerid][orm_ID], "ID");
-                                    orm_insert(g_Player[iii_playerid][orm_ID]);
+                                    orm_setkey(g_Player[iii_playerid][g_orm_ID], "ID");
+                                    orm_insert(g_Player[iii_playerid][g_orm_ID]);
                                 } else {
                                     // passwords did not match
                                     DIALOG_REGISTER
@@ -110,10 +110,10 @@ AuthenticatePlayer(playerid) {
 
 SavePlayer(playerid) {
     if(IsPlayerLoggedIn(playerid)) {
-        orm_update(g_Player[playerid][orm_ID]);
+        orm_update(g_Player[playerid][g_orm_ID]);
     }
     
-    orm_destroy(g_Player[playerid][orm_ID]);
+    orm_destroy(g_Player[playerid][g_orm_ID]);
 }
 
 ResetPlayer(playerid) {
@@ -139,9 +139,9 @@ static DeletePVars(playerid) {
 }
 
 IsPlayerLoggedIn(playerid) {
-    return g_Player[playerid][ID] != 0;
+    return g_Player[playerid][g_ID] != 0;
 }
 
 GetPlayerID(playerid) {
-    return g_Player[playerid][ID];
+    return g_Player[playerid][g_ID];
 }

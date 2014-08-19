@@ -27,7 +27,7 @@ public OnGameModeExit() {
 }
 
 public OnPlayerConnect(playerid) {
-    GetPlayerName(playerid, g_Player[playerid][name], MAX_PLAYER_NAME);
+    GetPlayerName(playerid, g_Player[playerid][g_name], MAX_PLAYER_NAME);
     AuthenticatePlayer(playerid);
     return 1;
 }
