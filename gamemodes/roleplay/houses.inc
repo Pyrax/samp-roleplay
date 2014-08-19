@@ -7,50 +7,48 @@
 
 #define MAX_HOUSES 50
 
-#define GetPlayerMoney GetPlayerMoney
-
 //-----------------------------------------------------
 
 enum E_HOUSE {
-    ORM:orm_ID,
-    ID,
-    interior_ID,
-    value,
-    bool:locked,
-    Float:entranceX,
-    Float:entranceY,
-    Float:entranceZ,
-    Float:entranceAngle,
-    Float:exitX,
-    Float:exitY,
-    Float:exitZ,
-    Float:exitAngle,
+    ORM:g_orm_ID,
+    g_ID,
+    g_interior_ID,
+    g_value,
+    bool:g_locked,
+    Float:g_entranceX,
+    Float:g_entranceY,
+    Float:g_entranceZ,
+    Float:g_entranceAngle,
+    Float:g_exitX,
+    Float:g_exitY,
+    Float:g_exitZ,
+    Float:g_exitAngle,
     
     // variables that are only needed for the shopping menu
-    model_ID,
-    Float:cameraPosX,
-    Float:cameraPosY,
-    Float:cameraPosZ,
-    Float:cameraLookAtX,
-    Float:cameraLookAtY,
-    Float:cameraLookAtZ,
+    g_model_ID,
+    Float:g_cameraPosX,
+    Float:g_cameraPosY,
+    Float:g_cameraPosZ,
+    Float:g_cameraLookAtX,
+    Float:g_cameraLookAtY,
+    Float:g_cameraLookAtZ,
     
     // non-stored variables
-    entrancePickup,
-    exitPickup
+    g_entrancePickup,
+    g_exitPickup
 }
 
 enum E_HOUSE_OWNER {
-    ORM:orm_ID,
-    house_ID,
-    owner_ID
+    ORM:g_orm_ID,
+    g_house_ID,
+    g_owner_ID
 }
 
 // houses being sold
 enum E_SELL_HOUSE {
-    ORM:orm_ID,
-    house_ID,
-    price
+    ORM:g_orm_ID,
+    g_house_ID,
+    g_price
 }
 
 //-----------------------------------------------------
@@ -61,7 +59,7 @@ new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE];
 
 //-----------------------------------------------------
 
-/*ShowPlayerHouseList(playerid) {
+/*ShowPlayerHouseOffers(playerid) {
     if(!IsPlayerLoggedIn()) {
         return 0;
     }
@@ -75,33 +73,41 @@ new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE];
     return 1;
 }*/
 
+static ORM:CreateHouseOwnerORM(idx) {
+    new ORM:ormid = g_HouseOwner[idx][g_orm_ID] = orm_create("houseOwners");
+    
+    orm_addvar_int(ormid, g_HouseOwner[idx][g_house_ID], "house_ID");
+    orm_addvar_int(ormid, g_HouseOwner[idx][g_owner_ID], "owner_ID");
+    return ormid;
+}
+
 LoadHousesFromDatabase() {
     inline HousesLoaded() {
         for(new r = 0; r < cache_num_rows(); r++) {
-            new ORM:ormid = g_House[r][orm_ID] = orm_create("houses");
+            new ORM:ormid = g_House[r][g_orm_ID] = orm_create("houses");
             
-            orm_addvar_int(ormid, g_House[r][ID], "ID");
+            orm_addvar_int(ormid, g_House[r][g_ID], "ID");
             orm_setkey(ormid, "ID");
             
-            orm_addvar_int(ormid, g_House[r][interior_ID], "interior_ID");
-            orm_addvar_int(ormid, g_House[r][value], "value");
-            orm_addvar_int(ormid, g_House[r][locked], "locked");
-            orm_addvar_float(ormid, g_House[r][entranceX], "entranceX");
-            orm_addvar_float(ormid, g_House[r][entranceY], "entranceY");
-            orm_addvar_float(ormid, g_House[r][entranceZ], "entranceZ");
-            orm_addvar_float(ormid, g_House[r][entranceAngle], "entranceAngle");
-            orm_addvar_float(ormid, g_House[r][exitX], "exitX");
-            orm_addvar_float(ormid, g_House[r][exitY], "exitY");
-            orm_addvar_float(ormid, g_House[r][exitZ], "exitZ");
-            orm_addvar_float(ormid, g_House[r][exitAngle], "exitAngle");
+            orm_addvar_int(ormid, g_House[r][g_interior_ID], "interior_ID");
+            orm_addvar_int(ormid, g_House[r][g_value], "value");
+            orm_addvar_int(ormid, g_House[r][g_locked], "locked");
+            orm_addvar_float(ormid, g_House[r][g_entranceX], "entranceX");
+            orm_addvar_float(ormid, g_House[r][g_entranceY], "entranceY");
+            orm_addvar_float(ormid, g_House[r][g_entranceZ], "entranceZ");
+            orm_addvar_float(ormid, g_House[r][g_entranceAngle], "entranceAngle");
+            orm_addvar_float(ormid, g_House[r][g_exitX], "exitX");
+            orm_addvar_float(ormid, g_House[r][g_exitY], "exitY");
+            orm_addvar_float(ormid, g_House[r][g_exitZ], "exitZ");
+            orm_addvar_float(ormid, g_House[r][g_exitAngle], "exitAngle");
             
-            orm_addvar_int(ormid, g_House[r][model_ID], "model_ID");
-            orm_addvar_float(ormid, g_House[r][cameraPosX], "cameraPosX");
-            orm_addvar_float(ormid, g_House[r][cameraPosY], "cameraPosY");
-            orm_addvar_float(ormid, g_House[r][cameraPosZ], "cameraPosZ");
-            orm_addvar_float(ormid, g_House[r][cameraLookAtX], "cameraLookAtX");
-            orm_addvar_float(ormid, g_House[r][cameraLookAtY], "cameraLookAtY");
-            orm_addvar_float(ormid, g_House[r][cameraLookAtZ], "cameraLookAtZ");
+            orm_addvar_int(ormid, g_House[r][g_model_ID], "model_ID");
+            orm_addvar_float(ormid, g_House[r][g_cameraPosX], "cameraPosX");
+            orm_addvar_float(ormid, g_House[r][g_cameraPosY], "cameraPosY");
+            orm_addvar_float(ormid, g_House[r][g_cameraPosZ], "cameraPosZ");
+            orm_addvar_float(ormid, g_House[r][g_cameraLookAtX], "cameraLookAtX");
+            orm_addvar_float(ormid, g_House[r][g_cameraLookAtY], "cameraLookAtY");
+            orm_addvar_float(ormid, g_House[r][g_cameraLookAtZ], "cameraLookAtZ");
             
             // store data of the cache in the ORM
             orm_apply_cache(ormid, r);
@@ -109,20 +115,16 @@ LoadHousesFromDatabase() {
         
         inline HouseOwnersLoaded() {
             for(new r = 0; r < cache_num_rows(); r++) {
-                new ORM:ormid = g_HouseOwner[r][orm_ID] = orm_create("houseOwners");
-                
-                orm_addvar_int(ormid, g_HouseOwner[r][house_ID], "house_ID");
-                orm_addvar_int(ormid, g_HouseOwner[r][owner_ID], "owner_ID");
-                
+                new ORM:ormid = CreateHouseOwnerORM(r);
                 orm_apply_cache(ormid, r);
             }
             
             inline SellHousesLoaded() {
                 for(new r = 0; r < cache_num_rows(); r++) {
-                    new ORM:ormid = g_SellHouse[r][orm_ID] = orm_create("sellHouses");
+                    new ORM:ormid = g_SellHouse[r][g_orm_ID] = orm_create("sellHouses");
                     
-                    orm_addvar_int(ormid, g_SellHouse[r][house_ID], "house_ID");
-                    orm_addvar_int(ormid, g_SellHouse[r][price], "price");
+                    orm_addvar_int(ormid, g_SellHouse[r][g_house_ID], "house_ID");
+                    orm_addvar_int(ormid, g_SellHouse[r][g_price], "price");
                     
                     orm_apply_cache(ormid, r);
                 }
@@ -141,26 +143,26 @@ LoadHousesFromDatabase() {
 
 static InitHouses() {
     for(new i = 0; i < MAX_HOUSES; i++) {
-        if(g_House[i][ID] != 0) {
+        if(g_House[i][g_ID] != 0) {
             new pickupModel = 1273;
             
             // check if someone owns the house
             for(new j = 0; j < MAX_HOUSES; j++) {
-                if(g_HouseOwner[j][house_ID] == g_House[i][ID]) {
+                if(g_HouseOwner[j][g_house_ID] == g_House[i][g_ID]) {
                     pickupModel = 1272;
                     break;
                 }
             }
             
-            g_House[i][entrancePickup] = CreatePickup(pickupModel, 1, g_House[i][entranceX], g_House[i][entranceY], g_House[i][entranceZ], VW_DEFAULT);
-            g_House[i][exitPickup] = CreatePickup(19133, 1, g_House[i][exitX], g_House[i][exitY], g_House[i][exitZ], VW_OFFSET_HOUSES + g_House[i][ID]);
+            g_House[i][g_entrancePickup] = CreatePickup(pickupModel, 1, g_House[i][g_entranceX], g_House[i][g_entranceY], g_House[i][g_entranceZ], VW_DEFAULT);
+            g_House[i][g_exitPickup] = CreatePickup(19133, 1, g_House[i][g_exitX], g_House[i][g_exitY], g_House[i][g_exitZ], VW_OFFSET_HOUSES + g_House[i][g_ID]);
         }
     }
 }
 
 IsHousePickup(pickupid) {
     for(new i = 0; i < MAX_HOUSES; i++) {
-        if(pickupid == g_House[i][entrancePickup]) {
+        if(pickupid == g_House[i][g_entrancePickup]) {
             return i;
         }
     }
@@ -168,40 +170,99 @@ IsHousePickup(pickupid) {
 }
 
 IsAtHouseEntrance(playerid, houseid) {
-    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][entranceX], g_House[houseid][entranceY], g_House[houseid][entranceZ]);
+    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][g_entranceX], g_House[houseid][g_entranceY], g_House[houseid][g_entranceZ]);
 }
 
 IsAtHouseExit(playerid, houseid) {
-    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][exitX], g_House[houseid][exitY], g_House[houseid][exitZ]);
+    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][g_exitX], g_House[houseid][g_exitY], g_House[houseid][g_exitZ]);
 }
 
 EnterHouse(playerid, houseid) {
-    if(!g_House[houseid][locked] || GetHouseOwnerByHouseID(houseid) == GetPlayerID(playerid)) {
-        SetPlayerVirtualWorld(playerid, VW_OFFSET_HOUSES + g_House[houseid][ID]);
-        SetPlayerInterior(playerid, g_House[houseid][interior_ID]);
-        SetPlayerPos(playerid, g_House[houseid][exitX], g_House[houseid][exitY], g_House[houseid][exitZ]);
-        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][entranceAngle]);
+    if(!g_House[houseid][g_locked] || GetHouseOwnerByHouseID(houseid) == GetPlayerID(playerid)) {
+        SetPlayerVirtualWorld(playerid, VW_OFFSET_HOUSES + g_House[houseid][g_ID]);
+        SetPlayerInterior(playerid, g_House[houseid][g_interior_ID]);
+        SetPlayerPos(playerid, g_House[houseid][g_exitX], g_House[houseid][g_exitY], g_House[houseid][g_exitZ]);
+        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][g_entranceAngle]);
         return 1;
     }
     return 0;
 }
 
 LeaveHouse(playerid, houseid) {
-    if(!g_House[houseid][locked] || GetHouseOwnerByHouseID(houseid) == GetPlayerID(playerid)) {
+    if(!g_House[houseid][g_locked] || GetHouseOwnerByHouseID(houseid) == GetPlayerID(playerid)) {
         SetPlayerVirtualWorld(playerid, VW_DEFAULT);
         SetPlayerInterior(playerid, 0);
-        SetPlayerPos(playerid, g_House[houseid][entranceX], g_House[houseid][entranceY], g_House[houseid][entranceZ]);
-        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][exitAngle]);
+        SetPlayerPos(playerid, g_House[houseid][g_entranceX], g_House[houseid][g_entranceY], g_House[houseid][g_entranceZ]);
+        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][g_exitAngle]);
         return 1;
     }
     return 0;
 }
 
 GetHouseOwnerByHouseID(houseid) {
+    return g_HouseOwner[GetHouseOwnerIdxByHouseID(houseid)][g_owner_ID];
+}
+
+BuyHouse(playerid, houseid) {
+    new bool:houseForSale = false,
+        price = -1;
+    
     for(new i = 0; i < MAX_HOUSES; i++) {
-        if(g_HouseOwner[i][house_ID] == houseid) {
-            return g_HouseOwner[i][owner_ID];
+        if(g_SellHouse[i][g_house_ID] == houseid) {
+            houseForSale = true;
+            price = g_SellHouse[i][g_price];
+            break;
+        }
+    }
+    
+    if(!houseForSale) {
+        if(GetHouseOwnerIdxByHouseID(houseid) == -1) {
+            houseForSale = true;
+            price = g_House[GetHouseIdxByID(houseid)][g_value];
+        }
+    }
+    
+    if(houseForSale) {
+        if(GetPlayerMoney(playerid) < price) {
+            return 0;
+        } else {
+            GivePlayerMoney(playerid, -price);
+            
+            new idx = GetFreeHouseOwnerSlot(),
+                ORM:ormid = CreateHouseOwnerORM(idx);
+            
+            g_HouseOwner[idx][g_owner_ID] = GetPlayerID(playerid);
+            g_HouseOwner[idx][g_house_ID] = houseid;
+            orm_insert(ormid);
+            return 1;
+        }
+    } else {
+        return -1;
+    }
+}
+
+static GetHouseIdxByID(houseid) {
+    for(new i = 0; i < MAX_HOUSES; i++) {
+        if(g_House[i][g_ID] == houseid) {
+            return i;
         }
     }
     return -1;
+}
+
+static GetHouseOwnerIdxByHouseID(houseid) {
+    for(new i = 0; i < MAX_HOUSES; i++) {
+        if(g_HouseOwner[i][g_house_ID] == houseid) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+static GetFreeHouseOwnerSlot() {
+    for(new i = 0; i < MAX_HOUSES; i++) {
+        if(!g_HouseOwner[i][g_orm_id]) {
+            return i;
+        }
+    }
 }
