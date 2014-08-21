@@ -79,6 +79,9 @@ Bootstrap() {
     
     DisableInteriorEnterExits();
     UsePlayerPedAnims();
+    EnableStuntBonusForAll(0);
+    SetNameTagDrawDistance(50.0);
+    ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
 }
 
 MysqlConnect() {
