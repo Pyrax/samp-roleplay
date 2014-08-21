@@ -217,6 +217,13 @@ GetHouseOwnerByHouseID(houseid) {
     return g_HouseOwner[GetHouseOwnerIdxByHouseID(houseid)][g_owner_ID];
 }
 
+/**
+ * BuyHouse
+ * returns
+ *     (0)    - Player has not enough money
+ *     (1)    - Player bought house successfully
+ *     (-1)   - House is not listed for sale
+ */
 BuyHouse(playerid, houseid) {
     new bool:houseForSale = false,
         price = -1;
@@ -254,6 +261,10 @@ BuyHouse(playerid, houseid) {
     } else {
         return -1;
     }
+}
+
+SellHouse(playerid, houseid, price) {
+    
 }
 
 static GetHouseIdxByID(houseid) {
