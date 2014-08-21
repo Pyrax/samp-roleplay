@@ -250,6 +250,7 @@ BuyHouse(playerid, houseid) {
             GivePlayerMoney(playerid, -price);
             
             new idx = Iter_Free(g_HouseOwnerIterator),
+                houseIdx = GetHouseIdxByID(houseid),
                 ORM:ormid = CreateHouseOwnerORM(idx),
                 bool:vendorOnline = false;
             
@@ -257,6 +258,10 @@ BuyHouse(playerid, houseid) {
             g_HouseOwner[idx][g_house_ID] = houseid;
             orm_insert(ormid);
             Iter_Add(g_HouseOwnerIterator, idx);
+            
+            // change pickup-model of entrance
+            DestroyPickup(g_House[houseIdx][entrancePickup]);
+            g_House[houseIdx][entrancePickup] = CreatePickup(1272, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
             
             // give the vendor his money for the sold house
             // first check if he is online
@@ -298,11 +303,18 @@ SellHouse(playerid, houseid, price) {
         return -1;
     }
     
+    new idx = Iter_Free(g_SellHouseIterator),
+        houseIdx = GetHouseIdxByHouseID(houseid);
+    
     // add house to sale
-    new idx = Iter_Free(g_SellHouseIterator);
     g_SellHouse[idx][g_house_ID] = houseid;
     g_SellHouse[idx][g_price] = price;
     Iter_Add(g_SellHouseIterator, idx);
+    
+    // change pickup-model of entrance
+    DestroyPickup(g_House[houseIdx][entrancePickup]);
+    g_House[houseIdx][entrancePickup] = CreatePickup(1273, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
+    
     return 1;
 }
 
