@@ -281,6 +281,31 @@ BuyHouse(playerid, houseid) {
     }
 }
 
+/**
+ * SellHouse(playerid, houseid, price)
+ *
+ * returns
+ *    (0)    - Invalid price
+ *    (1)    - House has been successfully listed for sale
+ *    (-1)   - Player does not own the specified house
+ */
+SellHouse(playerid, houseid, price) {
+    if(price <= 0) {
+        return 0;
+    }
+    
+    if(GetHouseOwnerByHouseID(houseid) != GetPlayerID(playerid)) {
+        return -1;
+    }
+    
+    // add house to sale
+    new idx = Iter_Free(g_SellHouseIterator);
+    g_SellHouse[idx][g_house_ID] = houseid;
+    g_SellHouse[idx][g_price] = price;
+    Iter_Add(g_SellHouseIterator, idx);
+    return 1;
+}
+
 static GetHouseIdxByID(houseid) {
     foreach(new i : g_HouseIterator) {
         if(g_House[i][g_ID] == houseid) {
