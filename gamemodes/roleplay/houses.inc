@@ -218,7 +218,8 @@ GetHouseOwnerByHouseID(houseid) {
 }
 
 /**
- * BuyHouse
+ * BuyHouse(playerid, houseid)
+ *
  * returns
  *     (0)    - Player has not enough money
  *     (1)    - Player bought house successfully
@@ -226,20 +227,19 @@ GetHouseOwnerByHouseID(houseid) {
  */
 BuyHouse(playerid, houseid) {
     new bool:houseForSale = false,
+        oldOwner = GetHouseOwnerIdxByHouseID(houseid);
         price = -1;
     
-    foreach(new i : g_SellHouseIterator) {
-        if(g_SellHouse[i][g_house_ID] == houseid) {
-            houseForSale = true;
-            price = g_SellHouse[i][g_price];
-            break;
-        }
-    }
-    
-    if(!houseForSale) {
-        if(GetHouseOwnerIdxByHouseID(houseid) == -1) {
-            houseForSale = true;
-            price = g_House[GetHouseIdxByID(houseid)][g_value];
+    if(oldOwner == -1) {
+        houseForSale = true;
+        price = g_House[GetHouseIdxByID(houseid)][g_value];
+    } else {
+        foreach(new i : g_SellHouseIterator) {
+            if(g_SellHouse[i][g_house_ID] == houseid) {
+                houseForSale = true;
+                price = g_SellHouse[i][g_price];
+                break;
+            }
         }
     }
     
@@ -250,21 +250,35 @@ BuyHouse(playerid, houseid) {
             GivePlayerMoney(playerid, -price);
             
             new idx = Iter_Free(g_HouseOwnerIterator),
-                ORM:ormid = CreateHouseOwnerORM(idx);
+                ORM:ormid = CreateHouseOwnerORM(idx),
+                bool:vendorOnline = false;
             
             g_HouseOwner[idx][g_owner_ID] = GetPlayerID(playerid);
             g_HouseOwner[idx][g_house_ID] = houseid;
             orm_insert(ormid);
             Iter_Add(g_HouseOwnerIterator, idx);
+            
+            // give the vendor his money for the sold house
+            // first check if he is online
+            foreach(new i : players) {
+                if(GetPlayerID(i) == oldOwner) {
+                    GivePlayerMoney(i, price);
+                    vendorOnline = true;
+                    break;
+                }
+            }
+            // if he is not online, directly change his money in the database
+            if(!vendorOnline) {
+                new query[128];
+                mysql_format(g_MysqlHandler, query, sizeof query, "UPDATE players SET money = money - %d WHERE ID = %d", price, oldOwner);
+                mysql_tquery(g_MysqlHandler, query);
+            }
+            
             return 1;
         }
     } else {
         return -1;
     }
-}
-
-SellHouse(playerid, houseid, price) {
-    
 }
 
 static GetHouseIdxByID(houseid) {
