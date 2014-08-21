@@ -248,6 +248,7 @@ BuyHouse(playerid, houseid) {
             g_HouseOwner[idx][g_owner_ID] = GetPlayerID(playerid);
             g_HouseOwner[idx][g_house_ID] = houseid;
             orm_insert(ormid);
+            Iter_Add(g_HouseOwnerIterator, idx);
             return 1;
         }
     } else {
