@@ -15,7 +15,8 @@ enum E_PLAYER {
     ORM:g_orm_ID,
     g_ID,
     g_password[129],
-    g_name[PLAYER_NAME_LEN]
+    g_name[PLAYER_NAME_LEN],
+    g_money
     
     // non-stored variables
 };
@@ -48,7 +49,7 @@ AuthenticatePlayer(playerid) {
                         WP_Hash(hash, 129, ii_inputtext);
                         
                         if(!strcmp(hash, g_Player[ii_playerid][g_password])) {
-                            orm_addvar_int(ormid, g_Player[ii_playerid][g_ID], "ID");
+                            CreatePlayerORMVars(ii_playerid, ormid);
                             
                             orm_setkey(g_Player[ii_playerid][g_orm_ID], "ID");
                             // orm_select to load
@@ -81,7 +82,7 @@ AuthenticatePlayer(playerid) {
                                     // store hashed password in g_Player
                                     WP_Hash(g_Player[iii_playerid][g_password], 129, ii_inputtext);
                                     
-                                    orm_addvar_int(ormid, g_Player[iii_playerid][g_ID], "ID");
+                                    CreatePlayerORMVars(ii_playerid, ormid);
                                     
                                     // change key to ID before inserting to automatically update it after the account has been inserted
                                     orm_setkey(g_Player[iii_playerid][g_orm_ID], "ID");
@@ -136,6 +137,11 @@ static DeletePVars(playerid) {
             DeletePVar(playerid, pVarName);
         }
     }
+}
+
+static CreatePlayerORMVars(playerid, ORM:ormid) {
+    orm_addvar_int(ormid, g_Player[playerid][g_ID], "ID");
+    orm_addvar_int(ormid, g_Player[playerid][g_money], "money");
 }
 
 IsPlayerLoggedIn(playerid) {
