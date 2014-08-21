@@ -260,7 +260,7 @@ BuyHouse(playerid, houseid) {
             
             // give the vendor his money for the sold house
             // first check if he is online
-            foreach(new i : players) {
+            foreach(new i : Player) {
                 if(GetPlayerID(i) == oldOwner) {
                     GivePlayerMoney(i, price);
                     vendorOnline = true;
