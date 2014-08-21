@@ -73,6 +73,34 @@ new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE];
     return 1;
 }*/
 
+static ORM:CreateHouseORM(idx) {
+    new ORM:ormid = g_House[idx][g_orm_ID] = orm_create("houses");
+    
+    orm_addvar_int(ormid, g_House[idx][g_ID], "ID");
+    orm_setkey(ormid, "ID");
+    
+    orm_addvar_int(ormid, g_House[idx][g_interior_ID], "interior_ID");
+    orm_addvar_int(ormid, g_House[idx][g_value], "value");
+    orm_addvar_int(ormid, g_House[idx][g_locked], "locked");
+    orm_addvar_float(ormid, g_House[idx][g_entranceX], "entranceX");
+    orm_addvar_float(ormid, g_House[idx][g_entranceY], "entranceY");
+    orm_addvar_float(ormid, g_House[idx][g_entranceZ], "entranceZ");
+    orm_addvar_float(ormid, g_House[idx][g_entranceAngle], "entranceAngle");
+    orm_addvar_float(ormid, g_House[idx][g_exitX], "exitX");
+    orm_addvar_float(ormid, g_House[idx][g_exitY], "exitY");
+    orm_addvar_float(ormid, g_House[idx][g_exitZ], "exitZ");
+    orm_addvar_float(ormid, g_House[idx][g_exitAngle], "exitAngle");
+    
+    orm_addvar_int(ormid, g_House[idx][g_model_ID], "model_ID");
+    orm_addvar_float(ormid, g_House[idx][g_cameraPosX], "cameraPosX");
+    orm_addvar_float(ormid, g_House[idx][g_cameraPosY], "cameraPosY");
+    orm_addvar_float(ormid, g_House[idx][g_cameraPosZ], "cameraPosZ");
+    orm_addvar_float(ormid, g_House[idx][g_cameraLookAtX], "cameraLookAtX");
+    orm_addvar_float(ormid, g_House[idx][g_cameraLookAtY], "cameraLookAtY");
+    orm_addvar_float(ormid, g_House[idx][g_cameraLookAtZ], "cameraLookAtZ");
+    return ormid;
+}
+
 static ORM:CreateHouseOwnerORM(idx) {
     new ORM:ormid = g_HouseOwner[idx][g_orm_ID] = orm_create("houseOwners");
     
@@ -81,34 +109,18 @@ static ORM:CreateHouseOwnerORM(idx) {
     return ormid;
 }
 
+static ORM:CreateSellHousesORM(idx) {
+    new ORM:ormid = g_SellHouse[idx][g_orm_ID] = orm_create("sellHouses");
+    
+    orm_addvar_int(ormid, g_SellHouse[idx][g_house_ID], "house_ID");
+    orm_addvar_int(ormid, g_SellHouse[idx][g_price], "price");
+    return ormid;
+}
+
 LoadHousesFromDatabase() {
     inline HousesLoaded() {
         for(new r = 0; r < cache_num_rows(); r++) {
-            new ORM:ormid = g_House[r][g_orm_ID] = orm_create("houses");
-            
-            orm_addvar_int(ormid, g_House[r][g_ID], "ID");
-            orm_setkey(ormid, "ID");
-            
-            orm_addvar_int(ormid, g_House[r][g_interior_ID], "interior_ID");
-            orm_addvar_int(ormid, g_House[r][g_value], "value");
-            orm_addvar_int(ormid, g_House[r][g_locked], "locked");
-            orm_addvar_float(ormid, g_House[r][g_entranceX], "entranceX");
-            orm_addvar_float(ormid, g_House[r][g_entranceY], "entranceY");
-            orm_addvar_float(ormid, g_House[r][g_entranceZ], "entranceZ");
-            orm_addvar_float(ormid, g_House[r][g_entranceAngle], "entranceAngle");
-            orm_addvar_float(ormid, g_House[r][g_exitX], "exitX");
-            orm_addvar_float(ormid, g_House[r][g_exitY], "exitY");
-            orm_addvar_float(ormid, g_House[r][g_exitZ], "exitZ");
-            orm_addvar_float(ormid, g_House[r][g_exitAngle], "exitAngle");
-            
-            orm_addvar_int(ormid, g_House[r][g_model_ID], "model_ID");
-            orm_addvar_float(ormid, g_House[r][g_cameraPosX], "cameraPosX");
-            orm_addvar_float(ormid, g_House[r][g_cameraPosY], "cameraPosY");
-            orm_addvar_float(ormid, g_House[r][g_cameraPosZ], "cameraPosZ");
-            orm_addvar_float(ormid, g_House[r][g_cameraLookAtX], "cameraLookAtX");
-            orm_addvar_float(ormid, g_House[r][g_cameraLookAtY], "cameraLookAtY");
-            orm_addvar_float(ormid, g_House[r][g_cameraLookAtZ], "cameraLookAtZ");
-            
+            new ORM:ormid = CreateHouseORM(r);
             // store data of the cache in the ORM
             orm_apply_cache(ormid, r);
         }
@@ -121,11 +133,7 @@ LoadHousesFromDatabase() {
             
             inline SellHousesLoaded() {
                 for(new r = 0; r < cache_num_rows(); r++) {
-                    new ORM:ormid = g_SellHouse[r][g_orm_ID] = orm_create("sellHouses");
-                    
-                    orm_addvar_int(ormid, g_SellHouse[r][g_house_ID], "house_ID");
-                    orm_addvar_int(ormid, g_SellHouse[r][g_price], "price");
-                    
+                    new ORM:ormid = CreateSellHousesORM(r);
                     orm_apply_cache(ormid, r);
                 }
                 
