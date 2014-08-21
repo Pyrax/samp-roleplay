@@ -242,7 +242,7 @@ BuyHouse(playerid, houseid) {
         } else {
             GivePlayerMoney(playerid, -price);
             
-            new idx = GetFreeHouseOwnerSlot(),
+            new idx = Iter_Free(g_HouseOwnerIterator),
                 ORM:ormid = CreateHouseOwnerORM(idx);
             
             g_HouseOwner[idx][g_owner_ID] = GetPlayerID(playerid);
@@ -271,12 +271,4 @@ static GetHouseOwnerIdxByHouseID(houseid) {
         }
     }
     return -1;
-}
-
-static GetFreeHouseOwnerSlot() {
-    foreach(new i : g_HouseOwnerIterator) {
-        if(!g_HouseOwner[i][g_orm_id]) {
-            return i;
-        }
-    }
 }
