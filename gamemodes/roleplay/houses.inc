@@ -53,9 +53,12 @@ enum E_SELL_HOUSE {
 
 //-----------------------------------------------------
 
-new g_House[MAX_HOUSES][E_HOUSE];
-new g_HouseOwner[MAX_HOUSES][E_HOUSE_OWNER];
-new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE];
+new g_House[MAX_HOUSES][E_HOUSE],
+    Iterator:g_HouseIterator<MAX_HOUSES>;
+new g_HouseOwner[MAX_HOUSES][E_HOUSE_OWNER],
+    Iterator:g_HouseOwnerIterator<MAX_HOUSES>;
+new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE],
+    Iterator:g_SellHouseIterator<MAX_HOUSES>;
 
 //-----------------------------------------------------
 
@@ -120,21 +123,24 @@ static ORM:CreateSellHousesORM(idx) {
 LoadHousesFromDatabase() {
     inline HousesLoaded() {
         for(new r = 0; r < cache_num_rows(); r++) {
-            new ORM:ormid = CreateHouseORM(r);
+            new ORM:ormid = CreateHouseORM(Iter_Free(g_HouseIterator));
             // store data of the cache in the ORM
             orm_apply_cache(ormid, r);
+            Iter_Add(g_HouseIterator, r);
         }
         
         inline HouseOwnersLoaded() {
             for(new r = 0; r < cache_num_rows(); r++) {
-                new ORM:ormid = CreateHouseOwnerORM(r);
+                new ORM:ormid = CreateHouseOwnerORM(Iter_Free(g_HouseOwnerIterator));
                 orm_apply_cache(ormid, r);
+                Iter_Add(g_HouseOwnerIterator, r);
             }
             
             inline SellHousesLoaded() {
                 for(new r = 0; r < cache_num_rows(); r++) {
-                    new ORM:ormid = CreateSellHousesORM(r);
+                    new ORM:ormid = CreateSellHousesORM(Iter_Free(g_SellHouseIterator));
                     orm_apply_cache(ormid, r);
+                    Iter_Add(g_SellHouseIterator, r);
                 }
                 
                 // now that all our arrays are filled with the data use the data to init pickups, etc.
@@ -150,12 +156,12 @@ LoadHousesFromDatabase() {
 }
 
 static InitHouses() {
-    for(new i = 0; i < MAX_HOUSES; i++) {
+    foreach(new i : g_HouseIterator) {
         if(g_House[i][g_ID] != 0) {
             new pickupModel = 1273;
             
             // check if someone owns the house
-            for(new j = 0; j < MAX_HOUSES; j++) {
+            foreach(new j : g_HouseOwnerIterator) {
                 if(g_HouseOwner[j][g_house_ID] == g_House[i][g_ID]) {
                     pickupModel = 1272;
                     break;
@@ -169,7 +175,7 @@ static InitHouses() {
 }
 
 IsHousePickup(pickupid) {
-    for(new i = 0; i < MAX_HOUSES; i++) {
+    foreach(new i : g_HouseIterator) {
         if(pickupid == g_House[i][g_entrancePickup]) {
             return i;
         }
@@ -215,7 +221,7 @@ BuyHouse(playerid, houseid) {
     new bool:houseForSale = false,
         price = -1;
     
-    for(new i = 0; i < MAX_HOUSES; i++) {
+    foreach(new i : g_SellHouseIterator) {
         if(g_SellHouse[i][g_house_ID] == houseid) {
             houseForSale = true;
             price = g_SellHouse[i][g_price];
@@ -250,7 +256,7 @@ BuyHouse(playerid, houseid) {
 }
 
 static GetHouseIdxByID(houseid) {
-    for(new i = 0; i < MAX_HOUSES; i++) {
+    foreach(new i : g_HouseIterator) {
         if(g_House[i][g_ID] == houseid) {
             return i;
         }
@@ -259,7 +265,7 @@ static GetHouseIdxByID(houseid) {
 }
 
 static GetHouseOwnerIdxByHouseID(houseid) {
-    for(new i = 0; i < MAX_HOUSES; i++) {
+    foreach(new i : g_HouseOwnerIterator) {
         if(g_HouseOwner[i][g_house_ID] == houseid) {
             return i;
         }
@@ -268,7 +274,7 @@ static GetHouseOwnerIdxByHouseID(houseid) {
 }
 
 static GetFreeHouseOwnerSlot() {
-    for(new i = 0; i < MAX_HOUSES; i++) {
+    foreach(new i : g_HouseOwnerIterator) {
         if(!g_HouseOwner[i][g_orm_id]) {
             return i;
         }
