@@ -55,6 +55,8 @@ native WP_Hash(buffer[], len, const str[]);
 //-----------------------------------------------------
 
 #define PLAYER_NAME_LEN     MAX_PLAYER_NAME+1
+#define ENTER_PICKUP        19132
+#define PICKUP_RANGE        1.5
 
 //-----------------------------------------------------
 

@@ -188,11 +188,11 @@ IsHousePickup(pickupid) {
 }
 
 IsAtHouseEntrance(playerid, houseid) {
-    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][g_entranceX], g_House[houseid][g_entranceY], g_House[houseid][g_entranceZ]);
+    return IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, g_House[houseid][g_entranceX], g_House[houseid][g_entranceY], g_House[houseid][g_entranceZ]);
 }
 
 IsAtHouseExit(playerid, houseid) {
-    return IsPlayerInRangeOfPoint(playerid, 1.5, g_House[houseid][g_exitX], g_House[houseid][g_exitY], g_House[houseid][g_exitZ]);
+    return IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, g_House[houseid][g_exitX], g_House[houseid][g_exitY], g_House[houseid][g_exitZ]);
 }
 
 EnterHouse(playerid, houseid) {
