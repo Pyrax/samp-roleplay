@@ -96,7 +96,7 @@ CreateOfferListTextDraws() {
     TextDrawSetPreviewVehCol(OfferListTextDraws[5], 0, 0);
 }
 
-CreateOfferListPlayerTextDraws() {
+CreateOfferListPlayerTextDraws(playerid) {
     OfferListPlayerTextDraws[playerid][0] = CreatePlayerTextDraw(playerid, 93.400001, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
     PlayerTextDrawAlignment(playerid, OfferListPlayerTextDraws[playerid][0], 2);
     PlayerTextDrawBackgroundColor(playerid, OfferListPlayerTextDraws[playerid][0], 255);
