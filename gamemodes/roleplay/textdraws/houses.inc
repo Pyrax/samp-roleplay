@@ -78,7 +78,10 @@ CreateOfferListTextDraws() {
     Textdraw5 = TextDrawCreate(0.0, 267.0, " ");
     TextDrawBackgroundColor(Textdraw5, 0);
     TextDrawFont(Textdraw5, 5);
-    TextDrawSetPreviewModel(Textdraw5, 17699)TextDrawSetPreviewRot(Textdraw5, -4.0, 0.0, 71.0, 0.899999)TextDrawSetPreviewVehCol(Textdraw5, 0, 0)TextDrawLetterSize(Textdraw5, 0.50, 1.0);
+    TextDrawSetPreviewModel(Textdraw5, 17699);
+    TextDrawSetPreviewRot(Textdraw5, -4.0, 0.0, 71.0, 0.899999);
+    TextDrawSetPreviewVehCol(Textdraw5, 0, 0);
+    TextDrawLetterSize(Textdraw5, 0.50, 1.0);
     TextDrawColor(Textdraw5, -1);
     TextDrawSetOutline(Textdraw5, 0);
     TextDrawSetProportional(Textdraw5, 1);
@@ -88,7 +91,8 @@ CreateOfferListTextDraws() {
     TextDrawSetPreviewModel(Textdraw5, 17699);
     TextDrawSetPreviewRot(Textdraw5, -4.0, 0.0, 71.0, 0.899999);
     TextDrawSetPreviewVehCol(Textdraw5, 0, 0);
-
+    
+    // PTextDraws
     Textdraw6 = TextDrawCreate(93.400001, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
     TextDrawAlignment(Textdraw6, 2);
     TextDrawBackgroundColor(Textdraw6, 255);
@@ -107,7 +111,10 @@ CreateOfferListTextDraws() {
     TextDrawAlignment(Textdraw7, 2);
     TextDrawBackgroundColor(Textdraw7, 0);
     TextDrawFont(Textdraw7, 5);
-    TextDrawSetPreviewModel(Textdraw7, 3614)TextDrawSetPreviewRot(Textdraw7, 0.0, 0.0, 0.0, 1.0)TextDrawSetPreviewVehCol(Textdraw7, 0, 0)TextDrawLetterSize(Textdraw7, 0.50, 1.0);
+    TextDrawSetPreviewModel(Textdraw7, 3614);
+    TextDrawSetPreviewRot(Textdraw7, 0.0, 0.0, 0.0, 1.0);
+    TextDrawSetPreviewVehCol(Textdraw7, 0, 0);
+    TextDrawLetterSize(Textdraw7, 0.50, 1.0);
     TextDrawColor(Textdraw7, -1);
     TextDrawSetOutline(Textdraw7, 0);
     TextDrawSetProportional(Textdraw7, 1);
@@ -136,7 +143,10 @@ CreateOfferListTextDraws() {
     TextDrawAlignment(Textdraw9, 2);
     TextDrawBackgroundColor(Textdraw9, 0);
     TextDrawFont(Textdraw9, 5);
-    TextDrawSetPreviewModel(Textdraw9, 3614)TextDrawSetPreviewRot(Textdraw9, 0.0, 0.0, 0.0, 1.0)TextDrawSetPreviewVehCol(Textdraw9, 0, 0)TextDrawLetterSize(Textdraw9, 0.50, 1.0);
+    TextDrawSetPreviewModel(Textdraw9, 3614);
+    TextDrawSetPreviewRot(Textdraw9, 0.0, 0.0, 0.0, 1.0);
+    TextDrawSetPreviewVehCol(Textdraw9, 0, 0);
+    TextDrawLetterSize(Textdraw9, 0.50, 1.0);
     TextDrawColor(Textdraw9, -1);
     TextDrawSetOutline(Textdraw9, 0);
     TextDrawSetProportional(Textdraw9, 1);
@@ -165,7 +175,10 @@ CreateOfferListTextDraws() {
     TextDrawAlignment(Textdraw11, 2);
     TextDrawBackgroundColor(Textdraw11, 0);
     TextDrawFont(Textdraw11, 5);
-    TextDrawSetPreviewModel(Textdraw11, 3614)TextDrawSetPreviewRot(Textdraw11, 0.0, 0.0, 0.0, 1.0)TextDrawSetPreviewVehCol(Textdraw11, 0, 0)TextDrawLetterSize(Textdraw11, 0.50, 1.0);
+    TextDrawSetPreviewModel(Textdraw11, 3614);
+    TextDrawSetPreviewRot(Textdraw11, 0.0, 0.0, 0.0, 1.0);
+    TextDrawSetPreviewVehCol(Textdraw11, 0, 0);
+    TextDrawLetterSize(Textdraw11, 0.50, 1.0);
     TextDrawColor(Textdraw11, -1);
     TextDrawSetOutline(Textdraw11, 0);
     TextDrawSetProportional(Textdraw11, 1);
@@ -194,7 +207,10 @@ CreateOfferListTextDraws() {
     TextDrawAlignment(Textdraw13, 2);
     TextDrawBackgroundColor(Textdraw13, 0);
     TextDrawFont(Textdraw13, 5);
-    TextDrawSetPreviewModel(Textdraw13, 3614)TextDrawSetPreviewRot(Textdraw13, 0.0, 0.0, 0.0, 1.0)TextDrawSetPreviewVehCol(Textdraw13, 0, 0)TextDrawLetterSize(Textdraw13, 0.50, 1.0);
+    TextDrawSetPreviewModel(Textdraw13, 3614);
+    TextDrawSetPreviewRot(Textdraw13, 0.0, 0.0, 0.0, 1.0);
+    TextDrawSetPreviewVehCol(Textdraw13, 0, 0);
+    TextDrawLetterSize(Textdraw13, 0.50, 1.0);
     TextDrawColor(Textdraw13, -1);
     TextDrawSetOutline(Textdraw13, 0);
     TextDrawSetProportional(Textdraw13, 1);
@@ -223,7 +239,10 @@ CreateOfferListTextDraws() {
     TextDrawAlignment(Textdraw15, 2);
     TextDrawBackgroundColor(Textdraw15, 0);
     TextDrawFont(Textdraw15, 5);
-    TextDrawSetPreviewModel(Textdraw15, 3614)TextDrawSetPreviewRot(Textdraw15, 0.0, 0.0, 0.0, 1.0)TextDrawSetPreviewVehCol(Textdraw15, 0, 0)TextDrawLetterSize(Textdraw15, 0.50, 1.0);
+    TextDrawSetPreviewModel(Textdraw15, 3614);
+    TextDrawSetPreviewRot(Textdraw15, 0.0, 0.0, 0.0, 1.0);
+    TextDrawSetPreviewVehCol(Textdraw15, 0, 0);
+    TextDrawLetterSize(Textdraw15, 0.50, 1.0);
     TextDrawColor(Textdraw15, -1);
     TextDrawSetOutline(Textdraw15, 0);
     TextDrawSetProportional(Textdraw15, 1);
