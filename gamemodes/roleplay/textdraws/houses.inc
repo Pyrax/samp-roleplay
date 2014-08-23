@@ -257,3 +257,7 @@ CreateOfferListPlayerTextDraws(playerid) {
     TextDrawSetPreviewRot(OfferListPlayerTextDraws[playerid][9], 0.0, 0.0, 0.0, 1.0);
     TextDrawSetPreviewVehCol(OfferListPlayerTextDraws[playerid][9], 0, 0);
 }
+
+ChangeOfferListPlayerTextDrawModel(playerid, idx, newModel) {
+    TextDrawSetPreviewModel(OfferListPlayerTextDraws[playerid][idx], newModel);
+}
