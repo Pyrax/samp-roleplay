@@ -249,6 +249,6 @@ ChangeOfferListTextDrawModel(playerid, element, newModel) {
 
 ChangeOfferListTextDrawPrice(playerid, element, newPrice) {
     new string[64];
-    format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$%d", newPrice);
+    format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$%s", FormatNumber(newPrice));
     PlayerTextDrawSetString(playerid, OfferListPlayerTextDraws[playerid][element+5], string);
 }
