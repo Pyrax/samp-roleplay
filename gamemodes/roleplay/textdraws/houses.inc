@@ -252,3 +252,12 @@ ChangeOfferListTextDrawPrice(playerid, element, newPrice) {
     format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$%s", FormatNumber(newPrice));
     PlayerTextDrawSetString(playerid, OfferListPlayerTextDraws[playerid][element+5], string);
 }
+
+ShowPlayerOfferListTextDraws(playerid) {
+    for(new i = 0; i < sizeof OfferListTextDraws; i++) {
+        TextDrawShowForPlayer(playerid, OfferListTextDraws[i]);
+    }
+    for(new i = 0; i < sizeof OfferListPlayerTextDraws[]; i++) {
+        PlayerTextDrawShow(playerid, OfferListPlayerTextDraws[playerid][i]);
+    }
+}
