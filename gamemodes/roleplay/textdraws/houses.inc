@@ -5,11 +5,19 @@
 
 //-----------------------------------------------------
 
+#include <YSI\y_hooks>
+
+//-----------------------------------------------------
+
 static Text:offerListTextDraws[6];
 static PlayerText:offerListPlayerTextDraws[MAX_PLAYERS][10];
 
 hook OnGameModeInit() {
     CreateHouseOfferTD();
+}
+
+hook OnPlayerConnect(playerid) {
+    offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
 }
 
 CreateHouseOfferTD() {
@@ -67,7 +75,7 @@ CreateHouseOfferTD() {
     TextDrawBoxColor(offerListTextDraws[3], 842170448);
     TextDrawTextSize(offerListTextDraws[3], 90.0, 25.0);
     TextDrawSetSelectable(offerListTextDraws[3], 1);
-
+    
     offerListTextDraws[4] = TextDrawCreate(320.0, 447.0, "~n~");
     TextDrawAlignment(offerListTextDraws[4], 2);
     TextDrawBackgroundColor(offerListTextDraws[4], 255);
@@ -101,6 +109,10 @@ CreateHouseOfferTD() {
 }
 
 CreateHouseOfferPlayerTD(playerid) {
+    if(offerListPlayerTextDraws[playerid][0] != PlayerText:INVALID_TEXT_DRAW) {
+        return;
+    }
+    
     offerListPlayerTextDraws[playerid][0] = CreatePlayerTextDraw(playerid, 48.0, 360.0, " ");
     PlayerTextDrawAlignment(playerid, offerListPlayerTextDraws[playerid][0], 2);
     PlayerTextDrawBackgroundColor(playerid, offerListPlayerTextDraws[playerid][0], 0);
