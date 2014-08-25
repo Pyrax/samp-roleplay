@@ -30,11 +30,12 @@ new g_Player[MAX_PLAYERS][E_PLAYER];
 AuthenticatePlayer(playerid) {
     new ORM:ormid = g_Player[playerid][g_orm_ID] = orm_create("players");
     
-    // Only load credentials as long as player is not authenticated
-    orm_addvar_string(ormid, g_Player[playerid][g_name], PLAYER_NAME_LEN, "name");
-    orm_setkey(ormid, "name");
-    
+    orm_addvar_int(ormid, g_Player[playerid][g_ID], "ID");
     orm_addvar_string(ormid, g_Player[playerid][g_password], 129, "password");
+    orm_addvar_string(ormid, g_Player[playerid][g_name], PLAYER_NAME_LEN, "name");
+    orm_addvar_int(ormid, g_Player[playerid][g_money], "money");
+    
+    orm_setkey(ormid, "name");
     
     inline CredentialsLoaded(i_playerid) {
         switch(orm_errno(g_Player[i_playerid][g_orm_ID])) {
@@ -49,10 +50,8 @@ AuthenticatePlayer(playerid) {
                         WP_Hash(hash, 129, ii_inputtext);
                         
                         if(!strcmp(hash, g_Player[ii_playerid][g_password])) {
-                            CreatePlayerORMVars(ii_playerid, ormid);
-                            
                             orm_setkey(g_Player[ii_playerid][g_orm_ID], "ID");
-                            // orm_select to load
+                            orm_select(g_Player[ii_playerid][g_orm_ID], "OnPlayerLoggedIn", "d", ii_playerid);
                         } else {
                             // wrong password
                             DIALOG_LOGIN
@@ -82,11 +81,9 @@ AuthenticatePlayer(playerid) {
                                     // store hashed password in g_Player
                                     WP_Hash(g_Player[iii_playerid][g_password], 129, ii_inputtext);
                                     
-                                    CreatePlayerORMVars(ii_playerid, ormid);
-                                    
                                     // change key to ID before inserting to automatically update it after the account has been inserted
                                     orm_setkey(g_Player[iii_playerid][g_orm_ID], "ID");
-                                    orm_insert(g_Player[iii_playerid][g_orm_ID]);
+                                    orm_insert(g_Player[iii_playerid][g_orm_ID], "OnPlayerLoggedIn", "d", iii_playerid);
                                 } else {
                                     // passwords did not match
                                     DIALOG_REGISTER
@@ -109,6 +106,10 @@ AuthenticatePlayer(playerid) {
     orm_select_inline(ormid, using inline CredentialsLoaded, "d", playerid);
 }
 
+function OnPlayerLoggedIn(playerid) {
+    GivePlayerMoney(playerid, g_Player[playerid][g_money]);
+}
+
 SavePlayer(playerid) {
     if(IsPlayerLoggedIn(playerid)) {
         orm_update(g_Player[playerid][g_orm_ID]);
@@ -116,6 +117,8 @@ SavePlayer(playerid) {
     
     orm_destroy(g_Player[playerid][g_orm_ID]);
 }
+
+stock ChangeMoney(playerid) { g_Player[playerid][g_money] += 250; }
 
 ResetPlayer(playerid) {
     static blank[E_PLAYER];
@@ -137,11 +140,6 @@ static DeletePVars(playerid) {
             DeletePVar(playerid, pVarName);
         }
     }
-}
-
-static CreatePlayerORMVars(playerid, ORM:ormid) {
-    orm_addvar_int(ormid, g_Player[playerid][g_ID], "ID");
-    orm_addvar_int(ormid, g_Player[playerid][g_money], "money");
 }
 
 IsPlayerLoggedIn(playerid) {
