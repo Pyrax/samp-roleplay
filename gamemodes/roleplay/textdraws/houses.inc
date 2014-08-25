@@ -269,3 +269,37 @@ ShowPlayerHouseOfferTD(playerid) {
     }
     SelectTextDraw(playerid, HOVER_COLOR_DEFAULT);
 }
+
+HidePlayerHouseOfferTD(playerid) {
+    for(new i = 0; i < sizeof offerListPlayerTextDraws[]; i++) {
+        PlayerTextDrawHide(playerid, offerListPlayerTextDraws[playerid][i]);
+    }
+    for(new i = 0; i < sizeof offerListTextDraws; i++) {
+        TextDrawHideForPlayer(playerid, offerListTextDraws[i]);
+    }
+}
+
+DestroyPlayerHouseOfferTD(playerid) {
+    for(new i = 0; i < sizeof offerListPlayerTextDraws[]; i++) {
+        PlayerTextDrawDestroy(playerid, offerListPlayerTextDraws[playerid][i]);
+    }
+}
+
+hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
+    if(clickedid == offerListTextDraws[2]) {
+        // next page
+        CallLocalFunction("OnNextHouseOfferPage", "d", playerid);
+        return 1;
+    } else if(clickedid == offerListTextDraws[3]) {
+        // previous page
+        CallLocalFunction("OnPrevHouseOfferPage", "d", playerid);
+        return 1;
+    } else if(clickedid == Text:INVALID_TEXT_DRAW && offerListPlayerTextDraws[playerid][0] != PlayerText:INVALID_TEXT_DRAW) {
+        // hide menu
+        CancelSelectTextDraw(playerid);
+        HidePlayerHouseOfferTD(playerid);
+        DestroyPlayerHouseOfferTD(playerid);
+        return 1;
+    }
+    return 0;
+}
