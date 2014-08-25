@@ -118,8 +118,6 @@ SavePlayer(playerid) {
     orm_destroy(g_Player[playerid][g_orm_ID]);
 }
 
-stock ChangeMoney(playerid) { g_Player[playerid][g_money] += 250; }
-
 ResetPlayer(playerid) {
     static blank[E_PLAYER];
     g_Player[playerid] = blank;
