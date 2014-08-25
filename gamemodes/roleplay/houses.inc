@@ -66,19 +66,14 @@ new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE],
 
 //-----------------------------------------------------
 
-/*ShowPlayerHouseOffers(playerid) {
-    if(!IsPlayerLoggedIn()) {
+ShowPlayerHouseOffers(playerid) {
+    if(!IsPlayerLoggedIn(playerid)) {
         return 0;
     }
     
-    // SHOW TEXTDRAWS
-    // TextDrawSetPreviewModel(td_houseModel, Model_ID);
-    inline QueryResponse() {
-        
-    }
-    mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM sell_houses", using inline QueryResponse, "");
+    CreateHouseOfferPlayerTD(playerid);
     return 1;
-}*/
+}
 
 static ORM:CreateHouseORM(idx) {
     new ORM:ormid = g_House[idx][g_orm_ID] = orm_create("houses");
@@ -109,7 +104,7 @@ static ORM:CreateHouseORM(idx) {
 }
 
 static ORM:CreateHouseOwnerORM(idx) {
-    new ORM:ormid = g_HouseOwner[idx][g_orm_ID] = orm_create("houseOwners");
+    new ORM:ormid = g_HouseOwner[idx][g_orm_ID] = orm_create("house_owners");
     
     orm_addvar_int(ormid, g_HouseOwner[idx][g_house_ID], "house_ID");
     orm_addvar_int(ormid, g_HouseOwner[idx][g_owner_ID], "owner_ID");
@@ -117,7 +112,7 @@ static ORM:CreateHouseOwnerORM(idx) {
 }
 
 static ORM:CreateSellHousesORM(idx) {
-    new ORM:ormid = g_SellHouse[idx][g_orm_ID] = orm_create("sellHouses");
+    new ORM:ormid = g_SellHouse[idx][g_orm_ID] = orm_create("sell_houses");
     
     orm_addvar_int(ormid, g_SellHouse[idx][g_house_ID], "house_ID");
     orm_addvar_int(ormid, g_SellHouse[idx][g_price], "price");
