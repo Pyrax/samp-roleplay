@@ -8,6 +8,10 @@
 static Text:OfferListTextDraws[6];
 static PlayerText:OfferListPlayerTextDraws[MAX_PLAYERS][10];
 
+hook OnGameModeInit() {
+    CreateHouseOfferTD();
+}
+
 CreateHouseOfferTD() {
     OfferListTextDraws[0] = TextDrawCreate(320.0, 353.0, "~n~~n~~n~");
     TextDrawAlignment(OfferListTextDraws[0], 2);
