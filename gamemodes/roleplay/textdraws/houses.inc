@@ -20,9 +20,9 @@ CreateOfferListTextDraws() {
     TextDrawSetShadow(OfferListTextDraws[0], 1);
     TextDrawUseBox(OfferListTextDraws[0], 1);
     TextDrawBoxColor(OfferListTextDraws[0], 252651584);
-    PlayerTextDrawTextSize(playerid, OfferListTextDraws[0], 180.0, 650.0);
-    PlayerTextDrawSetSelectable(playerid, OfferListTextDraws[0], 0);
-
+    TextDrawTextSize(OfferListTextDraws[0], 180.0, 650.0);
+    TextDrawSetSelectable(OfferListTextDraws[0], 0);
+    
     OfferListTextDraws[1] = TextDrawCreate(320.0, 354.0, "~n~");
     TextDrawAlignment(OfferListTextDraws[1], 2);
     TextDrawBackgroundColor(OfferListTextDraws[1], 255);
@@ -34,8 +34,8 @@ CreateOfferListTextDraws() {
     TextDrawSetShadow(OfferListTextDraws[1], 1);
     TextDrawUseBox(OfferListTextDraws[1], 1);
     TextDrawBoxColor(OfferListTextDraws[1], 64);
-    PlayerTextDrawTextSize(playerid, OfferListTextDraws[1], 0.0, 650.0);
-    PlayerTextDrawSetSelectable(playerid, OfferListTextDraws[1], 0);
+    TextDrawTextSize(OfferListTextDraws[1], 0.0, 650.0);
+    TextDrawSetSelectable(OfferListTextDraws[1], 0);
 
     OfferListTextDraws[2] = TextDrawCreate(628.0, 357.0, " ~n~ >>~n~ ~n~");
     TextDrawAlignment(OfferListTextDraws[2], 2);
@@ -47,8 +47,8 @@ CreateOfferListTextDraws() {
     TextDrawSetProportional(OfferListTextDraws[2], 1);
     TextDrawUseBox(OfferListTextDraws[2], 1);
     TextDrawBoxColor(OfferListTextDraws[2], 842170448);
-    PlayerTextDrawTextSize(playerid, OfferListTextDraws[2], 160.0, 21.0);
-    PlayerTextDrawSetSelectable(playerid, OfferListTextDraws[2], 1);
+    TextDrawTextSize(OfferListTextDraws[2], 160.0, 21.0);
+    TextDrawSetSelectable(OfferListTextDraws[2], 1);
 
     OfferListTextDraws[3] = TextDrawCreate(9.0, 357.0, " ~n~ <<~n~ ~n~");
     TextDrawAlignment(OfferListTextDraws[3], 2);
@@ -61,8 +61,8 @@ CreateOfferListTextDraws() {
     TextDrawSetShadow(OfferListTextDraws[3], 1);
     TextDrawUseBox(OfferListTextDraws[3], 1);
     TextDrawBoxColor(OfferListTextDraws[3], 842170448);
-    PlayerTextDrawTextSize(playerid, OfferListTextDraws[3], 90.0, 25.0);
-    PlayerTextDrawSetSelectable(playerid, OfferListTextDraws[3], 1);
+    TextDrawTextSize(OfferListTextDraws[3], 90.0, 25.0);
+    TextDrawSetSelectable(OfferListTextDraws[3], 1);
 
     OfferListTextDraws[4] = TextDrawCreate(320.0, 447.0, "~n~");
     TextDrawAlignment(OfferListTextDraws[4], 2);
@@ -75,8 +75,8 @@ CreateOfferListTextDraws() {
     TextDrawSetShadow(OfferListTextDraws[4], 1);
     TextDrawUseBox(OfferListTextDraws[4], 1);
     TextDrawBoxColor(OfferListTextDraws[4], 64);
-    PlayerTextDrawTextSize(playerid, OfferListTextDraws[4], 0.0, 640.0);
-    PlayerTextDrawSetSelectable(playerid, OfferListTextDraws[4], 0);
+    TextDrawTextSize(OfferListTextDraws[4], 0.0, 640.0);
+    TextDrawSetSelectable(OfferListTextDraws[4], 0);
 
     OfferListTextDraws[5] = TextDrawCreate(0.0, 267.0, " ");
     TextDrawBackgroundColor(OfferListTextDraws[5], 0);
@@ -89,8 +89,8 @@ CreateOfferListTextDraws() {
     TextDrawSetOutline(OfferListTextDraws[5], 0);
     TextDrawSetProportional(OfferListTextDraws[5], 1);
     TextDrawSetShadow(OfferListTextDraws[5], 1);
-    PlayerTextDrawTextSize(playerid, OfferListTextDraws[5], 120.0, 120.0);
-    PlayerTextDrawSetSelectable(playerid, OfferListTextDraws[5], 0);
+    TextDrawTextSize(OfferListTextDraws[5], 120.0, 120.0);
+    TextDrawSetSelectable(OfferListTextDraws[5], 0);
     TextDrawSetPreviewModel(OfferListTextDraws[5], 17699);
     TextDrawSetPreviewRot(OfferListTextDraws[5], -4.0, 0.0, 71.0, 0.899999);
     TextDrawSetPreviewVehCol(OfferListTextDraws[5], 0, 0);
