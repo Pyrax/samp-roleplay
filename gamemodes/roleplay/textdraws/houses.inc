@@ -8,7 +8,7 @@
 static Text:OfferListTextDraws[6];
 static PlayerText:OfferListPlayerTextDraws[MAX_PLAYERS][10];
 
-CreateOfferListTextDraws() {
+CreateHouseOfferTD() {
     OfferListTextDraws[0] = TextDrawCreate(320.0, 353.0, "~n~~n~~n~");
     TextDrawAlignment(OfferListTextDraws[0], 2);
     TextDrawBackgroundColor(OfferListTextDraws[0], 255);
@@ -96,7 +96,7 @@ CreateOfferListTextDraws() {
     TextDrawSetPreviewVehCol(OfferListTextDraws[5], 0, 0);
 }
 
-CreateOfferListPlayerTextDraws(playerid) {
+CreateHouseOfferPlayerTD(playerid) {
     OfferListPlayerTextDraws[playerid][0] = CreatePlayerTextDraw(playerid, 48.0, 360.0, " ");
     PlayerTextDrawAlignment(playerid, OfferListPlayerTextDraws[playerid][0], 2);
     PlayerTextDrawBackgroundColor(playerid, OfferListPlayerTextDraws[playerid][0], 0);
@@ -243,17 +243,17 @@ CreateOfferListPlayerTextDraws(playerid) {
     PlayerTextDrawSetSelectable(playerid, OfferListPlayerTextDraws[playerid][9], 1);
 }
 
-ChangeOfferListTextDrawModel(playerid, element, newModel) {
+ChangeHouseOfferPlayerTDModel(playerid, element, newModel) {
     PlayerTextDrawSetPreviewModel(playerid, OfferListPlayerTextDraws[playerid][element], newModel);
 }
 
-ChangeOfferListTextDrawPrice(playerid, element, newPrice) {
+ChangeHouseOfferPlayerTDPrice(playerid, element, newPrice) {
     new string[64];
     format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$%s", FormatNumber(newPrice));
     PlayerTextDrawSetString(playerid, OfferListPlayerTextDraws[playerid][element+5], string);
 }
 
-ShowPlayerOfferListTextDraws(playerid) {
+ShowPlayerHouseOfferTD(playerid) {
     for(new i = 0; i < sizeof OfferListTextDraws; i++) {
         TextDrawShowForPlayer(playerid, OfferListTextDraws[i]);
     }
