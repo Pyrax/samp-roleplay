@@ -6,7 +6,7 @@ Dies ist ein Roleplay-Gamemode für die Multiplayer-Modifikation "SA-MP" von "Gr
 ## Plugins ##
 
  - [pBlueG/SA-MP-MySQL][1]
- - [Y-Less/sscanf][2]
+ - [Y-Less/sscanf][2] (2.0)
  - [Y-Less/Whirlpool][3]
 
   [1]: https://github.com/pBlueG/SA-MP-MySQL
