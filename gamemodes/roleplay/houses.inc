@@ -72,6 +72,7 @@ ShowPlayerHouseOffers(playerid) {
     }
     
     CreateHouseOfferPlayerTD(playerid);
+    ShowPlayerHouseOfferTD(playerid);
     return 1;
 }
 
