@@ -79,7 +79,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if(KEY_PRESSED(KEY_SECONDARY_ATTACK)) {
         if(!GetPVarType(playerid, "EnterExitBlock")) {
             if(GetPVarType(playerid, "IsAtBrokersPickup")) {
-                // SHOW_PLAYER_HOUSE_OFFERS
+                ShowPlayerHouseOffers(playerid);
                 
                 EnterExitBlock(playerid);
                 return 0;
