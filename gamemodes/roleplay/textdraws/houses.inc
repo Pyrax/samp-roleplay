@@ -33,7 +33,6 @@ CreateHouseOfferTD() {
     TextDrawUseBox(offerListTextDraws[0], 1);
     TextDrawBoxColor(offerListTextDraws[0], 252651584);
     TextDrawTextSize(offerListTextDraws[0], 180.0, 650.0);
-    TextDrawSetSelectable(offerListTextDraws[0], 0);
     
     offerListTextDraws[1] = TextDrawCreate(320.0, 354.0, "~n~");
     TextDrawAlignment(offerListTextDraws[1], 2);
@@ -47,7 +46,6 @@ CreateHouseOfferTD() {
     TextDrawUseBox(offerListTextDraws[1], 1);
     TextDrawBoxColor(offerListTextDraws[1], 64);
     TextDrawTextSize(offerListTextDraws[1], 0.0, 650.0);
-    TextDrawSetSelectable(offerListTextDraws[1], 0);
 
     offerListTextDraws[2] = TextDrawCreate(628.0, 357.0, " ~n~ >>~n~ ~n~");
     TextDrawAlignment(offerListTextDraws[2], 2);
@@ -88,7 +86,6 @@ CreateHouseOfferTD() {
     TextDrawUseBox(offerListTextDraws[4], 1);
     TextDrawBoxColor(offerListTextDraws[4], 64);
     TextDrawTextSize(offerListTextDraws[4], 0.0, 640.0);
-    TextDrawSetSelectable(offerListTextDraws[4], 0);
 
     offerListTextDraws[5] = TextDrawCreate(0.0, 267.0, " ");
     TextDrawBackgroundColor(offerListTextDraws[5], 0);
@@ -102,7 +99,6 @@ CreateHouseOfferTD() {
     TextDrawSetProportional(offerListTextDraws[5], 1);
     TextDrawSetShadow(offerListTextDraws[5], 1);
     TextDrawTextSize(offerListTextDraws[5], 120.0, 120.0);
-    TextDrawSetSelectable(offerListTextDraws[5], 0);
     TextDrawSetPreviewModel(offerListTextDraws[5], 17699);
     TextDrawSetPreviewRot(offerListTextDraws[5], -4.0, 0.0, 71.0, 0.899999);
     TextDrawSetPreviewVehCol(offerListTextDraws[5], 0, 0);
@@ -123,7 +119,6 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetProportional(playerid, offerListPlayerTextDraws[playerid][0], 1);
     PlayerTextDrawSetShadow(playerid, offerListPlayerTextDraws[playerid][0], 1);
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][0], 70.0, 70.0);
-    PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][0], 0);
     PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][0], 3614);
     PlayerTextDrawSetPreviewRot(playerid, offerListPlayerTextDraws[playerid][0], 0.0, 0.0, 0.0, 1.0);
     PlayerTextDrawSetPreviewVehCol(playerid, offerListPlayerTextDraws[playerid][0], 0, 0);
@@ -138,7 +133,6 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetProportional(playerid, offerListPlayerTextDraws[playerid][1], 1);
     PlayerTextDrawSetShadow(playerid, offerListPlayerTextDraws[playerid][1], 1);
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][1], 70.0, 70.0);
-    PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][1], 0);
     PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][1], 3614);
     PlayerTextDrawSetPreviewRot(playerid, offerListPlayerTextDraws[playerid][1], 0.0, 0.0, 0.0, 1.0);
     PlayerTextDrawSetPreviewVehCol(playerid, offerListPlayerTextDraws[playerid][1], 0, 0);
@@ -153,7 +147,6 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetProportional(playerid, offerListPlayerTextDraws[playerid][2], 1);
     PlayerTextDrawSetShadow(playerid, offerListPlayerTextDraws[playerid][2], 1);
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][2], 70.0, 70.0);
-    PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][2], 0);
     PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][2], 3614);
     PlayerTextDrawSetPreviewRot(playerid, offerListPlayerTextDraws[playerid][2], 0.0, 0.0, 0.0, 1.0);
     PlayerTextDrawSetPreviewVehCol(playerid, offerListPlayerTextDraws[playerid][2], 0, 0);
@@ -168,7 +161,6 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetProportional(playerid, offerListPlayerTextDraws[playerid][3], 1);
     PlayerTextDrawSetShadow(playerid, offerListPlayerTextDraws[playerid][3], 1);
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][3], 70.0, 70.0);
-    PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][3], 0);
     PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][3], 3614);
     PlayerTextDrawSetPreviewRot(playerid, offerListPlayerTextDraws[playerid][3], 0.0, 0.0, 0.0, 1.0);
     PlayerTextDrawSetPreviewVehCol(playerid, offerListPlayerTextDraws[playerid][3], 0, 0);
@@ -183,7 +175,6 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetProportional(playerid, offerListPlayerTextDraws[playerid][4], 1);
     PlayerTextDrawSetShadow(playerid, offerListPlayerTextDraws[playerid][4], 1);
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][4], 70.0, 70.0);
-    PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][4], 0);
     PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][4], 3614);
     PlayerTextDrawSetPreviewRot(playerid, offerListPlayerTextDraws[playerid][4], 0.0, 0.0, 0.0, 1.0);
     PlayerTextDrawSetPreviewVehCol(playerid, offerListPlayerTextDraws[playerid][4], 0, 0);
