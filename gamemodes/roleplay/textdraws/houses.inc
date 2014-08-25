@@ -270,10 +270,11 @@ ChangeHouseOfferPlayerTDPrice(playerid, element, newPrice) {
 }
 
 ShowPlayerHouseOfferTD(playerid) {
-    for(new i = 0; i < sizeof offerListTextDraws; i++) {
-        TextDrawShowForPlayer(playerid, offerListTextDraws[i]);
-    }
     for(new i = 0; i < sizeof offerListPlayerTextDraws[]; i++) {
         PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
     }
+    for(new i = 0; i < sizeof offerListTextDraws; i++) {
+        TextDrawShowForPlayer(playerid, offerListTextDraws[i]);
+    }
+    SelectTextDraw(playerid, HOVER_COLOR_DEFAULT);
 }
