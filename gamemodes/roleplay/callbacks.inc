@@ -30,7 +30,7 @@ public OnGameModeInit() {
     LoadHousesFromDatabase();
     
     brokersPickup = CreatePickup(ENTER_PICKUP, 1, BROKER_X, BROKER_Y, BROKER_Z, VW_DEFAULT);
-    AddPlayerClass(0, 1481.3070, -861.3610, 58.2491, 139.0467, 0, 0, 0, 0, 0, 0);
+    AddPlayerClass(0, 1554.1963, -1097.0775, 25.0625, 95.6683, 0, 0, 0, 0, 0, 0);
     return 1;
 }
 
