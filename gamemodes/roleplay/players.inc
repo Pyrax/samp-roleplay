@@ -57,7 +57,7 @@ AuthenticatePlayer(playerid) {
                             DIALOG_LOGIN
                         }
                     } else {
-                        // KICK
+                        // TODO: kick
                     }
                 }
                 DIALOG_LOGIN
@@ -94,7 +94,7 @@ AuthenticatePlayer(playerid) {
                         }
                         Dialog_ShowCallback(i_playerid, using inline ValidateResponse, DIALOG_STYLE_PASSWORD, "Passwort bestätigen", "Gib dein Passwort erneut ein, um es zu bestätigen.", "Spielen!");
                     } else {
-                        // KICK
+                        // TODO: kick
                     }
                 }
                 DIALOG_REGISTER
