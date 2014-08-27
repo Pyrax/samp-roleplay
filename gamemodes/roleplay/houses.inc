@@ -70,9 +70,9 @@ static playerHouseOfferPage[MAX_PLAYERS];
 //-----------------------------------------------------
 
 ShowPlayerHouseOffers(playerid) {
-    //if(!IsPlayerLoggedIn(playerid)) {
-    //    return;
-    //}
+    if(!IsPlayerLoggedIn(playerid)) {
+        return;
+    }
     
     CreateHouseOfferPlayerTD(playerid);
     
@@ -84,19 +84,21 @@ ShowPlayerHouseOffers(playerid) {
         
         for(new r = 0; r < rows; r++) {
             PushPlayerHouseOffer(playerid,
+                cache_get_field_content_int(r, "house_ID"),
                 cache_get_field_content_int(r, "model"),
                 cache_get_field_content_int(r, "price"));
         }
         
         if(rows < 5) {
             for(new r = rows; r < 5; r++) {
-                PushPlayerHouseOffer(playerid, -1, -1);
+                PushPlayerHouseOffer(playerid);
             }
         }
         
+        SetPlayerActiveHouseOffer(playerid, 0);
         ShowPlayerHouseOfferTD(playerid);
     }
-    mysql_tquery_inline(g_MysqlHandler, "SELECT IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
+    mysql_tquery_inline(g_MysqlHandler, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
         FROM houses t \
         LEFT JOIN house_owners ho ON t.ID = ho.house_ID \
         LEFT JOIN sell_houses sh ON t.ID = sh.house_ID \
@@ -114,7 +116,7 @@ function OnNextHouseOfferPage(playerid) {
     
     new offset = playerHouseOfferPage[playerid];
     for(new i = offset; i < offset + 5; i++) {
-        PushPlayerHouseOffer(playerid,
+        PushPlayerHouseOffer(playerid, 0,
             g_House[ GetHouseIdxByID( g_SellHouse[i][g_house_ID] ) ][g_model_ID],
             g_SellHouse[i][g_price]);
     }
@@ -130,7 +132,7 @@ function OnPrevHouseOfferPage(playerid) {
     
     new offset = playerHouseOfferPage[playerid];
     for(new i = offset; i < offset + 5; i++) {
-        PushPlayerHouseOffer(playerid,
+        PushPlayerHouseOffer(playerid, 0,
             g_House[ GetHouseIdxByID( g_SellHouse[i][g_house_ID] ) ][g_model_ID],
             g_SellHouse[i][g_price]);
     }
@@ -384,6 +386,12 @@ SellHouse(playerid, houseid, price) {
     g_House[houseIdx][entrancePickup] = CreatePickup(1273, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
     
     return 1;
+}
+
+SetPlayerLookAtHouse(playerid, houseid) {
+    new idx = GetHouseIdxByID(houseid);
+    SetPlayerCameraPos(playerid, g_House[idx][g_cameraPosX], g_House[idx][g_cameraPosY], g_House[idx][g_cameraPosZ]);
+    SetPlayerCameraLookAt(playerid, g_House[idx][g_cameraLookAtX], g_House[idx][g_cameraLookAtY], g_House[idx][g_cameraLookAtZ]);
 }
 
 static GetHouseIdxByID(houseid) {

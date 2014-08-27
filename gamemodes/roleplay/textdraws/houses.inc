@@ -11,7 +11,7 @@
 
 static Text:offerListTextDraws[6];
 static PlayerText:offerListPlayerTextDraws[MAX_PLAYERS][10];
-static houseOffers[MAX_PLAYERS][5][2];
+static houseOffers[MAX_PLAYERS][5][3];
 static Iterator:houseOffersIterator[MAX_PLAYERS]<5>;
 
 hook OnGameModeInit() {
@@ -253,7 +253,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][9], 1);
 }
 
-PushPlayerHouseOffer(playerid, model = -1, price = -1) {
+PushPlayerHouseOffer(playerid, houseID = -1, model = -1, price = -1) {
     new element = Iter_Free(houseOffersIterator[playerid]);
     
     if(element == -1) {
@@ -280,6 +280,7 @@ PushPlayerHouseOffer(playerid, model = -1, price = -1) {
     
     houseOffers[playerid][element][0] = model;
     houseOffers[playerid][element][1] = price;
+    houseOffers[playerid][element][2] = houseID;
     
     Iter_Remove(houseOffersIterator[playerid], element);
     if(model != -1 && price != -1) {
@@ -312,6 +313,10 @@ DestroyPlayerHouseOfferTD(playerid) {
         PlayerTextDrawDestroy(playerid, offerListPlayerTextDraws[playerid][i]);
     }
     Iter_Clear(houseOffersIterator[playerid]);
+}
+
+SetPlayerActiveHouseOffer(playerid, element) {
+    SetPlayerLookAtHouse(playerid, houseOffers[playerid][element][2]);
 }
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
