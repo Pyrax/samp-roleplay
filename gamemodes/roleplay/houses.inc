@@ -70,52 +70,43 @@ static playerHouseOfferPage[MAX_PLAYERS];
 //-----------------------------------------------------
 
 ShowPlayerHouseOffers(playerid) {
-    if(!IsPlayerLoggedIn(playerid)) {
-        return 0;
-    }
+    //if(!IsPlayerLoggedIn(playerid)) {
+    //    return;
+    //}
     
     CreateHouseOfferPlayerTD(playerid);
     
     playerHouseOfferPage[playerid] = 0;
     
     // init first page with max. 5 houses
-    new end = 5,
-        items = CountHousesForSale();
-    printf("%d", items);
-    
-    if(items < 5) {
-        if(items == 0) {
-            // TODO: no houses being sold
-        } else {
-            end = items;
-        }
-    }
-    
-    for(new i = 0; i < end; i++) {
-        new model,
-            price = -1;
+    inline QueryResponse() {
+        new rows = cache_num_rows();
         
-        foreach(new j : g_HouseIterator) {
-            new owner = GetHouseOwnerIdxByHouseID(g_House[j][g_ID]);
-            model = g_House[j][g_model_ID];
-            
-            if(owner == -1) {
-                new sellIdx = GetSellHouseIdxByHouseID(g_House[j][g_ID]);
-                if(sellIdx != -1) {
-                    price = g_SellHouse[sellIdx][g_price];
-                } else {
-                    price = g_House[j][g_value];
-                }
+        for(new r = 0; r < rows; r++) {
+            PushPlayerHouseOffer(playerid,
+                cache_get_field_content_int(r, "model"),
+                cache_get_field_content_int(r, "price"));
+        }
+        
+        if(rows < 5) {
+            for(new r = rows; r < 5; r++) {
+                PushPlayerHouseOffer(playerid, -1, -1);
             }
         }
         
-        if(price != -1) {
-            PushPlayerHouseOffer(playerid, model, price);
-        }
+        ShowPlayerHouseOfferTD(playerid);
     }
-    
-    ShowPlayerHouseOfferTD(playerid);
-    return 1;
+    mysql_tquery_inline(g_MysqlHandler, "SELECT IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
+        FROM houses t \
+        LEFT JOIN house_owners ho ON t.ID = ho.house_ID \
+        LEFT JOIN sell_houses sh ON t.ID = sh.house_ID \
+        WHERE ho.owner_ID IS NULL \
+        LIMIT 0,5", using inline QueryResponse, "");
+}
+
+task testHouseSys[4000]() {
+    print("Testing...");
+    ShowPlayerHouseOffers(0);
 }
 
 function OnNextHouseOfferPage(playerid) {
