@@ -104,11 +104,6 @@ ShowPlayerHouseOffers(playerid) {
         LIMIT 0,5", using inline QueryResponse, "");
 }
 
-task testHouseSys[4000]() {
-    print("Testing...");
-    ShowPlayerHouseOffers(0);
-}
-
 function OnNextHouseOfferPage(playerid) {
     new sellHouseCount = CountHousesForSale();
     
