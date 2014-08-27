@@ -11,9 +11,12 @@
 
 static Text:offerListTextDraws[6];
 static PlayerText:offerListPlayerTextDraws[MAX_PLAYERS][10];
+static houseOffers[MAX_PLAYERS][5][2];
+static Iterator:houseOffersIterator[MAX_PLAYERS]<5>;
 
 hook OnGameModeInit() {
     CreateHouseOfferTD();
+    Iter_Init(houseOffersIterator);
 }
 
 hook OnPlayerConnect(playerid) {
@@ -179,7 +182,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetPreviewRot(playerid, offerListPlayerTextDraws[playerid][4], 0.0, 0.0, 0.0, 1.0);
     PlayerTextDrawSetPreviewVehCol(playerid, offerListPlayerTextDraws[playerid][4], 0, 0);
     
-    offerListPlayerTextDraws[playerid][5] = CreatePlayerTextDraw(playerid, 93.400001, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
+    offerListPlayerTextDraws[playerid][5] = CreatePlayerTextDraw(playerid, 93.400001, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$290.000");
     PlayerTextDrawAlignment(playerid, offerListPlayerTextDraws[playerid][5], 2);
     PlayerTextDrawBackgroundColor(playerid, offerListPlayerTextDraws[playerid][5], 255);
     PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][5], 2);
@@ -193,7 +196,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][5], 90.0, 100.0);
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][5], 1);
 
-    offerListPlayerTextDraws[playerid][6] = CreatePlayerTextDraw(playerid, 202.800003, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
+    offerListPlayerTextDraws[playerid][6] = CreatePlayerTextDraw(playerid, 202.800003, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$290.000");
     PlayerTextDrawAlignment(playerid, offerListPlayerTextDraws[playerid][6], 2);
     PlayerTextDrawBackgroundColor(playerid, offerListPlayerTextDraws[playerid][6], 255);
     PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][6], 2);
@@ -207,7 +210,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][6], 90.0, 100.0);
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][6], 1);
 
-    offerListPlayerTextDraws[playerid][7] = CreatePlayerTextDraw(playerid, 312.200012, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
+    offerListPlayerTextDraws[playerid][7] = CreatePlayerTextDraw(playerid, 312.200012, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$290.000");
     PlayerTextDrawAlignment(playerid, offerListPlayerTextDraws[playerid][7], 2);
     PlayerTextDrawBackgroundColor(playerid, offerListPlayerTextDraws[playerid][7], 255);
     PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][7], 2);
@@ -221,7 +224,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][7], 90.0, 100.0);
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][7], 1);
 
-    offerListPlayerTextDraws[playerid][8] = CreatePlayerTextDraw(playerid, 421.600006, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
+    offerListPlayerTextDraws[playerid][8] = CreatePlayerTextDraw(playerid, 421.600006, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$290.000");
     PlayerTextDrawAlignment(playerid, offerListPlayerTextDraws[playerid][8], 2);
     PlayerTextDrawBackgroundColor(playerid, offerListPlayerTextDraws[playerid][8], 255);
     PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][8], 2);
@@ -235,7 +238,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawTextSize(playerid, offerListPlayerTextDraws[playerid][8], 90.0, 100.0);
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][8], 1);
 
-    offerListPlayerTextDraws[playerid][9] = CreatePlayerTextDraw(playerid, 531.0, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$290.000");
+    offerListPlayerTextDraws[playerid][9] = CreatePlayerTextDraw(playerid, 531.0, 360.0, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$290.000");
     PlayerTextDrawAlignment(playerid, offerListPlayerTextDraws[playerid][9], 2);
     PlayerTextDrawBackgroundColor(playerid, offerListPlayerTextDraws[playerid][9], 255);
     PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][9], 2);
@@ -250,19 +253,44 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][9], 1);
 }
 
-ChangeHouseOfferPlayerTDModel(playerid, element, newModel) {
-    PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][element], newModel);
-}
-
-ChangeHouseOfferPlayerTDPrice(playerid, element, newPrice) {
-    new string[64];
-    format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~Kaufen - ~g~$%s", FormatNumber(newPrice));
-    PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][element+5], string);
+PushPlayerHouseOffer(playerid, model = -1, price = -1) {
+    new element = Iter_Free(houseOffersIterator[playerid]);
+    
+    if(element == -1) {
+        // array is full
+        element = 0;
+    }
+    
+    if(model == -1) {
+        PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][element], 0);
+    } else {
+        PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][element], 5);
+        PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][element], model);
+    }
+    
+    if(price == -1) {
+        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][element+5], " ");
+        PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][element+5], 0);
+    } else {
+        new string[64];
+        format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(price));
+        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][element+5], string);
+        PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][element+5], 1);
+    }
+    
+    houseOffers[playerid][element][0] = model;
+    houseOffers[playerid][element][1] = price;
+    
+    Iter_Remove(houseOffersIterator[playerid], element);
+    if(model != -1 && price != -1) {
+        Iter_Add(houseOffersIterator[playerid], element);
+    }
 }
 
 ShowPlayerHouseOfferTD(playerid) {
-    for(new i = 0; i < sizeof offerListPlayerTextDraws[]; i++) {
+    foreach(new i : houseOffersIterator[playerid]) {
         PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
+        PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i+5]);
     }
     for(new i = 0; i < sizeof offerListTextDraws; i++) {
         TextDrawShowForPlayer(playerid, offerListTextDraws[i]);
@@ -283,6 +311,7 @@ DestroyPlayerHouseOfferTD(playerid) {
     for(new i = 0; i < sizeof offerListPlayerTextDraws[]; i++) {
         PlayerTextDrawDestroy(playerid, offerListPlayerTextDraws[playerid][i]);
     }
+    Iter_Clear(houseOffersIterator[playerid]);
 }
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
@@ -299,7 +328,13 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         CancelSelectTextDraw(playerid);
         HidePlayerHouseOfferTD(playerid);
         DestroyPlayerHouseOfferTD(playerid);
+        
+        offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
         return 1;
     }
+    return 0;
+}
+
+hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
     return 0;
 }

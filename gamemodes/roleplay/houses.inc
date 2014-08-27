@@ -9,7 +9,7 @@
 
 //-----------------------------------------------------
 
-#define MAX_HOUSES 50
+#define MAX_HOUSES 500
 
 //-----------------------------------------------------
 
@@ -64,6 +64,9 @@ new g_HouseOwner[MAX_HOUSES][E_HOUSE_OWNER],
 new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE],
     Iterator:g_SellHouseIterator<MAX_HOUSES>;
 
+// playerHouseOfferPage is the idx of the first house which is shown in the list
+static playerHouseOfferPage[MAX_PLAYERS];
+
 //-----------------------------------------------------
 
 ShowPlayerHouseOffers(playerid) {
@@ -72,8 +75,79 @@ ShowPlayerHouseOffers(playerid) {
     }
     
     CreateHouseOfferPlayerTD(playerid);
+    
+    playerHouseOfferPage[playerid] = 0;
+    
+    // init first page with max. 5 houses
+    new end = 5,
+        items = CountHousesForSale();
+    printf("%d", items);
+    
+    if(items < 5) {
+        if(items == 0) {
+            // TODO: no houses being sold
+        } else {
+            end = items;
+        }
+    }
+    
+    for(new i = 0; i < end; i++) {
+        new model,
+            price = -1;
+        
+        foreach(new j : g_HouseIterator) {
+            new owner = GetHouseOwnerIdxByHouseID(g_House[j][g_ID]);
+            model = g_House[j][g_model_ID];
+            
+            if(owner == -1) {
+                new sellIdx = GetSellHouseIdxByHouseID(g_House[j][g_ID]);
+                if(sellIdx != -1) {
+                    price = g_SellHouse[sellIdx][g_price];
+                } else {
+                    price = g_House[j][g_value];
+                }
+            }
+        }
+        
+        if(price != -1) {
+            PushPlayerHouseOffer(playerid, model, price);
+        }
+    }
+    
     ShowPlayerHouseOfferTD(playerid);
     return 1;
+}
+
+function OnNextHouseOfferPage(playerid) {
+    new sellHouseCount = CountHousesForSale();
+    
+    playerHouseOfferPage[playerid] += 5; // 27 + 5 = 32
+    if(playerHouseOfferPage[playerid] >= sellHouseCount) { // 32
+        playerHouseOfferPage[playerid] -= sellHouseCount; // 32 - 32 = 0, 1, 2, 3, 4
+    }
+    
+    new offset = playerHouseOfferPage[playerid];
+    for(new i = offset; i < offset + 5; i++) {
+        PushPlayerHouseOffer(playerid,
+            g_House[ GetHouseIdxByID( g_SellHouse[i][g_house_ID] ) ][g_model_ID],
+            g_SellHouse[i][g_price]);
+    }
+}
+
+function OnPrevHouseOfferPage(playerid) {
+    new sellHouseCount = CountHousesForSale();
+    
+    playerHouseOfferPage[playerid] -= 5; // 0 - 5 = -5
+    if(playerHouseOfferPage[playerid] < 0) { // 32 --> 27, 28, 29, 30, 31
+        playerHouseOfferPage[playerid] += sellHouseCount; // -5 + 32 = 27
+    }
+    
+    new offset = playerHouseOfferPage[playerid];
+    for(new i = offset; i < offset + 5; i++) {
+        PushPlayerHouseOffer(playerid,
+            g_House[ GetHouseIdxByID( g_SellHouse[i][g_house_ID] ) ][g_model_ID],
+            g_SellHouse[i][g_price]);
+    }
 }
 
 static ORM:CreateHouseORM(idx) {
@@ -196,7 +270,7 @@ EnterHouse(playerid, houseid) {
         SetPlayerVirtualWorld(playerid, VW_OFFSET_HOUSES + g_House[houseid][g_ID]);
         SetPlayerInterior(playerid, g_House[houseid][g_interior_ID]);
         SetPlayerPos(playerid, g_House[houseid][g_exitX], g_House[houseid][g_exitY], g_House[houseid][g_exitZ]);
-        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][g_entranceAngle]);
+        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][g_exitAngle]);
         return 1;
     }
     return 0;
@@ -207,7 +281,7 @@ LeaveHouse(playerid, houseid) {
         SetPlayerVirtualWorld(playerid, VW_DEFAULT);
         SetPlayerInterior(playerid, 0);
         SetPlayerPos(playerid, g_House[houseid][g_entranceX], g_House[houseid][g_entranceY], g_House[houseid][g_entranceZ]);
-        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][g_exitAngle]);
+        SetPlayerFacingAngle(playerid, 180.0-g_House[houseid][g_entranceAngle]);
         return 1;
     }
     return 0;
@@ -228,7 +302,8 @@ GetHouseOwnerByHouseID(houseid) {
 BuyHouse(playerid, houseid) {
     new bool:houseForSale = false,
         oldOwner = GetHouseOwnerIdxByHouseID(houseid);
-        price = -1;
+        price = -1,
+        sellHouseIdx = -1;
     
     if(oldOwner == -1) {
         houseForSale = true;
@@ -236,6 +311,7 @@ BuyHouse(playerid, houseid) {
     } else {
         foreach(new i : g_SellHouseIterator) {
             if(g_SellHouse[i][g_house_ID] == houseid) {
+                sellHouseIdx = i;
                 houseForSale = true;
                 price = g_SellHouse[i][g_price];
                 break;
@@ -258,6 +334,10 @@ BuyHouse(playerid, houseid) {
             g_HouseOwner[idx][g_house_ID] = houseid;
             orm_insert(ormid);
             Iter_Add(g_HouseOwnerIterator, idx);
+            if(sellHouseIdx != -1) {
+                orm_delete(g_SellHouse[sellHouseIdx][g_orm_ID]);
+                Iter_Remove(g_SellHouseIterator, sellHouseIdx);
+            }
             
             // change pickup-model of entrance
             DestroyPickup(g_House[houseIdx][entrancePickup]);
@@ -304,11 +384,13 @@ SellHouse(playerid, houseid, price) {
     }
     
     new idx = Iter_Free(g_SellHouseIterator),
-        houseIdx = GetHouseIdxByHouseID(houseid);
+        houseIdx = GetHouseIdxByHouseID(houseid),
+        ORM:ormid = CreateSellHouseORM(idx);
     
     // add house to sale
     g_SellHouse[idx][g_house_ID] = houseid;
     g_SellHouse[idx][g_price] = price;
+    orm_insert(ormid);
     Iter_Add(g_SellHouseIterator, idx);
     
     // change pickup-model of entrance
@@ -334,4 +416,17 @@ static GetHouseOwnerIdxByHouseID(houseid) {
         }
     }
     return -1;
+}
+
+static GetSellHouseIdxByHouseID(houseid) {
+    foreach(new i : g_SellHouseIterator) {
+        if(g_SellHouse[i][g_house_ID] == houseid) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+static CountHousesForSale() {
+    return Iter_Count(g_HouseIterator) - Iter_Count(g_HouseOwnerIterator);
 }
