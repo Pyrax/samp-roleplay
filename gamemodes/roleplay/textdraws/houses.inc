@@ -335,6 +335,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         DestroyPlayerHouseOfferTD(playerid);
         
         offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
+        SetCameraBehindPlayer(playerid);
         return 1;
     }
     return 0;
