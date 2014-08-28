@@ -82,21 +82,25 @@ ShowPlayerHouseOffers(playerid) {
     inline QueryResponse() {
         new rows = cache_num_rows();
         
-        for(new r = 0; r < rows; r++) {
-            PushPlayerHouseOffer(playerid,
-                cache_get_field_content_int(r, "house_ID"),
-                cache_get_field_content_int(r, "model"),
-                cache_get_field_content_int(r, "price"));
-        }
-        
-        if(rows < 5) {
-            for(new r = rows; r < 5; r++) {
-                PushPlayerHouseOffer(playerid);
+        if(!rows) {
+            // TODO: no houses being sold
+        } else {
+            for(new r = 0; r < rows; r++) {
+                PushPlayerHouseOffer(playerid,
+                    cache_get_field_content_int(r, "house_ID"),
+                    cache_get_field_content_int(r, "model"),
+                    cache_get_field_content_int(r, "price"));
             }
+            
+            if(rows < 5) {
+                for(new r = rows; r < 5; r++) {
+                    PushPlayerHouseOffer(playerid);
+                }
+            }
+            
+            SetPlayerActiveHouseOffer(playerid, cache_get_field_content_int(0, "house_ID"));
+            ShowPlayerHouseOfferTD(playerid);
         }
-        
-        SetPlayerActiveHouseOffer(playerid, 0);
-        ShowPlayerHouseOfferTD(playerid);
     }
     mysql_tquery_inline(g_MysqlHandler, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
         FROM houses t \
@@ -107,35 +111,64 @@ ShowPlayerHouseOffers(playerid) {
 }
 
 function OnNextHouseOfferPage(playerid) {
-    new sellHouseCount = CountHousesForSale();
+    new query[312];
     
-    playerHouseOfferPage[playerid] += 5; // 27 + 5 = 32
-    if(playerHouseOfferPage[playerid] >= sellHouseCount) { // 32
-        playerHouseOfferPage[playerid] -= sellHouseCount; // 32 - 32 = 0, 1, 2, 3, 4
+    inline QueryResponse() {
+        new rows = cache_num_rows();
+        
+        for(new r = 0; r < rows; r++) {
+            PushPlayerHouseOffer(playerid,
+                cache_get_field_content_int(r, "house_ID"),
+                cache_get_field_content_int(r, "model"),
+                cache_get_field_content_int(r, "price"));
+        }
+        
+        if(rows < 5) {
+            // TODO: SetUnselectable right arrow
+        }
+        
+        playerHouseOfferPage[playerid] += rows;
     }
-    
-    new offset = playerHouseOfferPage[playerid];
-    for(new i = offset; i < offset + 5; i++) {
-        PushPlayerHouseOffer(playerid, 0,
-            g_House[ GetHouseIdxByID( g_SellHouse[i][g_house_ID] ) ][g_model_ID],
-            g_SellHouse[i][g_price]);
-    }
+    mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
+        FROM houses t \
+        LEFT JOIN house_owners ho ON t.ID = ho.house_ID \
+        LEFT JOIN sell_houses sh ON t.ID = sh.house_ID \
+        WHERE ho.owner_ID IS NULL \
+        LIMIT %i,5", playerHouseOfferPage[playerid] + 5);
+    mysql_tquery_inline(g_MysqlHandler, query, using inline QueryResponse, "");
 }
 
 function OnPrevHouseOfferPage(playerid) {
-    new sellHouseCount = CountHousesForSale();
+    new query[312];
     
-    playerHouseOfferPage[playerid] -= 5; // 0 - 5 = -5
-    if(playerHouseOfferPage[playerid] < 0) { // 32 --> 27, 28, 29, 30, 31
-        playerHouseOfferPage[playerid] += sellHouseCount; // -5 + 32 = 27
+    if(playerHouseOfferPage[playerid] - 5 < 0) {
+        // prevent negative values on SQL limit
+        playerHouseOfferPage[playerid] = 5;
     }
     
-    new offset = playerHouseOfferPage[playerid];
-    for(new i = offset; i < offset + 5; i++) {
-        PushPlayerHouseOffer(playerid, 0,
-            g_House[ GetHouseIdxByID( g_SellHouse[i][g_house_ID] ) ][g_model_ID],
-            g_SellHouse[i][g_price]);
+    inline QueryResponse() {
+        new rows = cache_num_rows();
+        
+        for(new r = 0; r < rows; r++) {
+            PushPlayerHouseOffer(playerid,
+                cache_get_field_content_int(r, "house_ID"),
+                cache_get_field_content_int(r, "model"),
+                cache_get_field_content_int(r, "price"));
+        }
+        
+        if(rows < 5) {
+            // TODO: SetUnselectable left arrow
+        }
+        
+        playerHouseOfferPage[playerid] -= rows;
     }
+    mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
+        FROM houses t \
+        LEFT JOIN house_owners ho ON t.ID = ho.house_ID \
+        LEFT JOIN sell_houses sh ON t.ID = sh.house_ID \
+        WHERE ho.owner_ID IS NULL \
+        LIMIT %i,5", playerHouseOfferPage[playerid] - 5);
+    mysql_tquery_inline(g_MysqlHandler, query, using inline QueryResponse, "");
 }
 
 static ORM:CreateHouseORM(idx) {

@@ -315,8 +315,15 @@ DestroyPlayerHouseOfferTD(playerid) {
     Iter_Clear(houseOffersIterator[playerid]);
 }
 
-SetPlayerActiveHouseOffer(playerid, element) {
-    SetPlayerLookAtHouse(playerid, houseOffers[playerid][element][2]);
+SetPlayerActiveHouseOffer(playerid, houseid) {
+    new idx = 0;
+    foreach(new i : houseOffersIterator[playerid]) {
+        if(houseOffers[playerid][i][2] == houseid) {
+            idx = i;
+            break;
+        }
+    }
+    SetPlayerLookAtHouse(playerid, houseOffers[playerid][idx][2]);
 }
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
