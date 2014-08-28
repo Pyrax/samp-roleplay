@@ -123,11 +123,11 @@ function OnNextHouseOfferPage(playerid) {
                 cache_get_field_content_int(r, "price"));
         }
         
-        if(rows < 5) {
+        playerHouseOfferPage[playerid] += rows;
+        
+        if(rows < 5 || CountHousesForSale() <= playerHouseOfferPage[playerid]+1) {
             // TODO: SetUnselectable right arrow
         }
-        
-        playerHouseOfferPage[playerid] += rows;
     }
     mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
         FROM houses t \
@@ -150,17 +150,17 @@ function OnPrevHouseOfferPage(playerid) {
         new rows = cache_num_rows();
         
         for(new r = 0; r < rows; r++) {
-            PushPlayerHouseOffer(playerid,
+            ReversePushPlayerHouseOffer(playerid,
                 cache_get_field_content_int(r, "house_ID"),
                 cache_get_field_content_int(r, "model"),
                 cache_get_field_content_int(r, "price"));
         }
         
-        if(rows < 5) {
+        playerHouseOfferPage[playerid] -= rows;
+        
+        if(rows < 5 || playerHouseOfferPage[playerid] == 0) {
             // TODO: SetUnselectable left arrow
         }
-        
-        playerHouseOfferPage[playerid] -= rows;
     }
     mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
         FROM houses t \
