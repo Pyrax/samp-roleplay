@@ -30,7 +30,8 @@ native WP_Hash(buffer[], len, const str[]);
 
 // VirtualWorlds
 #define VW_DEFAULT              0
-#define VW_OFFSET_HOUSES        VW_DEFAULT+1
+#define VW_OFFSET_HOUSES        VW_DEFAULT + 1
+#define VW_BROKER               VW_DEFAULT + 1 + MAX_HOUSES + 1
 
 //-----------------------------------------------------
 

@@ -16,9 +16,10 @@ enum E_PLAYER {
     g_ID,
     g_password[129],
     g_name[PLAYER_NAME_LEN],
-    g_money
+    g_money,
     
     // non-stored variables
+    g_cameraDummy
 };
 
 //-----------------------------------------------------
@@ -146,4 +147,12 @@ IsPlayerLoggedIn(playerid) {
 
 GetPlayerID(playerid) {
     return g_Player[playerid][g_ID];
+}
+
+CreatePlayerCameraDummy(playerid) {
+    g_Player[playerid][g_cameraDummy] = CreatePlayerObject(playerid, 19300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+}
+
+GetPlayerCameraDummy(playerid) {
+    return g_Player[playerid][g_cameraDummy];
 }

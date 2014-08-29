@@ -66,6 +66,7 @@ new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE],
 
 // playerHouseOfferPage is the idx of the first house which is shown in the list
 static playerHouseOfferPage[MAX_PLAYERS];
+static Float:playerCamera[MAX_PLAYERS][2][3];
 
 //-----------------------------------------------------
 
@@ -77,6 +78,20 @@ ShowPlayerHouseOffers(playerid) {
     CreateHouseOfferPlayerTD(playerid);
     
     playerHouseOfferPage[playerid] = 0;
+    
+    SetPlayerVirtualWorld(playerid, VW_BROKER);
+    
+    GetPlayerCameraPos(playerid, posArr{playerCamera[playerid][0]} );
+    
+    // GetPlayerCameraLookAt
+    GetPlayerCameraFrontVector(playerid, posArr{playerCamera[playerid][1]} );
+    playerCamera[playerid][1][0] += playerCamera[playerid][0][0];
+    playerCamera[playerid][1][1] += playerCamera[playerid][0][1];
+    playerCamera[playerid][1][2] += playerCamera[playerid][0][2];
+    
+    // use spectate mode for camera to stream nearby objects
+    TogglePlayerSpectating(playerid, true);
+    AttachCameraToPlayerObject(playerid, GetPlayerCameraDummy(playerid));
     
     // init first page with max. 5 houses
     inline QueryResponse() {
@@ -98,7 +113,7 @@ ShowPlayerHouseOffers(playerid) {
                 }
             }
             
-            SetPlayerActiveHouseOffer(playerid, cache_get_field_content_int(0, "house_ID"));
+            SetPlayerActiveHouseOfferID(playerid, cache_get_field_content_int(0, "house_ID"));
             ShowPlayerHouseOfferTD(playerid);
         }
     }
@@ -423,8 +438,20 @@ SellHouse(playerid, houseid, price) {
 
 SetPlayerLookAtHouse(playerid, houseid) {
     new idx = GetHouseIdxByID(houseid);
-    SetPlayerCameraPos(playerid, g_House[idx][g_cameraPosX], g_House[idx][g_cameraPosY], g_House[idx][g_cameraPosZ]);
-    SetPlayerCameraLookAt(playerid, g_House[idx][g_cameraLookAtX], g_House[idx][g_cameraLookAtY], g_House[idx][g_cameraLookAtZ]);
+    
+    SetPlayerCameraPos(playerid, posArr{playerCamera[playerid][0]});
+    SetPlayerCameraLookAt(playerid, posArr{playerCamera[playerid][1]});
+    
+    InterpolateCameraPos(playerid, posArr{playerCamera[playerid][0]}, g_House[idx][g_cameraPosX], g_House[idx][g_cameraPosY], g_House[idx][g_cameraPosZ], 2000, CAMERA_CUT);
+    InterpolateCameraLookAt(playerid, posArr{playerCamera[playerid][1]}, g_House[idx][g_cameraLookAtX], g_House[idx][g_cameraLookAtY], g_House[idx][g_cameraLookAtZ], 2000, CAMERA_CUT);
+    
+    playerCamera[playerid][0][0] = g_House[idx][g_cameraPosX];
+    playerCamera[playerid][0][1] = g_House[idx][g_cameraPosY];
+    playerCamera[playerid][0][2] = g_House[idx][g_cameraPosZ];
+    
+    playerCamera[playerid][1][0] = g_House[idx][g_cameraLookAtX];
+    playerCamera[playerid][1][1] = g_House[idx][g_cameraLookAtY];
+    playerCamera[playerid][1][2] = g_House[idx][g_cameraLookAtZ];
 }
 
 static GetHouseIdxByID(houseid) {

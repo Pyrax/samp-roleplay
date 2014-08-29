@@ -40,6 +40,7 @@ public OnGameModeExit() {
 
 public OnPlayerConnect(playerid) {
     GetPlayerName(playerid, g_Player[playerid][g_name], MAX_PLAYER_NAME);
+    CreatePlayerCameraDummy(playerid);
     AuthenticatePlayer(playerid);
     return 1;
 }

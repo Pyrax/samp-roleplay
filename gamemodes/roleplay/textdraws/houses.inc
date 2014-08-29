@@ -23,6 +23,11 @@ hook OnPlayerConnect(playerid) {
     offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
 }
 
+hook OnPlayerDisconnect(playerid, reason) {
+    HidePlayerHouseOfferTD(playerid);
+    DestroyPlayerHouseOfferTD(playerid);
+}
+
 CreateHouseOfferTD() {
     offerListTextDraws[0] = TextDrawCreate(320.0, 353.0, "~n~~n~~n~");
     TextDrawAlignment(offerListTextDraws[0], 2);
@@ -352,7 +357,7 @@ DestroyPlayerHouseOfferTD(playerid) {
     Iter_Clear(houseOffersIterator[playerid]);
 }
 
-SetPlayerActiveHouseOffer(playerid, houseid) {
+SetPlayerActiveHouseOfferID(playerid, houseid) {
     new idx = 0;
     foreach(new i : houseOffersIterator[playerid]) {
         if(houseOffers[playerid][i][2] == houseid) {
@@ -360,6 +365,10 @@ SetPlayerActiveHouseOffer(playerid, houseid) {
             break;
         }
     }
+    SetPlayerLookAtHouse(playerid, houseOffers[playerid][idx][2]);
+}
+
+SetPlayerActiveHouseOffer(playerid, idx) {
     SetPlayerLookAtHouse(playerid, houseOffers[playerid][idx][2]);
 }
 
@@ -379,12 +388,19 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         DestroyPlayerHouseOfferTD(playerid);
         
         offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
-        SetCameraBehindPlayer(playerid);
+        
+        TogglePlayerSpectating(playerid, false);
+        SetPlayerVirtualWorld(playerid, VW_DEFAULT);
         return 1;
     }
     return 0;
 }
 
 hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
+    foreach(new i : houseOffersIterator[playerid]) {
+        if(playertextid == offerListPlayerTextDraws[playerid][i+5]) {
+            SetPlayerActiveHouseOffer(playerid, i);
+        }
+    }
     return 0;
 }
