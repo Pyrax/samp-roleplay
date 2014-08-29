@@ -15,9 +15,10 @@
 
 //-----------------------------------------------------
 
-#define BROKER_X    1546.2646484375
-#define BROKER_Y    -1097.6547851563
-#define BROKER_Z    25.0625
+#define BROKER_X            1546.2646484375
+#define BROKER_Y            -1097.6547851563
+#define BROKER_Z            25.0625
+#define BROKER_EXIT_ANGLE   270.0
 
 //-----------------------------------------------------
 
@@ -116,6 +117,11 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 EnterExitBlock(playerid) {
     SetPVarInt(playerid, "EnterExitBlock", 1);
     defer ResetEnterExitBlock(playerid);
+}
+
+SetPlayerToBroker(playerid) {
+    SetPlayerPos(playerid, BROKER_X, BROKER_Y, BROKER_Z);
+    SetPlayerFacingAngle(playerid, BROKER_EXIT_ANGLE);
 }
 
 timer ResetEnterExitBlock[5000](playerid) {

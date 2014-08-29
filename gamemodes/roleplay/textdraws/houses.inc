@@ -14,19 +14,7 @@ static PlayerText:offerListPlayerTextDraws[MAX_PLAYERS][10];
 static houseOffers[MAX_PLAYERS][5][3];
 static Iterator:houseOffersIterator[MAX_PLAYERS]<5>;
 
-hook OnGameModeInit() {
-    CreateHouseOfferTD();
-    Iter_Init(houseOffersIterator);
-}
-
-hook OnPlayerConnect(playerid) {
-    offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
-}
-
-hook OnPlayerDisconnect(playerid, reason) {
-    HidePlayerHouseOfferTD(playerid);
-    DestroyPlayerHouseOfferTD(playerid);
-}
+//-----------------------------------------------------
 
 CreateHouseOfferTD() {
     offerListTextDraws[0] = TextDrawCreate(320.0, 353.0, "~n~~n~~n~");
@@ -258,6 +246,7 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][9], 1);
 }
 
+// TODO: FIX
 PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
     new idx = Iter_Free(houseOffersIterator[playerid]);
     
@@ -300,6 +289,7 @@ PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
     }
 }
 
+// TODO: FIX
 ReversePushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
     new idx = Iter_Free(houseOffersIterator[playerid]);
     
@@ -372,6 +362,20 @@ SetPlayerActiveHouseOffer(playerid, idx) {
     SetPlayerLookAtHouse(playerid, houseOffers[playerid][idx][2]);
 }
 
+hook OnGameModeInit() {
+    CreateHouseOfferTD();
+    Iter_Init(houseOffersIterator);
+}
+
+hook OnPlayerConnect(playerid) {
+    offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+    HidePlayerHouseOfferTD(playerid);
+    DestroyPlayerHouseOfferTD(playerid);
+}
+
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
     if(clickedid == offerListTextDraws[2]) {
         // next page
@@ -387,8 +391,6 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         HidePlayerHouseOfferTD(playerid);
         DestroyPlayerHouseOfferTD(playerid);
         
-        offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
-        
         TogglePlayerSpectating(playerid, false);
         SetPlayerVirtualWorld(playerid, VW_DEFAULT);
         return 1;
@@ -403,4 +405,12 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
         }
     }
     return 0;
+}
+
+hook OnPlayerSpawn(playerid) {
+    if(offerListPlayerTextDraws[playerid][0] != PlayerText:INVALID_TEXT_DRAW) {
+        offerListPlayerTextDraws[playerid][0] = PlayerText:INVALID_TEXT_DRAW;
+        SetPlayerToBroker(playerid);
+    }
+    return 1;
 }
