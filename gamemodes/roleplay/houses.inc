@@ -442,8 +442,8 @@ SetPlayerLookAtHouse(playerid, houseid) {
     SetPlayerCameraPos(playerid, posArr{playerCamera[playerid][0]});
     SetPlayerCameraLookAt(playerid, posArr{playerCamera[playerid][1]});
     
-    InterpolateCameraPos(playerid, posArr{playerCamera[playerid][0]}, g_House[idx][g_cameraPosX], g_House[idx][g_cameraPosY], g_House[idx][g_cameraPosZ], 2000, CAMERA_CUT);
-    InterpolateCameraLookAt(playerid, posArr{playerCamera[playerid][1]}, g_House[idx][g_cameraLookAtX], g_House[idx][g_cameraLookAtY], g_House[idx][g_cameraLookAtZ], 2000, CAMERA_CUT);
+    InterpolateCameraPos(playerid, posArr{playerCamera[playerid][0]}, g_House[idx][g_cameraPosX], g_House[idx][g_cameraPosY], g_House[idx][g_cameraPosZ], 2000, CAMERA_MOVE);
+    InterpolateCameraLookAt(playerid, posArr{playerCamera[playerid][1]}, g_House[idx][g_cameraLookAtX], g_House[idx][g_cameraLookAtY], g_House[idx][g_cameraLookAtZ], 2000, CAMERA_MOVE);
     
     playerCamera[playerid][0][0] = g_House[idx][g_cameraPosX];
     playerCamera[playerid][0][1] = g_House[idx][g_cameraPosY];
