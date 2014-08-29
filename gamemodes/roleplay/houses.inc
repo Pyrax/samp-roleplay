@@ -126,7 +126,7 @@ function OnNextHouseOfferPage(playerid) {
         playerHouseOfferPage[playerid] += rows;
         
         if(rows < 5 || CountHousesForSale() <= playerHouseOfferPage[playerid]+1) {
-            // TODO: SetUnselectable right arrow
+            // TODO: Play error sound
         }
     }
     mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
@@ -158,8 +158,8 @@ function OnPrevHouseOfferPage(playerid) {
         
         playerHouseOfferPage[playerid] -= rows;
         
-        if(rows < 5 || playerHouseOfferPage[playerid] == 0) {
-            // TODO: SetUnselectable left arrow
+        if(rows < 5 || playerHouseOfferPage[playerid] <= 0) {
+            // TODO: Play error sound
         }
     }
     mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
