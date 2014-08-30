@@ -61,6 +61,9 @@ native WP_Hash(buffer[], len, const str[]);
 #define PICKUP_RANGE        1.5
 #define HOVER_COLOR_DEFAULT 0xFFFFFF55
 
+#define PlaySoundSuccess(%0,%1,%2,%3)     PlayerPlaySound(%0, 1083, %1, %2, %3)
+#define PlaySoundFail(%0,%1,%2,%3)        PlayerPlaySound(%0, 1084, %1, %2, %3)
+
 //-----------------------------------------------------
 
 new g_MysqlHandler;
