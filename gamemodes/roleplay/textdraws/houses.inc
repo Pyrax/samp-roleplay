@@ -13,6 +13,7 @@ static Text:offerListTextDraws[6];
 static PlayerText:offerListPlayerTextDraws[MAX_PLAYERS][10];
 static houseOffers[MAX_PLAYERS][5][3];
 static Iterator:houseOffersIterator[MAX_PLAYERS]<5>;
+static playerActiveHouseOffer[MAX_PLAYERS];
 
 //-----------------------------------------------------
 
@@ -347,18 +348,13 @@ DestroyPlayerHouseOfferTD(playerid) {
     Iter_Clear(houseOffersIterator[playerid]);
 }
 
-SetPlayerActiveHouseOfferID(playerid, houseid) {
-    new idx = 0;
-    foreach(new i : houseOffersIterator[playerid]) {
-        if(houseOffers[playerid][i][2] == houseid) {
-            idx = i;
-            break;
-        }
-    }
-    SetPlayerLookAtHouse(playerid, houseOffers[playerid][idx][2]);
-}
-
 SetPlayerActiveHouseOffer(playerid, idx) {
+    PlayerTextDrawColor(playerid, offerListPlayerTextDraws[playerid][playerActiveHouseOffer[playerid] + 5], -1);
+    PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][playerActiveHouseOffer[playerid] + 5]);
+    PlayerTextDrawColor(playerid, offerListPlayerTextDraws[playerid][idx + 5], -1 & HOVER_COLOR_DEFAULT);
+    PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][idx + 5]);
+    
+    playerActiveHouseOffer[playerid] = idx;
     SetPlayerLookAtHouse(playerid, houseOffers[playerid][idx][2]);
 }
 

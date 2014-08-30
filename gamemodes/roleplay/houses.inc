@@ -113,7 +113,7 @@ ShowPlayerHouseOffers(playerid) {
                 }
             }
             
-            SetPlayerActiveHouseOfferID(playerid, cache_get_field_content_int(0, "house_ID"));
+            SetPlayerActiveHouseOffer(playerid, 0);
             ShowPlayerHouseOfferTD(playerid);
         }
     }
