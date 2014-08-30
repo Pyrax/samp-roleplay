@@ -36,6 +36,9 @@ public OnGameModeInit() {
 }
 
 public OnGameModeExit() {
+    foreach(new i : Player) {
+        CancelSelectTextDraw(i);
+    }
     return 1;
 }
 
