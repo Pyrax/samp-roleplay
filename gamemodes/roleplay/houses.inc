@@ -140,7 +140,7 @@ function OnNextHouseOfferPage(playerid) {
         
         playerHouseOfferPage[playerid] += rows;
         
-        if(!rows || (CountHousesForSale() <= playerHouseOfferPage[playerid] + 5 && rows > 0 )) {
+        if(!rows || (CountHousesForSale() <= playerHouseOfferPage[playerid] + 5 && rows == 5 )) {
             PlaySoundFail(playerid, 0.0, 0.0, 0.0);
         } else {
             PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
