@@ -140,7 +140,7 @@ function OnNextHouseOfferPage(playerid) {
         
         playerHouseOfferPage[playerid] += rows;
         
-        if(rows < 5 || CountHousesForSale() <= playerHouseOfferPage[playerid]+1) {
+        if(!rows || (CountHousesForSale() <= playerHouseOfferPage[playerid] + 5 && rows > 0 )) {
             PlaySoundFail(playerid, 0.0, 0.0, 0.0);
         } else {
             PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
@@ -175,7 +175,7 @@ function OnPrevHouseOfferPage(playerid) {
         
         playerHouseOfferPage[playerid] -= rows;
         
-        if(rows < 5 || playerHouseOfferPage[playerid] <= 0) {
+        if(!rows || playerHouseOfferPage[playerid] <= 0) {
             PlaySoundFail(playerid, 0.0, 0.0, 0.0);
         } else {
             PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
