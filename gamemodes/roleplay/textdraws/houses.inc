@@ -11,7 +11,7 @@
 
 static Text:offerListTextDraws[6];
 static PlayerText:offerListPlayerTextDraws[MAX_PLAYERS][10];
-static houseOffers[MAX_PLAYERS][5][3];
+static houseOffers[MAX_PLAYERS][MAX_HOUSES_PER_PAGE][3];
 static Iterator:houseOffersIterator[MAX_PLAYERS]<5>;
 static playerActiveHouseOffer[MAX_PLAYERS];
 
@@ -247,27 +247,49 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][9], 1);
 }
 
-PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
-    new idx = Iter_Free(houseOffersIterator[playerid]);
+PushPlayerHouseOffers(playerid, moves) {
+    if(!moves) {
+        return;
+    }
     
-    if(idx == -1) {
-        // array is full, so use the last element of the array to insert the new house offer
-        idx = sizeof houseOffers[] - 1;
+    for(new i = 0; i < MAX_HOUSES_PER_PAGE - moves; i++) {
+        houseOffers[playerid][i][0] = houseOffers[playerid][i+1][0];
+        houseOffers[playerid][i][1] = houseOffers[playerid][i+1][1];
+        houseOffers[playerid][i][2] = houseOffers[playerid][i+1][2];
         
-        // then move all elements one up so that idx 5 becomes 4... and so on
-        for(new i = 0; i < idx; i++) {
-            houseOffers[playerid][i][0] = houseOffers[playerid][i+1][0];
-            houseOffers[playerid][i][1] = houseOffers[playerid][i+1][1];
-            houseOffers[playerid][i][2] = houseOffers[playerid][i+1][2];
-            
-            // update textdraws
-            new string[64];
-            format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(houseOffers[playerid][i][1]));
-            
-            PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][i], houseOffers[playerid][i][0]);
-            PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][i+5], string);
-            PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
-        }
+        // update textdraws
+        new string[64];
+        format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(houseOffers[playerid][i][1]));
+        
+        PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][i], houseOffers[playerid][i][0]);
+        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][i+5], string);
+        PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
+    }
+}
+
+PullPlayerHouseOffers(playerid, moves) {
+    if(!moves) {
+        return;
+    }
+    
+    for(new i = MAX_HOUSES_PER_PAGE - 1; i > MAX_HOUSES_PER_PAGE - moves ; i--) {
+        houseOffers[playerid][i][0] = houseOffers[playerid][i-1][0];
+        houseOffers[playerid][i][1] = houseOffers[playerid][i-1][1];
+        houseOffers[playerid][i][2] = houseOffers[playerid][i-1][2];
+        
+        // update textdraws
+        new string[64];
+        format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(houseOffers[playerid][i][1]));
+        
+        PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][i], houseOffers[playerid][i][0]);
+        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][i+5], string);
+        PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
+    }
+}
+
+SetPlayerHouseOffer(playerid, idx, houseid = -1, model = -1, price = -1) {
+    if(idx < 0 || idx > MAX_HOUSES_PER_PAGE - 1) {
+        return;
     }
     
     if(model == -1) {
@@ -275,6 +297,7 @@ PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
     } else {
         PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][idx], 5);
         PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][idx], model);
+        PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][idx]);
     }
     
     if(price == -1) {
@@ -292,48 +315,9 @@ PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
     houseOffers[playerid][idx][2] = houseid;
     
     Iter_Remove(houseOffersIterator[playerid], idx);
-    if(model != -1 && price != -1) {
+    if(model != -1 && price != -1 && houseid != -1) {
         Iter_Add(houseOffersIterator[playerid], idx);
     }
-}
-
-// TODO: FIX
-ReversePushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
-    new idx = Iter_Free(houseOffersIterator[playerid]);
-    
-    if(idx != -1) {
-        Iter_Add(houseOffersIterator[playerid], idx);
-    }
-    
-    for(new i = Iter_Last(houseOffersIterator[playerid]); i > 0; i--) {
-        houseOffers[playerid][i][0] = houseOffers[playerid][i-1][0];
-        houseOffers[playerid][i][1] = houseOffers[playerid][i-1][1];
-        houseOffers[playerid][i][2] = houseOffers[playerid][i-1][2];
-        
-        // update textdraws
-        new string[64];
-        format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(houseOffers[playerid][i][1]));
-        
-        PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][i], houseOffers[playerid][i][0]);
-        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][i+5], string);
-        PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
-    }
-    
-    if(model != -1) {
-        PlayerTextDrawFont(playerid, offerListPlayerTextDraws[playerid][0], 5);
-        PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][0], model);
-    }
-    
-    if(price != -1) {
-        new string[64];
-        format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(price));
-        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][5], string);
-        PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][5], 1);
-    }
-    
-    houseOffers[playerid][0][0] = model;
-    houseOffers[playerid][0][1] = price;
-    houseOffers[playerid][0][2] = houseid;
 }
 
 ShowPlayerHouseOfferTD(playerid) {

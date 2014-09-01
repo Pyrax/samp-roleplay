@@ -101,15 +101,20 @@ ShowPlayerHouseOffers(playerid) {
             // TODO: no houses being sold
         } else {
             for(new r = 0; r < rows; r++) {
-                PushPlayerHouseOffer(playerid,
+                //PushPlayerHouseOffer(playerid,
+                //    cache_get_field_content_int(r, "house_ID"),
+                //    cache_get_field_content_int(r, "model"),
+                //    cache_get_field_content_int(r, "price"));
+                SetPlayerHouseOffer(playerid, r,
                     cache_get_field_content_int(r, "house_ID"),
                     cache_get_field_content_int(r, "model"),
                     cache_get_field_content_int(r, "price"));
             }
             
-            if(rows < 5) {
-                for(new r = rows; r < 5; r++) {
-                    PushPlayerHouseOffer(playerid);
+            if(rows < MAX_HOUSES_PER_PAGE) {
+                for(new r = rows; r < MAX_HOUSES_PER_PAGE; r++) {
+                    //PushPlayerHouseOffer(playerid);
+                    SetPlayerHouseOffer(playerid, r);
                 }
             }
             
@@ -131,19 +136,20 @@ function OnNextHouseOfferPage(playerid) {
     inline QueryResponse() {
         new rows = cache_num_rows();
         
-        for(new r = 0; r < rows; r++) {
-            PushPlayerHouseOffer(playerid,
-                cache_get_field_content_int(r, "house_ID"),
-                cache_get_field_content_int(r, "model"),
-                cache_get_field_content_int(r, "price"));
-        }
-        
         playerHouseOfferPage[playerid] += rows;
         
         if(!rows || (CountHousesForSale() <= playerHouseOfferPage[playerid] + 5 && rows == 5 )) {
             PlaySoundFail(playerid, 0.0, 0.0, 0.0);
         } else {
             PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
+            PushPlayerHouseOffers(playerid, rows);
+        }
+        
+        for(new r = 0, i = MAX_HOUSES_PER_PAGE-1; r < rows; r++) {
+            SetPlayerHouseOffer(playerid, i - r,
+                cache_get_field_content_int(r, "house_ID"),
+                cache_get_field_content_int(r, "model"),
+                cache_get_field_content_int(r, "price"));
         }
     }
     mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
@@ -166,19 +172,21 @@ function OnPrevHouseOfferPage(playerid) {
     inline QueryResponse() {
         new rows = cache_num_rows();
         
-        for(new r = rows; r > 0; r--) {
-            ReversePushPlayerHouseOffer(playerid,
+        playerHouseOfferPage[playerid] -= rows;
+        
+        // TODO: check IF-condition
+        //if(!rows || playerHouseOfferPage[playerid] <= 0) {
+        //    PlaySoundFail(playerid, 0.0, 0.0, 0.0);
+        //} else {
+        //    PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
+            PullPlayerHouseOffers(playerid, rows);
+        //}
+        
+        for(new r = 0; r < rows; r++) {
+            SetPlayerHouseOffer(playerid, r,
                 cache_get_field_content_int(r, "house_ID"),
                 cache_get_field_content_int(r, "model"),
                 cache_get_field_content_int(r, "price"));
-        }
-        
-        playerHouseOfferPage[playerid] -= rows;
-        
-        if(!rows || playerHouseOfferPage[playerid] <= 0) {
-            PlaySoundFail(playerid, 0.0, 0.0, 0.0);
-        } else {
-            PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
         }
     }
     mysql_format(g_MysqlHandler, query, sizeof query, "SELECT t.ID AS house_ID, IF(sh.price IS NULL, t.value, sh.price) AS price, t.model_ID AS model \
