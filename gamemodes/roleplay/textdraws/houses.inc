@@ -247,7 +247,6 @@ CreateHouseOfferPlayerTD(playerid) {
     PlayerTextDrawSetSelectable(playerid, offerListPlayerTextDraws[playerid][9], 1);
 }
 
-// TODO: FIX
 PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
     new idx = Iter_Free(houseOffersIterator[playerid]);
     
@@ -260,6 +259,14 @@ PushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
             houseOffers[playerid][i][0] = houseOffers[playerid][i+1][0];
             houseOffers[playerid][i][1] = houseOffers[playerid][i+1][1];
             houseOffers[playerid][i][2] = houseOffers[playerid][i+1][2];
+            
+            // update textdraws
+            new string[64];
+            format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(houseOffers[playerid][i][1]));
+            
+            PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][i], houseOffers[playerid][i][0]);
+            PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][i+5], string);
+            PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
         }
     }
     
@@ -302,6 +309,14 @@ ReversePushPlayerHouseOffer(playerid, houseid = -1, model = -1, price = -1) {
         houseOffers[playerid][i][0] = houseOffers[playerid][i-1][0];
         houseOffers[playerid][i][1] = houseOffers[playerid][i-1][1];
         houseOffers[playerid][i][2] = houseOffers[playerid][i-1][2];
+        
+        // update textdraws
+        new string[64];
+        format(string, sizeof string, "~n~~n~~n~~n~~n~~n~~n~~n~~g~$%s", FormatNumber(houseOffers[playerid][i][1]));
+        
+        PlayerTextDrawSetPreviewModel(playerid, offerListPlayerTextDraws[playerid][i], houseOffers[playerid][i][0]);
+        PlayerTextDrawSetString(playerid, offerListPlayerTextDraws[playerid][i+5], string);
+        PlayerTextDrawShow(playerid, offerListPlayerTextDraws[playerid][i]);
     }
     
     if(model != -1) {
@@ -398,6 +413,7 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
     foreach(new i : houseOffersIterator[playerid]) {
         if(playertextid == offerListPlayerTextDraws[playerid][i+5]) {
             SetPlayerActiveHouseOffer(playerid, i);
+            PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
         }
     }
     return 0;

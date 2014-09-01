@@ -166,7 +166,7 @@ function OnPrevHouseOfferPage(playerid) {
     inline QueryResponse() {
         new rows = cache_num_rows();
         
-        for(new r = 0; r < rows; r++) {
+        for(new r = rows; r > 0; r--) {
             ReversePushPlayerHouseOffer(playerid,
                 cache_get_field_content_int(r, "house_ID"),
                 cache_get_field_content_int(r, "model"),
