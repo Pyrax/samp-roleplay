@@ -164,9 +164,14 @@ function OnNextHouseOfferPage(playerid) {
 function OnPrevHouseOfferPage(playerid) {
     new query[312];
     
-    if(playerHouseOfferPage[playerid] - 5 < 0) {
+    if(playerHouseOfferPage[playerid] == 0) {
+        PlaySoundFail(playerid, 0.0, 0.0, 0.0);
+        return;
+    }
+    
+    if(playerHouseOfferPage[playerid] - MAX_HOUSES_PER_PAGE < 0) {
         // prevent negative values on SQL limit
-        playerHouseOfferPage[playerid] = 5;
+        playerHouseOfferPage[playerid] = MAX_HOUSES_PER_PAGE;
     }
     
     inline QueryResponse() {
@@ -174,13 +179,12 @@ function OnPrevHouseOfferPage(playerid) {
         
         playerHouseOfferPage[playerid] -= rows;
         
-        // TODO: check IF-condition
-        //if(!rows || playerHouseOfferPage[playerid] <= 0) {
-        //    PlaySoundFail(playerid, 0.0, 0.0, 0.0);
-        //} else {
-        //    PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
+        if(!rows) {
+            PlaySoundFail(playerid, 0.0, 0.0, 0.0);
+        } else {
+            PlaySoundSuccess(playerid, 0.0, 0.0, 0.0);
             PullPlayerHouseOffers(playerid, rows);
-        //}
+        }
         
         for(new r = 0; r < rows; r++) {
             SetPlayerHouseOffer(playerid, r,
