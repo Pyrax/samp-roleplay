@@ -42,6 +42,7 @@ native WP_Hash(buffer[], len, const str[]);
 #include <YSI\y_dialog>
 #include <YSI\y_commands>
 #include <YSI\y_iterate>
+#include <YSI\y_colours>
 
 //-----------------------------------------------------
 
@@ -56,10 +57,11 @@ native WP_Hash(buffer[], len, const str[]);
 
 //-----------------------------------------------------
 
-#define PLAYER_NAME_LEN     MAX_PLAYER_NAME+1
-#define ENTER_PICKUP        19132
-#define PICKUP_RANGE        1.5
-#define HOVER_COLOR_DEFAULT 0xFFFFFF55
+#define PLAYER_NAME_LEN             MAX_PLAYER_NAME+1
+#define ENTER_PICKUP                19132
+#define PICKUP_RANGE                1.5
+#define D3_DRAW_DISTANCE_DEFAULT    20.0
+#define HOVER_COLOR_DEFAULT         0xFFFFFF55
 
 #define PlaySoundSuccess(%0,%1,%2,%3)     PlayerPlaySound(%0, 1083, %1, %2, %3)
 #define PlaySoundFail(%0,%1,%2,%3)        PlayerPlaySound(%0, 1084, %1, %2, %3)
