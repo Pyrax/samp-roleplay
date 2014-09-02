@@ -208,7 +208,7 @@ static ORM:CreateHouseORM(idx) {
     orm_addvar_int(ormid, g_House[idx][g_ID], "ID");
     orm_setkey(ormid, "ID");
     
-    orm_addvar_int(ormid, g_House[idx][g_interior_ID], "interior_ID");
+    orm_addvar_int(ormid, g_House[idx][g_interior_ID], "sampInteriorID");
     orm_addvar_int(ormid, g_House[idx][g_value], "value");
     orm_addvar_int(ormid, g_House[idx][g_locked], "locked");
     orm_addvar_float(ormid, g_House[idx][g_entranceX], "entranceX");
@@ -278,7 +278,7 @@ LoadHousesFromDatabase() {
         mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM house_owners", using inline HouseOwnersLoaded, "");
         
     }
-    mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM houses", using inline HousesLoaded, "");
+    mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM houses LEFT JOIN interiors ON houses.interior_ID = interiors.ID;", using inline HousesLoaded, "");
 }
 
 static InitHouses() {
