@@ -343,6 +343,17 @@ GetHouseOwnerByHouseID(houseid) {
     return g_HouseOwner[GetHouseOwnerIdxByHouseID(houseid)][g_owner_ID];
 }
 
+ShowBuyHouseDialog(playerid, houseid) {
+    inline DialogResponse(i_playerid, i_dialogid, i_response, i_listitem, string:i_inputtext[]) {
+        #pragma unused i_playerid, i_dialogid, i_listitem, i_inputtext
+        
+        if(i_response) {
+            BuyHouse(playerid, houseid);
+        }
+    }
+    Dialog_ShowCallback(playerid, using inline DialogResponse, DIALOG_STYLE_MSGBOX, "Haus kaufen", "Möchtest du das Haus wirklich kaufen?", "Ja", "Nein");
+}
+
 /**
  * BuyHouse(playerid, houseid)
  *
@@ -353,7 +364,7 @@ GetHouseOwnerByHouseID(houseid) {
  */
 BuyHouse(playerid, houseid) {
     new bool:houseForSale = false,
-        oldOwner = GetHouseOwnerIdxByHouseID(houseid);
+        oldOwner = GetHouseOwnerIdxByHouseID(houseid),
         price = -1,
         sellHouseIdx = -1;
     
@@ -392,8 +403,8 @@ BuyHouse(playerid, houseid) {
             }
             
             // change pickup-model of entrance
-            DestroyPickup(g_House[houseIdx][entrancePickup]);
-            g_House[houseIdx][entrancePickup] = CreatePickup(1272, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
+            DestroyPickup(g_House[houseIdx][g_entrancePickup]);
+            g_House[houseIdx][g_entrancePickup] = CreatePickup(1272, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
             
             // give the vendor his money for the sold house
             // first check if he is online
