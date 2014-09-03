@@ -1,0 +1,5 @@
+<YML>
+	<group name="all">
+		<entry name="HELLO_MESSAGE" style="client" colour="FF0000" />
+	</group>
+</YML>

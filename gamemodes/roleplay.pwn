@@ -43,6 +43,8 @@ native WP_Hash(buffer[], len, const str[]);
 #include <YSI\y_commands>
 #include <YSI\y_iterate>
 #include <YSI\y_colours>
+#include <YSI\y_text>
+#include <YSI\y_languages>
 
 //-----------------------------------------------------
 
@@ -73,6 +75,8 @@ native WP_Hash(buffer[], len, const str[]);
 
 new g_MysqlHandler;
 
+loadtext mode_text[all];
+
 //-----------------------------------------------------
 
 main() {
@@ -89,6 +93,8 @@ Bootstrap() {
     SendRconCommand("mapname " SERVER_MAP);
     SendRconCommand("weburl " SERVER_WEBSITE);
     SendRconCommand("password " SERVER_PASSWORD);
+    
+    Langs_Add("DE", "Deutsch");
     
     DisableInteriorEnterExits();
     UsePlayerPedAnims();

@@ -42,7 +42,6 @@ AuthenticatePlayer(playerid) {
         switch(orm_errno(g_Player[i_playerid][g_orm_ID])) {
             case ERROR_OK: {
                 // user exists, ask for password
-                #define DIALOG_LOGIN Dialog_ShowCallback(i_playerid, using inline LoginResponse, DIALOG_STYLE_PASSWORD, "Anmelden", "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
                 
                 inline LoginResponse(ii_playerid, ii_dialogid, ii_response, ii_listitem, string:ii_inputtext[]) {
                     #pragma unused ii_dialogid, ii_listitem
@@ -55,15 +54,13 @@ AuthenticatePlayer(playerid) {
                             orm_select(g_Player[ii_playerid][g_orm_ID], "OnPlayerLoggedIn", "d", ii_playerid);
                         } else {
                             // wrong password
-                            DIALOG_LOGIN
+                            Text_PasswordBox(i_playerid, using inline LoginResponse, $LOGIN_DIALOG_H, "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
                         }
                     } else {
                         // TODO: kick
                     }
                 }
-                DIALOG_LOGIN
-                
-                #undef DIALOG_LOGIN
+                Text_PasswordBox(i_playerid, using inline LoginResponse, $LOGIN_DIALOG_H, "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
             }
             case ERROR_NO_DATA: {
                 // user does not exist, ask to register
