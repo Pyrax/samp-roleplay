@@ -75,8 +75,6 @@ native WP_Hash(buffer[], len, const str[]);
 
 new g_MysqlHandler;
 
-loadtext mode_text[all];
-
 //-----------------------------------------------------
 
 main() {
@@ -94,6 +92,7 @@ Bootstrap() {
     SendRconCommand("weburl " SERVER_WEBSITE);
     SendRconCommand("password " SERVER_PASSWORD);
     
+    // y_languages
     Langs_Add("DE", "Deutsch");
     
     DisableInteriorEnterExits();

@@ -5,6 +5,10 @@
 
 //-----------------------------------------------------
 
+loadtext mode_text[players];
+
+//-----------------------------------------------------
+
 #define MIN_PW_LEN          6
 #define MAX_PW_LEN          32
 #define MAX_LOG_TRIES       3
@@ -54,13 +58,13 @@ AuthenticatePlayer(playerid) {
                             orm_select(g_Player[ii_playerid][g_orm_ID], "OnPlayerLoggedIn", "d", ii_playerid);
                         } else {
                             // wrong password
-                            Text_PasswordBox(i_playerid, using inline LoginResponse, $LOGIN_DIALOG_H, "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
+                            Text_PasswordBox(i_playerid, using inline LoginResponse, $LOGIN_DIALOG_H, "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden", "");
                         }
                     } else {
                         // TODO: kick
                     }
                 }
-                Text_PasswordBox(i_playerid, using inline LoginResponse, $LOGIN_DIALOG_H, "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden");
+                Text_PasswordBox(i_playerid, using inline LoginResponse, $LOGIN_DIALOG_H, "Herzlich Willkommen zurück!\nGib unten dein Passwort ein, um dich anzumelden.\n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.\nÄndere deinen Namen und komm zurück.]", "Anmelden", "");
             }
             case ERROR_NO_DATA: {
                 // user does not exist, ask to register
