@@ -95,6 +95,20 @@ Bootstrap() {
     // y_languages
     Langs_Add("DE", "Deutsch");
     
+    // implement new color codes in y_text through y_colours
+    SetColour("TEXT", X11_GHOST_WHITE);
+    SetColour("TEXT_HEADLINE", X11_CORNFLOWER_BLUE);
+    SetColour("TEXT_HIGHLIGHT", X11_DODGER_BLUE);
+    SetColour("TEXT_STRESS", X11_IVORY);
+    
+    SetColour("DIALOG_TEXT", X11_GHOST_WHITE);
+    SetColour("DIALOG_HEADLINE", X11_CORNFLOWER_BLUE);
+    SetColour("DIALOG_HIGHLIGHT", X11_DODGER_BLUE);
+    SetColour("DIALOG_STRESS", X11_IVORY);
+    
+    SetColour("ERROR", X11_FIREBRICK);
+    SetColour("SUCCESS", X11_GREEN_YELLOW);
+    
     DisableInteriorEnterExits();
     UsePlayerPedAnims();
     EnableStuntBonusForAll(0);

@@ -1,2 +1,7 @@
 [players]
-LOGIN_DIALOG_H = Anmelden
+DIALOG_LOGIN_H = {DIALOG_HEADLINE}Anmelden
+DIALOG_LOGIN_B_1 = {DIALOG_TEXT}Herzlich Willkommen zurück!
+DIALOG_LOGIN_B_2 = \nGib unten dein Passwort ein, um dich anzumelden.
+DIALOG_LOGIN_B_3 = \n[Falls du das erste Mal auf dem Server bist, ist dein Benutzername schon vergeben.
+DIALOG_LOGIN_B_4 = \n{DIALOG_STRESS}Ändere deinen Namen {DIALOG_TEXT}und komm zurück.]
+DIALOG_LOGIN_SUB = Anmelden

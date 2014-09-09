@@ -1,5 +1,7 @@
 <YML>
-	<group name="all">
-		<entry name="HELLO_MESSAGE" style="client" colour="FF0000" />
-	</group>
+    <group name="players">
+        <entry name="DIALOG_LOGIN_H" />
+        <entry name="DIALOG_LOGIN_B" />
+        <entry name="DIALOG_LOGIN_SUB" />
+    </group>
 </YML>
