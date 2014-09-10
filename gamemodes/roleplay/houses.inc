@@ -359,7 +359,7 @@ ShowBuyHouseDialog(playerid, houseid) {
             BuyHouse(playerid, houseid);
         }
     }
-    Dialog_ShowCallback(playerid, using inline DialogResponse, DIALOG_STYLE_MSGBOX, $DIALOG_BUY_HOUSE_H, $DIALOG_BUY_HOUSE_B, $DIALOG_BUY_HOUSE_SUB, $DIALOG_BUY_HOUSE_CAN);
+    Text_MessageBox(playerid, using inline DialogResponse, $DIALOG_BUY_HOUSE_H, $DIALOG_BUY_HOUSE_B, $DIALOG_BUY_HOUSE_SUB, $DIALOG_BUY_HOUSE_CAN);
 }
 
 /**
