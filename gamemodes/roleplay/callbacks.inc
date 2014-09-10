@@ -56,11 +56,13 @@ public OnPlayerConnect(playerid) {
 public OnPlayerDisconnect(playerid, reason) {
     SavePlayer(playerid);
     ResetPlayer(playerid);
+    HidePlayerDateTime(playerid);
     return 1;
 }
 
 public OnPlayerSpawn(playerid) {
     PreloadAnimations(playerid);
+    ShowPlayerDateTime(playerid);
     return 1;
 }
 
@@ -131,7 +133,7 @@ SetPlayerToBroker(playerid) {
 }
 
 task SyncWorldTime[1000]() {
-    UpdateTime();
+    UpdateDateTime();
 }
 
 // reset IsAtHouseEntrance-PVar if the player is not near the pickup anymore
