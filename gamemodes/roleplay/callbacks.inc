@@ -86,7 +86,7 @@ public OnPlayerPickUpPickup(playerid, pickupid) {
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if(KEY_PRESSED(KEY_SECONDARY_ATTACK)) {
-        if(!GetPVarType(playerid, "EnterExitBlock")) {
+        if(GetPVarInt(playerid, "EnterExitBlock") < gettime()) {
             if(GetPVarType(playerid, "IsAtBrokersPickup")) {
                 ShowPlayerHouseOffers(playerid);
                 
@@ -122,19 +122,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 EnterExitBlock(playerid) {
-    SetPVarInt(playerid, "EnterExitBlock", 1);
-    defer ResetEnterExitBlock(playerid);
+    SetPVarInt(playerid, "EnterExitBlock", gettime() + 5);
 }
 
 SetPlayerToBroker(playerid) {
     SetPlayerPos(playerid, BROKER_X, BROKER_Y, BROKER_Z);
     SetPlayerFacingAngle(playerid, BROKER_EXIT_ANGLE);
-}
-
-timer ResetEnterExitBlock[5000](playerid) {
-    if(GetPVarType(playerid, "EnterExitBlock")) {
-        DeletePVar(playerid, "EnterExitBlock");
-    }
 }
 
 task SyncWorldTime[1000]() {
