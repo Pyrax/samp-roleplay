@@ -63,6 +63,7 @@ native WP_Hash(buffer[], len, const str[]);
 #define ENTER_PICKUP                19132
 #define PICKUP_RANGE                1.5
 #define D3_DRAW_DISTANCE_DEFAULT    25.0
+#define D3_DRAW_DISTANCE_HOUSES     15.0
 #define HOVER_COLOR_DEFAULT         0xFFFFFF55
 
 #define PlaySoundSuccess(%0,%1,%2,%3)     PlayerPlaySound(%0, 1083, %1, %2, %3)
@@ -108,6 +109,8 @@ Bootstrap() {
     
     SetColour("ERROR", X11_FIREBRICK);
     SetColour("SUCCESS", X11_GREEN_YELLOW);
+    
+    #define COLOR_3DTEXT    X11_ALICE_BLUE
     
     DisableInteriorEnterExits();
     UsePlayerPedAnims();

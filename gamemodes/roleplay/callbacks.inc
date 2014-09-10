@@ -32,7 +32,7 @@ public OnGameModeInit() {
     LoadHousesFromDatabase();
     
     brokersPickup = CreatePickup(ENTER_PICKUP, 1, BROKER_X, BROKER_Y, BROKER_Z, VW_DEFAULT);
-    brokers3DText = Create3DTextLabel("Hausmakler", X11_ALICE_BLUE, BROKER_X, BROKER_Y, BROKER_Z, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
+    brokers3DText = Create3DTextLabel("Hausmakler", COLOR_3DTEXT, BROKER_X, BROKER_Y, BROKER_Z, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
     
     AddPlayerClass(0, 1554.1963, -1097.0775, 25.0625, 95.6683, 0, 0, 0, 0, 0, 0);
     return 1;

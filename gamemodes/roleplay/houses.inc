@@ -39,7 +39,8 @@ enum E_HOUSE {
     
     // non-stored variables
     g_entrancePickup,
-    g_exitPickup
+    g_exitPickup,
+    Text3D:g_textLabel
 }
 
 enum E_HOUSE_OWNER {
@@ -284,18 +285,21 @@ LoadHousesFromDatabase() {
 static InitHouses() {
     foreach(new i : g_HouseIterator) {
         if(g_House[i][g_ID] != 0) {
-            new pickupModel = 1273;
+            new houseOwnerIdx = GetHouseOwnerIdxByHouseID(g_House[i][g_ID]),
+                string[64];
             
-            // check if someone owns the house
-            foreach(new j : g_HouseOwnerIterator) {
-                if(g_HouseOwner[j][g_house_ID] == g_House[i][g_ID]) {
-                    pickupModel = 1272;
-                    break;
-                }
-            }
-            
-            g_House[i][g_entrancePickup] = CreatePickup(pickupModel, 1, g_House[i][g_entranceX], g_House[i][g_entranceY], g_House[i][g_entranceZ], VW_DEFAULT);
+            g_House[i][g_entrancePickup] = CreatePickup((houseOwnerIdx == -1) ? 1273 : 1272, 1, g_House[i][g_entranceX], g_House[i][g_entranceY], g_House[i][g_entranceZ], VW_DEFAULT);
             g_House[i][g_exitPickup] = CreatePickup(19133, 1, g_House[i][g_exitX], g_House[i][g_exitY], g_House[i][g_exitZ], VW_OFFSET_HOUSES + g_House[i][g_ID]);
+            
+            if(houseOwnerIdx != -1) {
+                mysql_format(g_MysqlHandler, string, sizeof string, "SELECT name FROM players WHERE id = %i", GetHouseOwnerByHouseID(g_House[i][g_ID]));
+                inline FetchHouseOwnerName() {
+                    cache_get_row(0, 0, string);
+                    format(string, sizeof string, "Besitzer: %s", string);
+                    g_House[i][g_textLabel] = Create3DTextLabel(string, COLOR_3DTEXT, g_House[i][g_entranceX], g_House[i][g_entranceY], g_House[i][g_entranceZ], D3_DRAW_DISTANCE_HOUSES, VW_DEFAULT, 1);
+                }
+                mysql_tquery_inline(g_MysqlHandler, string, using inline FetchHouseOwnerName, "");
+            }
         }
     }
 }
@@ -391,7 +395,8 @@ BuyHouse(playerid, houseid) {
             new idx = Iter_Free(g_HouseOwnerIterator),
                 houseIdx = GetHouseIdxByID(houseid),
                 ORM:ormid = CreateHouseOwnerORM(idx),
-                bool:vendorOnline = false;
+                bool:vendorOnline = false,
+                string[128];
             
             g_HouseOwner[idx][g_owner_ID] = GetPlayerID(playerid);
             g_HouseOwner[idx][g_house_ID] = houseid;
@@ -406,6 +411,10 @@ BuyHouse(playerid, houseid) {
             DestroyPickup(g_House[houseIdx][g_entrancePickup]);
             g_House[houseIdx][g_entrancePickup] = CreatePickup(1272, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
             
+            // change 3D TextLabel
+            format(string, sizeof string, "Besitzer: %s", g_Player[playerid][g_name]);
+            g_House[houseIdx][g_textLabel] = Create3DTextLabel(string, COLOR_3DTEXT, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], D3_DRAW_DISTANCE_HOUSES, VW_DEFAULT, 1);
+            
             // give the vendor his money for the sold house
             // first check if he is online
             foreach(new i : Player) {
@@ -417,9 +426,8 @@ BuyHouse(playerid, houseid) {
             }
             // if he is not online, directly change his money in the database
             if(!vendorOnline) {
-                new query[128];
-                mysql_format(g_MysqlHandler, query, sizeof query, "UPDATE players SET money = money - %d WHERE ID = %d", price, oldOwner);
-                mysql_tquery(g_MysqlHandler, query);
+                mysql_format(g_MysqlHandler, string, sizeof string, "UPDATE players SET money = money - %d WHERE ID = %d", price, oldOwner);
+                mysql_tquery(g_MysqlHandler, string);
             }
             
             return 1;
@@ -459,6 +467,9 @@ SellHouse(playerid, houseid, price) {
     // change pickup-model of entrance
     DestroyPickup(g_House[houseIdx][entrancePickup]);
     g_House[houseIdx][entrancePickup] = CreatePickup(1273, 1, g_House[houseIdx][g_entranceX], g_House[houseIdx][g_entranceY], g_House[houseIdx][g_entranceZ], VW_DEFAULT);
+    
+    // remove text label
+    Delete3DTextLabel(g_House[houseIdx][g_textLabel]);
     
     return 1;
 }
