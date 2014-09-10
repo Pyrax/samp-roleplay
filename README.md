@@ -19,7 +19,6 @@ Dies ist ein Roleplay-Gamemode für die Multiplayer-Modifikation "SA-MP" von "Gr
  - a_mysql
  - sscanf2
  - formatnumber
- 
  - YSI\y_hooks
  - YSI\y_timers
  - YSI\y_bit
