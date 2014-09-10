@@ -137,6 +137,10 @@ timer ResetEnterExitBlock[5000](playerid) {
     }
 }
 
+task SyncWorldTime[1000]() {
+    UpdateTime();
+}
+
 // reset IsAtHouseEntrance-PVar if the player is not near the pickup anymore
 ptask ResetAtHouseEntrance[1000](playerid) {
     if(GetPVarType(playerid, "IsAtHouseEntrance")) {
