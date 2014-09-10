@@ -4,4 +4,11 @@
         <entry name="DIALOG_LOGIN_B" />
         <entry name="DIALOG_LOGIN_SUB" />
     </group>
+    
+    <group name="houses">
+        <entry name="DIALOG_BUY_HOUSE_H" />
+        <entry name="DIALOG_BUY_HOUSE_B" />
+        <entry name="DIALOG_BUY_HOUSE_SUB" />
+        <entry name="DIALOG_BUY_HOUSE_CAN" />
+    </group>
 </YML>
