@@ -132,10 +132,6 @@ SetPlayerToBroker(playerid) {
     SetPlayerFacingAngle(playerid, BROKER_EXIT_ANGLE);
 }
 
-task SyncWorldTime[1000]() {
-    UpdateDateTime();
-}
-
 // reset IsAtHouseEntrance-PVar if the player is not near the pickup anymore
 ptask ResetAtHouseEntrance[1000](playerid) {
     if(GetPVarType(playerid, "IsAtHouseEntrance")) {

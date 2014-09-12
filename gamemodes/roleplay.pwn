@@ -144,6 +144,7 @@ MysqlConnect() {
 #include "./roleplay/players"
 #include "./roleplay/houses"
 #include "./roleplay/dateTime"
+#include "./roleplay/weather"
 
 // Load implementation of functions
 #include "./roleplay/callbacks"

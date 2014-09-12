@@ -19,3 +19,7 @@ UpdateDateTime() {
     getdate(t[0], t[1], t[2]);
     UpdateDate(t[0], t[1], t[2]);
 }
+
+task SyncWorldTime[1000]() {
+    UpdateDateTime();
+}
