@@ -1,1 +1,1 @@
-find ./pawno/include/YSI -type f
+find "../Grand Theft Auto - San Andreas/pawno/include/YSI" -type f
