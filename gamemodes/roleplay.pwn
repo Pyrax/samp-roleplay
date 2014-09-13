@@ -35,7 +35,7 @@ native WP_Hash(buffer[], len, const str[]);
 
 //-----------------------------------------------------
 
-#include <YSI\y_hooks>
+#include <YSI\YSI-Includes\y_hooks>
 #include <YSI\y_timers>
 #include <YSI\y_bit>
 #include <YSI\y_inline>
