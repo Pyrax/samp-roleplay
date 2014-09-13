@@ -6,5 +6,4 @@ before_script:
   - chmod +x tools/compile-gamemode.sh
   - chmod +x tools/pawnc/pawncc
 script:
-  - tools/debug.sh
   - tools/compile-gamemode.sh
