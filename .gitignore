@@ -1,0 +1,39 @@
+# Exclude every directory and files
+
+/*
+
+
+# Except configuration files, README and LICENSE
+
+!server.cfg
+!README.md
+!LICENSE.md
+
+
+# Except /gamemodes(/roleplay)
+
+!/gamemodes
+/gamemodes/*
+!/gamemodes/roleplay
+!/gamemodes/roleplay.pwn
+
+!/gamemodes/roleplay/textdraws
+
+# Except /pawno(/include)
+
+!/pawno
+/pawno/*
+!/pawno/include
+/pawno/include/*
+!/pawno/include/YSI
+
+
+# Except /plugins
+
+!/plugins
+/plugins/*
+!/plugins/mysql.so
+!/plugins/mysql.dll
+!/plugins/sscanf2.so
+!/plugins/sscanf2.dll
+!/plugins/Whirlpool.dll
