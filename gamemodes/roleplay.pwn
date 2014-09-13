@@ -35,16 +35,16 @@ native WP_Hash(buffer[], len, const str[]);
 
 //-----------------------------------------------------
 
-#include <YSI\YSI-Includes\y_hooks>
-#include <YSI\YSI-Includes\y_timers>
-#include <YSI\YSI-Includes\y_bit>
-#include <YSI\YSI-Includes\y_inline>
-#include <YSI\YSI-Includes\y_dialog>
-#include <YSI\YSI-Includes\y_commands>
-#include <YSI\YSI-Includes\y_iterate>
-#include <YSI\YSI-Includes\y_colours>
-#include <YSI\YSI-Includes\y_text>
-#include <YSI\YSI-Includes\y_languages>
+#include <YSI\y_hooks>
+#include <YSI\y_timers>
+#include <YSI\y_bit>
+#include <YSI\y_inline>
+#include <YSI\y_dialog>
+#include <YSI\y_commands>
+#include <YSI\y_iterate>
+#include <YSI\y_colours>
+#include <YSI\y_text>
+#include <YSI\y_languages>
 
 //-----------------------------------------------------
 
