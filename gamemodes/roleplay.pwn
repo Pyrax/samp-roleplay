@@ -4,7 +4,7 @@
 //-----------------------------------------------------
 
 #include <a_samp>
-//#include <a_mysql>
+#include <a_mysql>
 #include <sscanf2>
 #include <formatnumber>
 
