@@ -5,6 +5,8 @@ before_install:
 before_script:
   - chmod +x tools/compile-gamemode.sh
   - chmod +x tools/pawnc/pawncc
-  - cp -r pawno/include/YSI/YSI-Includes pawno/include/YSI
+  - ls pawno/include/YSI
+  - pwd
+  - ls
 script:
   - tools/compile-gamemode.sh
