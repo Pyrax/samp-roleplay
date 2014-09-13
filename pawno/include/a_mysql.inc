@@ -167,7 +167,7 @@ forward OnQueryError(errorid, error[], callback[], query[], connectionHandle);
 
 #if defined MYSQL_USE_YINLINE || defined E_CALLBACK_DATA
 	#if !defined E_CALLBACK_DATA
-		#include "YSI\y_inline"
+		#include "YSI\YSI-Includes\y_inline"
 	#endif
 	
 	static g_MySQL_InlineData[1000][E_CALLBACK_DATA];
