@@ -4,6 +4,7 @@
 //-----------------------------------------------------
 
 #include <a_samp>
+#include <YSI\y_hooks>
 #include <a_mysql>
 #include <sscanf2>
 #include <formatnumber>
@@ -35,7 +36,7 @@ native WP_Hash(buffer[], len, const str[]);
 
 //-----------------------------------------------------
 
-#include <YSI\y_hooks>
+//#include <YSI\y_hooks>
 #include <YSI\y_timers>
 #include <YSI\y_bit>
 #include <YSI\y_inline>
