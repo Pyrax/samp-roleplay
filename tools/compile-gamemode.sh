@@ -8,6 +8,6 @@ export LD_LIBRARY_PATH="tools/pawnc:$LD_LIBRARY_PATH"
 
 pushd $TOOLSPATH/.. > /dev/null
 
-tools/pawnc/pawncc gamemodes/roleplay.pwn -i./pawno/include -\; -\( -\Z
+sudo tools/pawnc/pawncc gamemodes/roleplay.pwn -i./pawno/include -\; -\( -\Z
 
 popd > /dev/null
