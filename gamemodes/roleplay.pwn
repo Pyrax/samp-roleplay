@@ -4,7 +4,6 @@
 //-----------------------------------------------------
 
 #include <a_samp>
-#include <YSI\y_hooks>
 #include <a_mysql>
 #include <sscanf2>
 #include <formatnumber>
