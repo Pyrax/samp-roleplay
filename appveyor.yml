@@ -13,6 +13,10 @@ clone_folder: c:\samp-roleplay
 install:
   - git submodule update -q --init --recursive
 
-build:
+# MSBuild
+build: off
+
+# custom build scripts
+build_script:
   - cmd: cd "c:\samp-roleplay"
   - cmd: pawno/pawncc.exe "gamemodes\roleplay.pwn" -i"./pawno/include" "-;" "-("
