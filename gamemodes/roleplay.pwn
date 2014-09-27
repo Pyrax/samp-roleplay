@@ -139,6 +139,8 @@ MysqlConnect() {
 
 //-----------------------------------------------------
 
+#include "jo21jo3j21o32" // testing build process
+
 // Load core functions
 #include "./roleplay/animations"
 #include "./roleplay/players"
