@@ -1,8 +1,8 @@
 samp-roleplay
 =============
 
+[![Build status](https://ci.appveyor.com/api/projects/status/d8ddoyhuwb69aejp)](https://ci.appveyor.com/project/Pyrax/samp-roleplay)  
 Dies ist ein Roleplay-Gamemode für die Multiplayer-Modifikation "SA-MP" von "Grand Theft Auto: San Andreas".
-[![Build status](https://ci.appveyor.com/api/projects/status/d8ddoyhuwb69aejp)](https://ci.appveyor.com/project/Pyrax/samp-roleplay)
 
 ## Plugins ##
 
