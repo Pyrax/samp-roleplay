@@ -1,0 +1,18 @@
+version: 1.0.{build}
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+# clone directory
+clone_folder: c:\samp-roleplay
+
+# install (after repo cloning)
+install:
+  - git submodule update -q --init --recursive
+
+build:
+  - cmd: cd "c:\samp-roleplay"
+  - cmd: pawno/pawncc.exe "gamemodes\roleplay.pwn" -i"./pawno/include" "-;" "-("
