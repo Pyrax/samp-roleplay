@@ -14,7 +14,7 @@ Dies ist ein Roleplay-Gamemode für die Multiplayer-Modifikation "SA-MP" von "Gr
   [2]: https://github.com/Y-Less/sscanf
   [3]: http://forum.sa-mp.com/showthread.php?t=65290
 
-## External includes ##
+## Externe Includes ##
 
  - a_samp
  - a_mysql
