@@ -53,8 +53,6 @@ UpdateWeather() {
             weatherDirectionTreshold[1] = (float(random(45) + 45) / 10);
         }
     }
-    
-    log();
 
     switch(floatround(currentWeather, floatround_round)) {
         case 0, 1, 2: {
@@ -77,34 +75,12 @@ UpdateWeather() {
     SetWeather(currentWeatherID);
 }
 
-static log() {
-    new File:logf = fopen("/weather.csv", io_append),
-        string[90];
-    
-    format(string, sizeof string, "%f,%d,%f,%f\n", currentWeather, weatherDirection, weatherDirectionTreshold[0], weatherDirectionTreshold[1]);
-    
-    if(logf) {
-        fwrite(logf, string);
-        fclose(logf);
-    }
-}
-
 hook OnGameModeInit() {
     currentWeather = 4.5;
     weatherDirection = 1;
     
     weatherDirectionTreshold[0] = (float(random(45)) / 10);
     weatherDirectionTreshold[1] = (float(random(45) + 45) / 10);
-    
-    new File:logf = fopen("/weather.csv", io_write),
-        string[128];
-    
-    format(string, sizeof string, "currentWeather,weatherDirection,weatherDirectionTreshold[0],weatherDirectionTreshold[1]\n");
-    
-    if(logf) {
-        fwrite(logf, string);
-        fclose(logf);
-    }
     
     UpdateWeather();
 }
