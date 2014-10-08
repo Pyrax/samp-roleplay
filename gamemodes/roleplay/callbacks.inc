@@ -20,10 +20,17 @@
 #define BROKER_Z            25.0625
 #define BROKER_EXIT_ANGLE   270.0
 
+#define LABOUR_OFFICE_X             0.0
+#define LABOUR_OFFICE_Y             0.0
+#define LABOUR_OFFICE_Z             0.0
+#define LABOUR_OFFICE_EXIT_ANGLE    180.0
+
 //-----------------------------------------------------
 
-static brokersPickup;
-static Text3D:brokers3DText;
+static  brokersPickup,
+        labourOfficePickup;
+static  Text3D:brokers3DText,
+        Text3D:labourOffice3DText;
 
 //-----------------------------------------------------
 
@@ -34,6 +41,9 @@ public OnGameModeInit() {
     brokersPickup = CreatePickup(ENTER_PICKUP, 1, BROKER_X, BROKER_Y, BROKER_Z, VW_DEFAULT);
     brokers3DText = Create3DTextLabel("Hausmakler", COLOR_3DTEXT, BROKER_X, BROKER_Y, BROKER_Z, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
     
+    labourOfficePickup = CreatePickup(ENTER_PICKUP, 1, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z, VW_DEFAULT);
+    labourOffice3DText = Create3DTextLabel("Arbeitsamt", COLOR_3DTEXT, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
+    
     AddPlayerClass(0, 1554.1963, -1097.0775, 25.0625, 95.6683, 0, 0, 0, 0, 0, 0);
     return 1;
 }
@@ -42,7 +52,9 @@ public OnGameModeExit() {
     foreach(new i : Player) {
         CancelSelectTextDraw(i);
     }
+    
     Delete3DTextLabel(brokers3DText);
+    Delete3DTextLabel(labourOffice3DText);
     return 1;
 }
 
@@ -72,6 +84,12 @@ public OnPlayerPickUpPickup(playerid, pickupid) {
         SetPVarInt(playerid, "IsAtBrokersPickup", 1);
         return 1;
     }
+        
+    // labour office
+    if(pickupid == labourOfficePickup) {
+        SetPVarInt(playerid, "IsAtLabourOfficePickup", 1);
+        return 1;
+    }
     
     // house entrance
     if(!GetPVarInt(playerid, "IsAtHouseEntrance")) {
@@ -91,6 +109,11 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if(GetPVarInt(playerid, "EnterExitBlock") < gettime()) {
             if(GetPVarType(playerid, "IsAtBrokersPickup")) {
                 ShowPlayerHouseOffers(playerid);
+                
+                EnterExitBlock(playerid);
+                return 0;
+            } else if(GetPVarType(playerid, "IsAtLabourOfficePickup")) {
+                ShowPlayerJobsMenu(playerid);
                 
                 EnterExitBlock(playerid);
                 return 0;
@@ -132,6 +155,11 @@ SetPlayerToBroker(playerid) {
     SetPlayerFacingAngle(playerid, BROKER_EXIT_ANGLE);
 }
 
+SetPlayerToLabourOffice(playerid) {
+    SetPlayerPos(playerid, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z);
+    SetPlayerFacingAngle(playerid, LABOUR_OFFICE_EXIT_ANGLE);
+}
+
 // reset IsAtHouseEntrance-PVar if the player is not near the pickup anymore
 ptask ResetAtHouseEntrance[1000](playerid) {
     if(GetPVarType(playerid, "IsAtHouseEntrance")) {
@@ -146,6 +174,14 @@ ptask ResetAtBrokersPickup[1000](playerid) {
     if(GetPVarType(playerid, "IsAtBrokersPickup")) {
         if(!IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, BROKER_X, BROKER_Y, BROKER_Z)) {
             DeletePVar(playerid, "IsAtBrokersPickup");
+        }
+    }
+}
+
+ptask ResetAtLabourOfficePickup[1000](playerid) {
+    if(GetPVarType(playerid, "IsAtLabourOfficePickup")) {
+        if(!IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z)) {
+            DeletePVar(playerid, "IsAtLabourOfficePickup");
         }
     }
 }
