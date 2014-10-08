@@ -21,6 +21,7 @@ enum E_PLAYER {
     g_password[129],
     g_name[PLAYER_NAME_LEN],
     g_money,
+    g_genderMale,
     
     // non-stored variables
     g_cameraDummy
@@ -39,6 +40,7 @@ AuthenticatePlayer(playerid) {
     orm_addvar_string(ormid, g_Player[playerid][g_password], 129, "password");
     orm_addvar_string(ormid, g_Player[playerid][g_name], PLAYER_NAME_LEN, "name");
     orm_addvar_int(ormid, g_Player[playerid][g_money], "money");
+    orm_addvar_int(ormid, g_Player[playerid][g_genderMale], "genderMale");
     
     orm_setkey(ormid, "name");
     
@@ -144,6 +146,11 @@ static DeletePVars(playerid) {
 
 IsPlayerLoggedIn(playerid) {
     return g_Player[playerid][g_ID] != 0;
+}
+
+IsMale(playerid) {
+    // convert g_genderMale to a boolean and return
+    return !!g_Player[playerid][g_genderMale];
 }
 
 GetPlayerID(playerid) {
