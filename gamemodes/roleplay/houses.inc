@@ -9,11 +9,11 @@ loadtext mode_text[houses];
 
 //-----------------------------------------------------
 
-#include "./roleplay/textdraws/houses"
+#define MAX_HOUSES 500
 
 //-----------------------------------------------------
 
-#define MAX_HOUSES 500
+#include "./roleplay/textdraws/houses"
 
 //-----------------------------------------------------
 
