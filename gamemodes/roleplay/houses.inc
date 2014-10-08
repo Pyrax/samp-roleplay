@@ -13,10 +13,6 @@ loadtext mode_text[houses];
 
 //-----------------------------------------------------
 
-#include "./roleplay/textdraws/houses"
-
-//-----------------------------------------------------
-
 enum E_HOUSE {
     ORM:g_orm_ID,
     g_ID,
@@ -72,6 +68,10 @@ new g_SellHouse[MAX_HOUSES][E_SELL_HOUSE],
 // playerHouseOfferPage is the idx of the first house which is shown in the list
 static playerHouseOfferPage[MAX_PLAYERS];
 static Float:playerCamera[MAX_PLAYERS][2][3];
+
+//-----------------------------------------------------
+
+#include "./roleplay/textdraws/houses"
 
 //-----------------------------------------------------
 
