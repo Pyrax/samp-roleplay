@@ -11,3 +11,10 @@ DIALOG_BUY_HOUSE_H = {DIALOG_HEADLINE}Haus kaufen
 DIALOG_BUY_HOUSE_B = {DIALOG_TEXT}Möchtest du das Haus wirklich kaufen?
 DIALOG_BUY_HOUSE_SUB = Ja
 DIALOG_BUY_HOUSE_CAN = Nein
+
+[jobs]
+DIALOG_ACCEPT_JOB_H = {DIALOG_HEADLINE}Job annehmen
+DIALOG_ACCEPT_JOB_B = {DIALOG_TEXT}Möchtest du den Job annehmen?
+DIALOG_ACCEPT_JOB_SUB = Ja
+DIALOG_ACCEPT_JOB_CAN = Nein
+JOB_ACCEPTED = {TEXT}Du stehst nun als {TEXT_STRESS}%s {TEXT}bei {TEXT_STRESS}%s {TEXT}unter Vertrag.

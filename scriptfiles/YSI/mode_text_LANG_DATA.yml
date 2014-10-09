@@ -11,4 +11,11 @@
         <entry name="DIALOG_BUY_HOUSE_SUB" />
         <entry name="DIALOG_BUY_HOUSE_CAN" />
     </group>
+    
+    <group name="jobs">
+        <entry name="DIALOG_ACCEPT_JOB_H" />
+        <entry name="DIALOG_ACCEPT_JOB_B" />
+        <entry name="DIALOG_ACCEPT_JOB_SUB" />
+        <entry name="DIALOG_ACCEPT_JOB_CAN" />
+    </group>
 </YML>

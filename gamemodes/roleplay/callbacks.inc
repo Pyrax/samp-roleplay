@@ -20,10 +20,10 @@
 #define BROKER_Z            25.0625
 #define BROKER_EXIT_ANGLE   270.0
 
-#define LABOUR_OFFICE_X             0.0
-#define LABOUR_OFFICE_Y             0.0
-#define LABOUR_OFFICE_Z             0.0
-#define LABOUR_OFFICE_EXIT_ANGLE    180.0
+#define LABOUR_OFFICE_X             1465.3000488281
+#define LABOUR_OFFICE_Y             -1051.0999755859
+#define LABOUR_OFFICE_Z             24.0
+#define LABOUR_OFFICE_EXIT_ANGLE    360.0-45.0
 
 //-----------------------------------------------------
 
@@ -113,7 +113,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
                 EnterExitBlock(playerid);
                 return 0;
             } else if(GetPVarType(playerid, "IsAtLabourOfficePickup")) {
-                ShowPlayerJobsMenu(playerid);
+                ShowPlayerJobMenu(playerid);
                 
                 EnterExitBlock(playerid);
                 return 0;
