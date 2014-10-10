@@ -366,6 +366,7 @@ HidePlayerHouseOfferTD(playerid) {
     }
     PlayerTextDrawHide(playerid, buyTextDraw[playerid]);
     PlayerTextDrawHide(playerid, buyTextDrawBox[playerid]);
+    CancelSelectTextDraw(playerid);
 }
 
 DestroyPlayerHouseOfferTD(playerid) {
@@ -421,7 +422,6 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         return 1;
     } else if(clickedid == Text:INVALID_TEXT_DRAW && offerListPlayerTextDraws[playerid][0] != PlayerText:INVALID_TEXT_DRAW) {
         // hide menu
-        CancelSelectTextDraw(playerid);
         HidePlayerHouseOfferTD(playerid);
         DestroyPlayerHouseOfferTD(playerid);
         

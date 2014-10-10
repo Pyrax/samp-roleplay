@@ -90,6 +90,7 @@ HidePlayerJobMenuTD(playerid) {
         TextDrawHideForPlayer(playerid, jobListTextDraws[i+1]);
         TextDrawHideForPlayer(playerid, jobListTextDraws[i+2]);
     }
+    CancelSelectTextDraw(playerid);
 }
 
 hook OnPlayerDisconnect(playerid, reason) {
@@ -107,7 +108,6 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
     
     if(clickedid == Text:INVALID_TEXT_DRAW && playerJobMenu[playerid]) {
         // hide menu
-        CancelSelectTextDraw(playerid);
         HidePlayerJobMenuTD(playerid);
         
         TogglePlayerSpectating(playerid, false);
