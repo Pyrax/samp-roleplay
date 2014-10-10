@@ -80,8 +80,8 @@ ShowPlayerJobMenuTD(playerid) {
         TextDrawShowForPlayer(playerid, jobListTextDraws[i]);
         TextDrawShowForPlayer(playerid, jobListTextDraws[i+1]);
         TextDrawShowForPlayer(playerid, jobListTextDraws[i+2]);
-        print("SHOWING TD");
     }
+    SelectTextDraw(playerid, HOVER_COLOR_DEFAULT);
 }
 
 HidePlayerJobMenuTD(playerid) {

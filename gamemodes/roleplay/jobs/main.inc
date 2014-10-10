@@ -118,8 +118,6 @@ LoadJobsFromDatabase() {
             // store data of the cache in the ORM
             orm_apply_cache(ormid, r);
             Iter_Add(g_JobIterator, r);
-            
-            printf("Job #%d loaded", r);
         }
         CreateJobMenuTD();
     }
