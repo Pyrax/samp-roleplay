@@ -46,7 +46,7 @@ CreateJobMenuTD() {
             TextDrawTextSize(jobListTextDraws[i], 26.0, 240.0);
             TextDrawSetSelectable(jobListTextDraws[i], 1);
 
-            jobListTextDraws[i+1] = TextDrawCreate(240.0, 146.0, "Company name");
+            jobListTextDraws[i+1] = TextDrawCreate(240.0, 146.0, g_Job[i][g_company]);
             TextDrawBackgroundColor(jobListTextDraws[i+1], 255);
             TextDrawFont(jobListTextDraws[i+1], 0);
             TextDrawLetterSize(jobListTextDraws[i+1], 0.50, 1.50);
@@ -66,7 +66,7 @@ CreateJobMenuTD() {
             TextDrawUseBox(jobListTextDraws[i+2], 1);
             TextDrawBoxColor(jobListTextDraws[i+2], -256);
             TextDrawTextSize(jobListTextDraws[i+2], 33.0, 33.0);
-            TextDrawSetPreviewModel(jobListTextDraws[i+2], 431);
+            TextDrawSetPreviewModel(jobListTextDraws[i+2], g_Job[i][g_previewModel]);
             TextDrawSetPreviewRot(jobListTextDraws[i+2], -12.0, 0.0, -17.0, 0.80);
             TextDrawSetPreviewVehCol(jobListTextDraws[i+2], 0, 0);
             

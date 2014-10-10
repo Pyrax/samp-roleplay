@@ -20,7 +20,7 @@ loadtext mode_text[jobs];
 enum E_JOBS {
     ORM:g_orm_ID,
     g_ID,
-    g_company,
+    g_company[64],
     Float:g_dutyPosX,
     Float:g_dutyPosY,
     Float:g_dutyPosZ,
