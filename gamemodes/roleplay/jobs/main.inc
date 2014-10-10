@@ -52,6 +52,8 @@ ShowPlayerJobMenu(playerid) {
     
     TogglePlayerSpectating(playerid, true);
     AttachCameraToPlayerObject(playerid, GetPlayerCameraDummy(playerid));
+    
+    // SETCAMERAPOS AND LOOKAT
 }
 
 ShowPlayerJobOfferDialog(playerid, idx) {
@@ -109,19 +111,17 @@ static ORM:CreateJobORM(idx) {
     return ormid;
 }
 
-static LoadJobsFromDatabase() {
+LoadJobsFromDatabase() {
     inline JobsLoaded() {
         for(new r = 0; r < cache_num_rows(); r++) {
             new ORM:ormid = CreateJobORM(Iter_Free(g_JobIterator));
             // store data of the cache in the ORM
             orm_apply_cache(ormid, r);
             Iter_Add(g_JobIterator, r);
+            
+            printf("Job #%d loaded", r);
         }
         CreateJobMenuTD();
     }
     mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM jobs", using inline JobsLoaded, "");
-}
-
-hook OnGameModeInit() {
-    LoadJobsFromDatabase();
 }
