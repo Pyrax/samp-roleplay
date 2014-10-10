@@ -62,6 +62,7 @@ ShowPlayerJobOfferDialog(playerid, idx) {
         
         if(i_response) {
             AddJobMember(playerid, g_Job[idx][g_ID]);
+            HidePlayerJobMenuTD(playerid);
         }
     }
     Text_MessageBox(playerid, using inline DialogResponse, $DIALOG_ACCEPT_JOB_H, $DIALOG_ACCEPT_JOB_B, $DIALOG_ACCEPT_JOB_SUB, $DIALOG_ACCEPT_JOB_CAN);
