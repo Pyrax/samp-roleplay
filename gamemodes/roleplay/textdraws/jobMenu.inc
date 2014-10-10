@@ -83,6 +83,7 @@ ShowPlayerJobMenuTD(playerid) {
         TextDrawShowForPlayer(playerid, jobListTextDraws[i+2]);
     }
     SelectTextDraw(playerid, HOVER_COLOR_DEFAULT);
+    playerJobMenu[playerid] = true;
 }
 
 HidePlayerJobMenuTD(playerid) {
@@ -121,7 +122,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
 hook OnPlayerSpawn(playerid) {
     if(playerJobMenu[playerid]) {
-        playerJobMenu[playerid] = !playerJobMenu[playerid];
+        playerJobMenu[playerid] = false;
         SetPlayerToLabourOffice(playerid);
     }
     return 1;
