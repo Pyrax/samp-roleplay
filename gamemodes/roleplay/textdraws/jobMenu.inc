@@ -76,6 +76,7 @@ CreateJobMenuTD() {
 }
 
 ShowPlayerJobMenuTD(playerid) {
+    TextDrawShowForPlayer(playerid, jobListHeader);
     foreach(new i : jobListIterator) {
         TextDrawShowForPlayer(playerid, jobListTextDraws[i]);
         TextDrawShowForPlayer(playerid, jobListTextDraws[i+1]);
@@ -85,6 +86,7 @@ ShowPlayerJobMenuTD(playerid) {
 }
 
 HidePlayerJobMenuTD(playerid) {
+    TextDrawHideForPlayer(playerid, jobListHeader);
     foreach(new i : jobListIterator) {
         TextDrawHideForPlayer(playerid, jobListTextDraws[i]);
         TextDrawHideForPlayer(playerid, jobListTextDraws[i+1]);
