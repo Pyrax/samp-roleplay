@@ -64,7 +64,7 @@ ShowPlayerJobOfferDialog(playerid, idx) {
             AddJobMember(playerid, g_Job[idx][g_ID]);
         }
     }
-    Text_MessageBox(playerid, using inline DialogResponse, $DIALOG_BUY_HOUSE_H, $DIALOG_BUY_HOUSE_B, $DIALOG_BUY_HOUSE_SUB, $DIALOG_BUY_HOUSE_CAN);
+    Text_MessageBox(playerid, using inline DialogResponse, $DIALOG_ACCEPT_JOB_H, $DIALOG_ACCEPT_JOB_B, $DIALOG_ACCEPT_JOB_SUB, $DIALOG_ACCEPT_JOB_CAN);
 }
 
 AddJobMember(playerid, jobid) {
