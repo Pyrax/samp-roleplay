@@ -77,7 +77,7 @@ native WP_Hash(buffer[], len, const str[]);
 //-----------------------------------------------------
 
 new g_MysqlHandler;
-new g_langGerman;
+new Language:g_langGerman;
 
 //-----------------------------------------------------
 
