@@ -98,6 +98,9 @@ Bootstrap() {
     // y_languages
     Langs_Add("DE", "Deutsch");
     
+    // y_groups
+    Group_SetGlobalCommandDefault(false);
+    
     // implement new color codes in y_text through y_colours
     SetColour("TEXT", X11_GHOST_WHITE);
     SetColour("TEXT_HEADLINE", X11_CORNFLOWER_BLUE);
