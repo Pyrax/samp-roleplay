@@ -57,7 +57,7 @@ AuthenticatePlayer(playerid) {
                         
                         if(!strcmp(hash, g_Player[ii_playerid][g_password])) {
                             orm_setkey(g_Player[ii_playerid][g_orm_ID], "ID");
-                            orm_select(g_Player[ii_playerid][g_orm_ID], "OnPlayerLoggedIn", "d", ii_playerid);
+                            orm_select(g_Player[ii_playerid][g_orm_ID], "OnPlayerLogin", "d", ii_playerid);
                         } else {
                             // wrong password
                             Text_PasswordBox(i_playerid, using inline LoginResponse, $DIALOG_LOGIN_H, $DIALOG_LOGIN_B, $DIALOG_LOGIN_SUB, "");
