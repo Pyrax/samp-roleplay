@@ -106,12 +106,12 @@ Bootstrap() {
     SetColour("TEXT", X11_GHOST_WHITE);
     SetColour("TEXT_HEADLINE", X11_CORNFLOWER_BLUE);
     SetColour("TEXT_HIGHLIGHT", X11_DODGER_BLUE);
-    SetColour("TEXT_STRESS", X11_IVORY);
+    SetColour("TEXT_STRESS", X11_KHAKI);
     
     SetColour("DIALOG_TEXT", X11_GHOST_WHITE);
     SetColour("DIALOG_HEADLINE", X11_CORNFLOWER_BLUE);
     SetColour("DIALOG_HIGHLIGHT", X11_DODGER_BLUE);
-    SetColour("DIALOG_STRESS", X11_IVORY);
+    SetColour("DIALOG_STRESS", X11_KHAKI);
     
     SetColour("ERROR", X11_FIREBRICK);
     SetColour("SUCCESS", X11_GREEN_YELLOW);

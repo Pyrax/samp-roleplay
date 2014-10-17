@@ -17,6 +17,6 @@
         <entry name="DIALOG_ACCEPT_JOB_B" />
         <entry name="DIALOG_ACCEPT_JOB_SUB" />
         <entry name="DIALOG_ACCEPT_JOB_CAN" />
-        <entry name="JOB_ACCEPTED" style="client" />
+        <entry name="JOB_ACCEPTED" style="client" color="TEXT" />
     </group>
 </YML>
