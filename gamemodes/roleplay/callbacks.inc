@@ -147,6 +147,7 @@ SetPlayerToBroker(playerid) {
 SetPlayerToLabourOffice(playerid) {
     SetPlayerPos(playerid, LABOUR_OFFICE_POS);
     SetPlayerFacingAngle(playerid, LABOUR_OFFICE_EXIT_ANGLE);
+    SetPlayerInterior(playerid, 0);
 }
 
 // reset IsAtHouseEntrance-PVar if the player is not near the pickup anymore
