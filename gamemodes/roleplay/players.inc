@@ -111,6 +111,11 @@ AuthenticatePlayer(playerid) {
     orm_select_inline(ormid, using inline CredentialsLoaded, "d", playerid);
 }
 
+hook OnGameModeInit() {
+    g_LoggedIn = Group_Create("Angemeldet");
+    return 1;
+}
+
 hook OnPlayerLogin(playerid) {
     Group_SetPlayer(g_LoggedIn, playerid, true);
     GivePlayerMoney(playerid, g_Player[playerid][g_money]);
