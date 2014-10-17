@@ -77,6 +77,7 @@ native WP_Hash(buffer[], len, const str[]);
 //-----------------------------------------------------
 
 new g_MysqlHandler;
+new g_langGerman;
 
 //-----------------------------------------------------
 
@@ -96,7 +97,7 @@ Bootstrap() {
     SendRconCommand("password " SERVER_PASSWORD);
     
     // y_languages
-    Langs_Add("DE", "Deutsch");
+    g_langGerman = Langs_Add("DE", "Deutsch");
     
     // y_groups
     Group_SetGlobalCommandDefault(false);

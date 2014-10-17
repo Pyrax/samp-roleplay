@@ -49,6 +49,7 @@ public OnGameModeExit() {
 
 public OnPlayerConnect(playerid) {
     GetPlayerName(playerid, g_Player[playerid][g_name], MAX_PLAYER_NAME);
+    Langs_SetPlayerLanguage(playerid, g_langGerman);
     CreatePlayerCameraDummy(playerid);
     AuthenticatePlayer(playerid);
     return 1;
@@ -136,6 +137,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 function OnPlayerLogin(playerid) {
+    return 1;
+}
+
+function OnPlayerLoadJob(playerid, newJobType) {
     return 1;
 }
 
