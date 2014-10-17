@@ -132,5 +132,14 @@ LoadJobsFromDatabase() {
 }
 
 hook OnPlayerLogin(playerid) {
-    // Load jobs
+    // Load a players job
+    new query[128];
+    
+    format(query, sizeof query, "SELECT j.jobType FROM job_members jm LEFT JOIN jobs j ON j.ID = jm.job_ID WHERE player_ID = '%d'", GetPlayerID(playerid));
+    inline JobMembersLoaded() {
+        if(cache_num_rows()) {
+            CallLocalFunction("OnPlayerLoadJob", "dd", playerid, cache_get_row_int(0, 0));
+        }
+    }
+    mysql_tquery_inline(g_MysqlHandler, query, using inline JobMembersLoaded, "");
 }
