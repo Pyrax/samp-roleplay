@@ -175,3 +175,7 @@ CreatePlayerCameraDummy(playerid) {
 GetPlayerCameraDummy(playerid) {
     return g_Player[playerid][g_cameraDummy];
 }
+
+DestroyPlayerCameraDummy(playerid) {
+    DestroyPlayerObject(playerid, g_Player[playerid][g_cameraDummy]);
+}

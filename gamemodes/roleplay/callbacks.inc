@@ -34,10 +34,6 @@ public OnGameModeInit() {
     labourOfficePickup = CreatePickup(ENTER_PICKUP, 1, LABOUR_OFFICE_POS, VW_DEFAULT);
     labourOffice3DText = Create3DTextLabel("Arbeitsamt", COLOR_3DTEXT, LABOUR_OFFICE_POS, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
     
-    for(new i = 0; i < MAX_PLAYERS; i++) {
-        CreatePlayerCameraDummy(i);
-    }
-    
     AddPlayerClass(0, 1554.1963, -1097.0775, 25.0625, 95.6683, 0, 0, 0, 0, 0, 0);
     return 1;
 }
@@ -55,6 +51,7 @@ public OnGameModeExit() {
 public OnPlayerConnect(playerid) {
     GetPlayerName(playerid, g_Player[playerid][g_name], MAX_PLAYER_NAME);
     Langs_SetPlayerLanguage(playerid, g_langGerman);
+    CreatePlayerCameraDummy(playerid);
     AuthenticatePlayer(playerid);
     return 1;
 }
@@ -63,6 +60,7 @@ public OnPlayerDisconnect(playerid, reason) {
     SavePlayer(playerid);
     ResetPlayer(playerid);
     HidePlayerDateTime(playerid);
+    DestroyPlayerCameraDummy(playerid);
     return 1;
 }
 
