@@ -53,7 +53,9 @@ ShowPlayerJobMenu(playerid) {
     TogglePlayerSpectating(playerid, true);
     AttachCameraToPlayerObject(playerid, GetPlayerCameraDummy(playerid));
     
-    // SETCAMERAPOS AND LOOKAT
+    SetPlayerInterior(playerid, 3);
+    SetPlayerCameraPos(playerid, LABOUR_CAMERA_POS);
+    SetPlayerCameraLookAt(playerid, LABOUR_CAMERA_LOOK);
 }
 
 ShowPlayerJobOfferDialog(playerid, idx) {
@@ -75,10 +77,10 @@ AddJobMember(playerid, jobid) {
     format(query, sizeof query, "INSERT INTO job_members (job_ID, player_ID, rank_ID) VALUES ('%d', '%d', (SELECT `ID` FROM job_ranks WHERE `job_ID` = '%d' ORDER BY `order` LIMIT 1))", jobid, pid, jobid);
     inline JobMemberAdded() {
         if(cache_affected_rows()) {
-            format(query, sizeof query, "SELECT jr.%sTitle AS jobTitle, j.company AS company FROM job_members jm \
+            format(query, sizeof query, "SELECT jr.%s AS jobTitle, j.company AS company FROM job_members jm \
                 LEFT JOIN job_ranks jr ON jr.ID = jm.rank_ID \
                 LEFT JOIN jobs j ON j.ID = jm.job_ID \
-                WHERE player_ID = '%d'", (IsMale(playerid)) ? ("male") : ("female"), pid);
+                WHERE player_ID = '%d'", (IsMale(playerid)) ? ("maleTitle") : ("femaleTitle"), pid);
             inline JobTitleFetched() {
                 new jobTitle[32],
                     company[64];

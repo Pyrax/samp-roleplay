@@ -141,6 +141,8 @@ MysqlConnect() {
 //-----------------------------------------------------
 
 // Load core functions
+#include "./roleplay/places"
+
 #include "./roleplay/animations"
 #include "./roleplay/players"
 #include "./roleplay/houses"

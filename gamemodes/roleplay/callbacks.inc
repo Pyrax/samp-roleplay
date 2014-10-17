@@ -15,18 +15,6 @@
 
 //-----------------------------------------------------
 
-#define BROKER_X            1546.2646484375
-#define BROKER_Y            -1097.6547851563
-#define BROKER_Z            25.0625
-#define BROKER_EXIT_ANGLE   270.0
-
-#define LABOUR_OFFICE_X             1465.3000488281
-#define LABOUR_OFFICE_Y             -1051.0999755859
-#define LABOUR_OFFICE_Z             24.0
-#define LABOUR_OFFICE_EXIT_ANGLE    360.0-45.0
-
-//-----------------------------------------------------
-
 static  brokersPickup,
         labourOfficePickup;
 static  Text3D:brokers3DText,
@@ -39,11 +27,11 @@ public OnGameModeInit() {
     LoadHousesFromDatabase();
     LoadJobsFromDatabase();
     
-    brokersPickup = CreatePickup(ENTER_PICKUP, 1, BROKER_X, BROKER_Y, BROKER_Z, VW_DEFAULT);
-    brokers3DText = Create3DTextLabel("Hausmakler", COLOR_3DTEXT, BROKER_X, BROKER_Y, BROKER_Z, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
+    brokersPickup = CreatePickup(ENTER_PICKUP, 1, BROKER_POS, VW_DEFAULT);
+    brokers3DText = Create3DTextLabel("Hausmakler", COLOR_3DTEXT, BROKER_POS, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
     
-    labourOfficePickup = CreatePickup(ENTER_PICKUP, 1, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z, VW_DEFAULT);
-    labourOffice3DText = Create3DTextLabel("Arbeitsamt", COLOR_3DTEXT, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
+    labourOfficePickup = CreatePickup(ENTER_PICKUP, 1, LABOUR_OFFICE_POS, VW_DEFAULT);
+    labourOffice3DText = Create3DTextLabel("Arbeitsamt", COLOR_3DTEXT, LABOUR_OFFICE_POS, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
     
     AddPlayerClass(0, 1554.1963, -1097.0775, 25.0625, 95.6683, 0, 0, 0, 0, 0, 0);
     return 1;
@@ -152,12 +140,12 @@ EnterExitBlock(playerid) {
 }
 
 SetPlayerToBroker(playerid) {
-    SetPlayerPos(playerid, BROKER_X, BROKER_Y, BROKER_Z);
+    SetPlayerPos(playerid, BROKER_POS);
     SetPlayerFacingAngle(playerid, BROKER_EXIT_ANGLE);
 }
 
 SetPlayerToLabourOffice(playerid) {
-    SetPlayerPos(playerid, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z);
+    SetPlayerPos(playerid, LABOUR_OFFICE_POS);
     SetPlayerFacingAngle(playerid, LABOUR_OFFICE_EXIT_ANGLE);
 }
 
@@ -173,7 +161,7 @@ ptask ResetAtHouseEntrance[1000](playerid) {
 
 ptask ResetAtBrokersPickup[1000](playerid) {
     if(GetPVarType(playerid, "IsAtBrokersPickup")) {
-        if(!IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, BROKER_X, BROKER_Y, BROKER_Z)) {
+        if(!IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, BROKER_POS)) {
             DeletePVar(playerid, "IsAtBrokersPickup");
         }
     }
@@ -181,7 +169,7 @@ ptask ResetAtBrokersPickup[1000](playerid) {
 
 ptask ResetAtLabourOfficePickup[1000](playerid) {
     if(GetPVarType(playerid, "IsAtLabourOfficePickup")) {
-        if(!IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, LABOUR_OFFICE_X, LABOUR_OFFICE_Y, LABOUR_OFFICE_Z)) {
+        if(!IsPlayerInRangeOfPoint(playerid, PICKUP_RANGE, LABOUR_OFFICE_POS)) {
             DeletePVar(playerid, "IsAtLabourOfficePickup");
         }
     }
