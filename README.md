@@ -30,3 +30,4 @@ Dies ist ein Roleplay-Gamemode für die Multiplayer-Modifikation "SA-MP" von "Gr
  - YSI/y_colours
  - YSI/y_text
  - YSI/y_languages
+ - YSI/y_groups

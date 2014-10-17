@@ -46,6 +46,7 @@ native WP_Hash(buffer[], len, const str[]);
 #include <YSI\y_colours>
 #include <YSI\y_text>
 #include <YSI\y_languages>
+#include <YSI\y_groups>
 
 //-----------------------------------------------------
 
