@@ -34,7 +34,7 @@ public OnGameModeInit() {
     labourOfficePickup = CreatePickup(ENTER_PICKUP, 1, LABOUR_OFFICE_POS, VW_DEFAULT);
     labourOffice3DText = Create3DTextLabel("Arbeitsamt", COLOR_3DTEXT, LABOUR_OFFICE_POS, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);
     
-    foreach(new i : Player) {
+    for(new i = 0; i < MAX_PLAYERS; i++) {
         CreatePlayerCameraDummy(i);
     }
     
