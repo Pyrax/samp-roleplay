@@ -64,20 +64,22 @@ ShowPlayerJobOfferDialog(playerid, idx) {
         #pragma unused i_playerid, i_dialogid, i_listitem, i_inputtext
         
         if(i_response) {
-            AddJobMember(playerid, g_Job[idx][g_ID]);
+            AddJobMember(playerid, g_Job[idx][g_ID], g_Job[idx][g_jobType]);
             HidePlayerJobMenuTD(playerid);
         }
     }
     Text_MessageBox(playerid, using inline DialogResponse, $DIALOG_ACCEPT_JOB_H, $DIALOG_ACCEPT_JOB_B, $DIALOG_ACCEPT_JOB_SUB, $DIALOG_ACCEPT_JOB_CAN);
 }
 
-AddJobMember(playerid, jobid) {
+AddJobMember(playerid, jobid, jobtype) {
     new query[256],
         pid = GetPlayerID(playerid);
     
     format(query, sizeof query, "INSERT INTO job_members (job_ID, player_ID, rank_ID) VALUES ('%d', '%d', (SELECT `ID` FROM job_ranks WHERE `job_ID` = '%d' ORDER BY `order` LIMIT 1))", jobid, pid, jobid);
     inline JobMemberAdded() {
         if(cache_affected_rows()) {
+            CallLocalFunction("OnPlayerLoadJob", "dd", playerid, jobtype);
+            
             format(query, sizeof query, "SELECT jr.%s AS jobTitle, j.company AS company FROM job_members jm \
                 LEFT JOIN job_ranks jr ON jr.ID = jm.rank_ID \
                 LEFT JOIN jobs j ON j.ID = jm.job_ID \
@@ -127,4 +129,8 @@ LoadJobsFromDatabase() {
         CreateJobMenuTD();
     }
     mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM jobs", using inline JobsLoaded, "");
+}
+
+hook OnPlayerLogin(playerid) {
+    // Load jobs
 }
