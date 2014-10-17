@@ -30,6 +30,7 @@ enum E_PLAYER {
 //-----------------------------------------------------
 
 new g_Player[MAX_PLAYERS][E_PLAYER];
+new Group:g_LoggedIn;
 
 //-----------------------------------------------------
 
@@ -111,6 +112,7 @@ AuthenticatePlayer(playerid) {
 }
 
 hook OnPlayerLogin(playerid) {
+    Group_SetPlayer(g_LoggedIn, playerid, true);
     GivePlayerMoney(playerid, g_Player[playerid][g_money]);
 }
 
@@ -149,7 +151,7 @@ static DeletePVars(playerid) {
 }
 
 IsPlayerLoggedIn(playerid) {
-    return g_Player[playerid][g_ID] != 0;
+    return Group_GetPlayer(g_LoggedIn, playerid);
 }
 
 IsMale(playerid) {
