@@ -26,7 +26,8 @@ enum E_JOBS {
     Float:g_dutyPosZ,
     g_dutyInteriorID,
     g_inviteOnly,
-    g_previewModel
+    g_previewModel,
+    g_jobType
 };
 
 //-----------------------------------------------------
@@ -111,6 +112,7 @@ static ORM:CreateJobORM(idx) {
     orm_addvar_int(ormid, g_Job[idx][g_dutyInteriorID], "dutyInteriorID");
     orm_addvar_int(ormid, g_Job[idx][g_inviteOnly], "inviteOnly");
     orm_addvar_int(ormid, g_Job[idx][g_previewModel], "previewModel");
+    orm_addvar_int(ormid, g_Job[idx][g_jobType], "jobType");
     return ormid;
 }
 
