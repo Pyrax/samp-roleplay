@@ -127,13 +127,17 @@ ResetPlayer(playerid) {
     g_Player[playerid] = blank;
     
     DeletePVars(playerid);
+    
+    // remove player from all groups
+    foreach(new Group:group : PlayerGroups(playerid)) {
+        Group_SetPlayer(group, playerid, false);
+    }
 }
 
 static DeletePVars(playerid) {
     new pVarUpperIndex = GetPVarsUpperIndex(playerid) + 1;
     
-    for(new i = 0; i != pVarUpperIndex; i++)
-    {
+    for(new i = 0; i != pVarUpperIndex; i++) {
         new pVarName[128];
         GetPVarNameAtIndex(playerid, i, pVarName, sizeof pVarName);
         
