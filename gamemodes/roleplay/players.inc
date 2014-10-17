@@ -110,7 +110,7 @@ AuthenticatePlayer(playerid) {
     orm_select_inline(ormid, using inline CredentialsLoaded, "d", playerid);
 }
 
-function OnPlayerLogin(playerid) {
+hook OnPlayerLogin(playerid) {
     GivePlayerMoney(playerid, g_Player[playerid][g_money]);
 }
 

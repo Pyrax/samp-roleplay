@@ -135,6 +135,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
+function OnPlayerLogin(playerid) {
+    return 1;
+}
+
 EnterExitBlock(playerid) {
     SetPVarInt(playerid, "EnterExitBlock", gettime() + 5);
 }
