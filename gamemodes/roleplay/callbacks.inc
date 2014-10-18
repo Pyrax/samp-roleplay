@@ -27,6 +27,7 @@ public OnGameModeInit() {
     
     LoadHousesFromDatabase();
     LoadJobsFromDatabase();
+    LoadJobVehiclesFromDatabase();
     
     brokersPickup = CreatePickup(ENTER_PICKUP, 1, BROKER_POS, VW_DEFAULT);
     brokers3DText = Create3DTextLabel("Hausmakler", COLOR_3DTEXT, BROKER_POS, D3_DRAW_DISTANCE_DEFAULT, VW_DEFAULT, 1);

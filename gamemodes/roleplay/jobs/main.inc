@@ -30,10 +30,25 @@ enum E_JOBS {
     g_jobType
 };
 
+enum E_JOB_VEHICLES {
+    ORM:g_orm_ID,
+    g_ID,
+    g_model_ID,
+    Float:g_spawnX,
+    Float:g_spawnY,
+    Float:g_spawnZ,
+    Float:g_spawnAngle,
+    g_color1,
+    g_color2,
+    g_job_ID
+};
+
 //-----------------------------------------------------
 
 new g_Job[MAX_JOBS][E_JOBS],
     Iterator:g_JobIterator<MAX_JOBS>;
+new g_JobVehicle[MAX_VEHICLES][E_JOB_VEHICLES],
+    Iterator:g_JobVehicleIterator<MAX_VEHICLES>;
 static bool:playerJobMenu[MAX_PLAYERS];
 
 //-----------------------------------------------------
@@ -129,6 +144,39 @@ LoadJobsFromDatabase() {
         CreateJobMenuTD();
     }
     mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM jobs", using inline JobsLoaded, "");
+}
+
+static ORM:CreateJobVehicleORM(idx) {
+    new ORM:ormid = g_JobVehicle[idx][g_orm_ID] = orm_create("job_vehicles");
+    
+    orm_addvar_int(ormid, g_JobVehicle[idx][g_ID], "ID");
+    orm_setkey(ormid, "ID");
+    
+    orm_addvar_int(ormid, g_JobVehicle[idx][g_model_ID], "model_ID");
+    orm_addvar_float(ormid, g_JobVehicle[idx][g_spawnX], "spawnX");
+    orm_addvar_float(ormid, g_JobVehicle[idx][g_spawnY], "spawnY");
+    orm_addvar_float(ormid, g_JobVehicle[idx][g_spawnZ], "spawnZ");
+    orm_addvar_float(ormid, g_JobVehicle[idx][g_spawnAngle], "spawnAngle");
+    orm_addvar_int(ormid, g_JobVehicle[idx][g_color1], "color1");
+    orm_addvar_int(ormid, g_JobVehicle[idx][g_color2], "color2");
+    orm_addvar_int(ormid, g_JobVehicle[idx][g_job_ID], "job_ID");
+    return ormid;
+}
+
+LoadJobVehiclesFromDatabase() {
+    inline JobVehiclesLoaded() {
+        for(new r = 0; r < cache_num_rows(); r++) {
+            new ORM:ormid = CreateJobVehicleORM(Iter_Free(g_JobVehicleIterator));
+            
+            // store data of the cache in the ORM
+            orm_apply_cache(ormid, r);
+            Iter_Add(g_JobVehicleIterator, r);
+            
+            // create vehicle
+            AddStaticVehicleEx(g_JobVehicle[r][g_model_ID], g_JobVehicle[r][g_spawnX], g_JobVehicle[r][g_spawnY], g_JobVehicle[r][g_spawnZ], g_JobVehicle[r][g_spawnAngle], g_JobVehicle[r][g_color1], g_JobVehicle[r][g_color2], -1);
+        }
+    }
+    mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM job_vehicles", using inline JobVehiclesLoaded, "");
 }
 
 hook OnPlayerLogin(playerid) {
