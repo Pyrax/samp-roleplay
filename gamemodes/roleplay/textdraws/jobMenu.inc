@@ -32,6 +32,7 @@ CreateJobMenuTD() {
     foreach(new i : g_JobIterator) {
         // only display jobs which do not need an invitation
         if(g_Job[i][g_ID] > 0 && !g_Job[i][g_inviteOnly]) {
+            // TOOD: fix coordinates for next textdraws (this currently uses absolute coordinates)
             jobListTextDraws[i] = TextDrawCreate(320.0, 141.0, "                                     >");
             TextDrawAlignment(jobListTextDraws[i], 2);
             TextDrawBackgroundColor(jobListTextDraws[i], 255);
