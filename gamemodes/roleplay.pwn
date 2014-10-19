@@ -153,8 +153,10 @@ MysqlConnect() {
 #include "./roleplay/houses"
 #include "./roleplay/dateTime"
 #include "./roleplay/weather"
+#include "./roleplay/vehicles"
 
 #include "./roleplay/jobs/main"
+#include "./roleplay/jobs/busdriver"
 
 // Load implementation of functions
 #include "./roleplay/callbacks"
