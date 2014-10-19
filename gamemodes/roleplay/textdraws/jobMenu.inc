@@ -29,49 +29,50 @@ CreateJobMenuTD() {
     TextDrawBoxColor(jobListHeader, 180);
     TextDrawTextSize(jobListHeader, 40.0, 240.0);
     
+    new counter = 0;
     foreach(new i : g_JobIterator) {
         // only display jobs which do not need an invitation
         if(g_Job[i][g_ID] > 0 && !g_Job[i][g_inviteOnly]) {
-            // TOOD: fix coordinates for next textdraws (this currently uses absolute coordinates)
-            jobListTextDraws[i] = TextDrawCreate(320.0, 141.0, "                                     >");
-            TextDrawAlignment(jobListTextDraws[i], 2);
-            TextDrawBackgroundColor(jobListTextDraws[i], 255);
-            TextDrawFont(jobListTextDraws[i], 2);
-            TextDrawLetterSize(jobListTextDraws[i], 0.50, 3.0);
-            TextDrawColor(jobListTextDraws[i], -1);
-            TextDrawSetOutline(jobListTextDraws[i], 0);
-            TextDrawSetProportional(jobListTextDraws[i], 1);
-            TextDrawSetShadow(jobListTextDraws[i], 1);
-            TextDrawUseBox(jobListTextDraws[i], 1);
-            TextDrawBoxColor(jobListTextDraws[i], 128);
-            TextDrawTextSize(jobListTextDraws[i], 26.0, 240.0);
-            TextDrawSetSelectable(jobListTextDraws[i], 1);
+            jobListTextDraws[counter*3] = TextDrawCreate(320.0, 141.0+counter*30.0, "                                     >");
+            TextDrawAlignment(jobListTextDraws[counter*3], 2);
+            TextDrawBackgroundColor(jobListTextDraws[counter*3], 255);
+            TextDrawFont(jobListTextDraws[counter*3], 2);
+            TextDrawLetterSize(jobListTextDraws[counter*3], 0.50, 3.0);
+            TextDrawColor(jobListTextDraws[counter*3], -1);
+            TextDrawSetOutline(jobListTextDraws[counter*3], 0);
+            TextDrawSetProportional(jobListTextDraws[counter*3], 1);
+            TextDrawSetShadow(jobListTextDraws[counter*3], 1);
+            TextDrawUseBox(jobListTextDraws[counter*3], 1);
+            TextDrawBoxColor(jobListTextDraws[counter*3], 128);
+            TextDrawTextSize(jobListTextDraws[counter*3], 26.0, 240.0);
+            TextDrawSetSelectable(jobListTextDraws[counter*3], 1);
 
-            jobListTextDraws[i+1] = TextDrawCreate(240.0, 146.0, g_Job[i][g_company]);
-            TextDrawBackgroundColor(jobListTextDraws[i+1], 255);
-            TextDrawFont(jobListTextDraws[i+1], 0);
-            TextDrawLetterSize(jobListTextDraws[i+1], 0.50, 1.50);
-            TextDrawColor(jobListTextDraws[i+1], -1);
-            TextDrawSetOutline(jobListTextDraws[i+1], 0);
-            TextDrawSetProportional(jobListTextDraws[i+1], 1);
-            TextDrawSetShadow(jobListTextDraws[i+1], 1);
-            TextDrawTextSize(jobListTextDraws[i+1], 440.0, 0.0);
+            jobListTextDraws[counter*3+1] = TextDrawCreate(240.0, 146.0+counter*30.0, g_Job[i][g_company]);
+            TextDrawBackgroundColor(jobListTextDraws[counter*3+1], 255);
+            TextDrawFont(jobListTextDraws[counter*3+1], 0);
+            TextDrawLetterSize(jobListTextDraws[counter*3+1], 0.50, 1.50);
+            TextDrawColor(jobListTextDraws[counter*3+1], -1);
+            TextDrawSetOutline(jobListTextDraws[counter*3+1], 0);
+            TextDrawSetProportional(jobListTextDraws[counter*3+1], 1);
+            TextDrawSetShadow(jobListTextDraws[counter*3+1], 1);
+            TextDrawTextSize(jobListTextDraws[counter*3+1], 440.0, 0.0);
 
-            jobListTextDraws[i+2] = TextDrawCreate(207.0, 136.0, "previewModel");
-            TextDrawBackgroundColor(jobListTextDraws[i+2], -256);
-            TextDrawFont(jobListTextDraws[i+2], 5);
-            TextDrawColor(jobListTextDraws[i+2], -1);
-            TextDrawSetOutline(jobListTextDraws[i+2], 0);
-            TextDrawSetProportional(jobListTextDraws[i+2], 1);
-            TextDrawSetShadow(jobListTextDraws[i+2], 1);
-            TextDrawUseBox(jobListTextDraws[i+2], 1);
-            TextDrawBoxColor(jobListTextDraws[i+2], -256);
-            TextDrawTextSize(jobListTextDraws[i+2], 33.0, 33.0);
-            TextDrawSetPreviewModel(jobListTextDraws[i+2], g_Job[i][g_previewModel]);
-            TextDrawSetPreviewRot(jobListTextDraws[i+2], -12.0, 0.0, -17.0, 0.80);
-            TextDrawSetPreviewVehCol(jobListTextDraws[i+2], 0, 0);
+            jobListTextDraws[counter*3+2] = TextDrawCreate(207.0, 136.0+counter*30.0, "previewModel");
+            TextDrawBackgroundColor(jobListTextDraws[counter*3+2], -256);
+            TextDrawFont(jobListTextDraws[counter*3+2], 5);
+            TextDrawColor(jobListTextDraws[counter*3+2], -1);
+            TextDrawSetOutline(jobListTextDraws[counter*3+2], 0);
+            TextDrawSetProportional(jobListTextDraws[counter*3+2], 1);
+            TextDrawSetShadow(jobListTextDraws[counter*3+2], 1);
+            TextDrawUseBox(jobListTextDraws[counter*3+2], 1);
+            TextDrawBoxColor(jobListTextDraws[counter*3+2], -256);
+            TextDrawTextSize(jobListTextDraws[counter*3+2], 33.0, 33.0);
+            TextDrawSetPreviewModel(jobListTextDraws[counter*3+2], g_Job[i][g_previewModel]);
+            TextDrawSetPreviewRot(jobListTextDraws[counter*3+2], -12.0, 0.0, -17.0, 0.80);
+            TextDrawSetPreviewVehCol(jobListTextDraws[counter*3+2], 0, 0);
             
             Iter_Add(jobListIterator, i);
+            counter++;
         }
     }
 }
@@ -79,9 +80,9 @@ CreateJobMenuTD() {
 ShowPlayerJobMenuTD(playerid) {
     TextDrawShowForPlayer(playerid, jobListHeader);
     foreach(new i : jobListIterator) {
-        TextDrawShowForPlayer(playerid, jobListTextDraws[i]);
-        TextDrawShowForPlayer(playerid, jobListTextDraws[i+1]);
-        TextDrawShowForPlayer(playerid, jobListTextDraws[i+2]);
+        TextDrawShowForPlayer(playerid, jobListTextDraws[i*3]);
+        TextDrawShowForPlayer(playerid, jobListTextDraws[i*3+1]);
+        TextDrawShowForPlayer(playerid, jobListTextDraws[i*3+2]);
     }
     SelectTextDraw(playerid, HOVER_COLOR_DEFAULT);
     playerJobMenu[playerid] = true;
@@ -90,9 +91,9 @@ ShowPlayerJobMenuTD(playerid) {
 HidePlayerJobMenuTD(playerid) {
     TextDrawHideForPlayer(playerid, jobListHeader);
     foreach(new i : jobListIterator) {
-        TextDrawHideForPlayer(playerid, jobListTextDraws[i]);
-        TextDrawHideForPlayer(playerid, jobListTextDraws[i+1]);
-        TextDrawHideForPlayer(playerid, jobListTextDraws[i+2]);
+        TextDrawHideForPlayer(playerid, jobListTextDraws[i*3]);
+        TextDrawHideForPlayer(playerid, jobListTextDraws[i*3+1]);
+        TextDrawHideForPlayer(playerid, jobListTextDraws[i*3+2]);
     }
     CancelSelectTextDraw(playerid);
 }
@@ -104,7 +105,7 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
     foreach(new i : jobListIterator) {
-        if(clickedid == jobListTextDraws[i]) {
+        if(clickedid == jobListTextDraws[i*3]) {
             ShowPlayerJobOfferDialog(playerid, i);
             return 1;
         }
