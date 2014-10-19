@@ -10,6 +10,7 @@ loadtext mode_text[jobs];
 //-----------------------------------------------------
 
 #define MAX_JOBS 10
+#define MAX_RANKS 20
 
 //-----------------------------------------------------
 
@@ -40,7 +41,16 @@ enum E_JOB_VEHICLES {
     Float:g_spawnAngle,
     g_color1,
     g_color2,
-    g_job_ID
+    g_job_ID,
+    g_rank_ID,
+    
+    // run-time data (non stored)
+    g_vehicle_ID,
+    g_rankOrder
+};
+
+enum E_PLAYER_JOB {
+    
 };
 
 //-----------------------------------------------------
@@ -49,6 +59,7 @@ new g_Job[MAX_JOBS][E_JOBS],
     Iterator:g_JobIterator<MAX_JOBS>;
 new g_JobVehicle[MAX_VEHICLES][E_JOB_VEHICLES],
     Iterator:g_JobVehicleIterator<MAX_VEHICLES>;
+new Group:g_JobGroup[MAX_JOBS][MAX_RANKS];
 static bool:playerJobMenu[MAX_PLAYERS];
 
 //-----------------------------------------------------
@@ -93,7 +104,11 @@ AddJobMember(playerid, jobid, jobtype) {
     format(query, sizeof query, "INSERT INTO job_members (job_ID, player_ID, rank_ID) VALUES ('%d', '%d', (SELECT `ID` FROM job_ranks WHERE `job_ID` = '%d' ORDER BY `order` LIMIT 1))", jobid, pid, jobid);
     inline JobMemberAdded() {
         if(cache_affected_rows()) {
-            CallLocalFunction("OnPlayerLoadJob", "dd", playerid, jobtype);
+            format(query, sizeof query, "SELECT jr.order FROM job_members jm LEFT JOIN job_ranks jr ON jr.ID = jm.rank_ID WHERE player_ID = '%d'", pid);
+            inline RankOrderFetched() {
+                CallLocalFunction("OnPlayerLoadJob", "dddd", playerid, jobid, jobtype, cache_get_row_int(0, 0));
+            }
+            mysql_tquery_inline(g_MysqlHandler, query, using inline RankOrderFetched, "");
             
             format(query, sizeof query, "SELECT jr.%s AS jobTitle, j.company AS company FROM job_members jm \
                 LEFT JOIN job_ranks jr ON jr.ID = jm.rank_ID \
@@ -142,6 +157,35 @@ LoadJobsFromDatabase() {
             Iter_Add(g_JobIterator, r);
         }
         CreateJobMenuTD();
+        
+        // create job groups
+        inline JobRanksLoaded() {
+            new groupName[100],
+                company[64],
+                maleTitle[32],
+                jobid,
+                oldJob,
+                rankOrder,
+                oldRank;
+            
+            for(new r = 0; r < cache_num_rows(); r++) {
+                cache_get_field_content(r, "company", company);
+                cache_get_field_content(r, "maleTitle", maleTitle);
+                jobid = cache_get_field_content_int(r, "ID")-1;
+                rankOrder = cache_get_field_content_int(r, "order");
+                
+                format(groupName, sizeof groupName, "%s: %s", company, maleTitle);
+                g_JobGroup[jobid][rankOrder] = Group_Create(groupName);
+                
+                if(oldJob == jobid) {
+                    Group_SetGroup(g_JobGroup[jobid][rankOrder], g_JobGroup[jobid][oldRank], true);
+                }
+                
+                oldJob = jobid;
+                oldRank = rankOrder;
+            }
+        }
+        mysql_tquery_inline(g_MysqlHandler, "SELECT j.company, jr.maleTitle, j.ID, jr.order FROM job_ranks jr LEFT JOIN jobs j ON j.ID = jr.job_ID ORDER BY j.ID, jr.order", using inline JobRanksLoaded, "");
     }
     mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM jobs", using inline JobsLoaded, "");
 }
@@ -160,6 +204,7 @@ static ORM:CreateJobVehicleORM(idx) {
     orm_addvar_int(ormid, g_JobVehicle[idx][g_color1], "color1");
     orm_addvar_int(ormid, g_JobVehicle[idx][g_color2], "color2");
     orm_addvar_int(ormid, g_JobVehicle[idx][g_job_ID], "job_ID");
+    orm_addvar_int(ormid, g_JobVehicle[idx][g_rank_ID], "rank_ID");
     return ormid;
 }
 
@@ -173,20 +218,29 @@ LoadJobVehiclesFromDatabase() {
             Iter_Add(g_JobVehicleIterator, r);
             
             // create vehicle
-            AddStaticVehicleEx(g_JobVehicle[r][g_model_ID], g_JobVehicle[r][g_spawnX], g_JobVehicle[r][g_spawnY], g_JobVehicle[r][g_spawnZ], g_JobVehicle[r][g_spawnAngle], g_JobVehicle[r][g_color1], g_JobVehicle[r][g_color2], -1);
+            g_JobVehicle[r][g_vehicle_ID] = AddStaticVehicleEx(g_JobVehicle[r][g_model_ID], g_JobVehicle[r][g_spawnX], g_JobVehicle[r][g_spawnY], g_JobVehicle[r][g_spawnZ], g_JobVehicle[r][g_spawnAngle], g_JobVehicle[r][g_color1], g_JobVehicle[r][g_color2], -1);
+            LockVehicle(g_JobVehicle[r][g_vehicle_ID]);
+            
+            // get required rank order
+            g_JobVehicle[r][g_rankOrder] = cache_get_field_content_int(r, "order");
         }
     }
-    mysql_tquery_inline(g_MysqlHandler, "SELECT * FROM job_vehicles", using inline JobVehiclesLoaded, "");
+    mysql_tquery_inline(g_MysqlHandler, "SELECT jv.ID, model_ID, spawnX, spawnY, spawnZ, spawnAngle, color1, color2, jv.job_ID, rank_ID, jr.order FROM samp.job_vehicles jv LEFT JOIN job_ranks jr ON jv.rank_ID = jr.ID", using inline JobVehiclesLoaded, "");
+}
+
+function OnPlayerLoadJob(playerid, jobid, newJobType, rankOrder) {
+    Group_SetPlayer(g_JobGroup[jobid-1][rankOrder], playerid, true);
+    return 1;
 }
 
 hook OnPlayerLogin(playerid) {
     // Load a players job
-    new query[128];
+    new query[200];
     
-    format(query, sizeof query, "SELECT j.jobType FROM job_members jm LEFT JOIN jobs j ON j.ID = jm.job_ID WHERE player_ID = '%d'", GetPlayerID(playerid));
+    format(query, sizeof query, "SELECT j.ID, j.jobType, jr.order FROM job_members jm LEFT JOIN jobs j ON j.ID = jm.job_ID LEFT JOIN job_ranks jr ON jr.ID = jm.rank_ID WHERE player_ID = '%d'", GetPlayerID(playerid));
     inline JobMembersLoaded() {
         if(cache_num_rows()) {
-            CallLocalFunction("OnPlayerLoadJob", "dd", playerid, cache_get_row_int(0, 0));
+            CallLocalFunction("OnPlayerLoadJob", "dddd", playerid, cache_get_row_int(0, 0), cache_get_row_int(0, 1), cache_get_row_int(0, 2));
         }
     }
     mysql_tquery_inline(g_MysqlHandler, query, using inline JobMembersLoaded, "");

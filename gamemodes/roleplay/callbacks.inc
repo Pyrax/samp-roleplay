@@ -139,11 +139,11 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
-function OnPlayerLogin(playerid) {
+public OnVehicleStreamIn(vehicleid, forplayerid) {
     return 1;
 }
 
-function OnPlayerLoadJob(playerid, newJobType) {
+function OnPlayerLogin(playerid) {
     return 1;
 }
 
