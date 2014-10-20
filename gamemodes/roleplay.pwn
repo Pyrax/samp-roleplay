@@ -64,6 +64,7 @@ native WP_Hash(buffer[], len, const str[]);
 #define PLAYER_NAME_LEN             MAX_PLAYER_NAME+1
 #define ENTER_PICKUP                19132
 #define PICKUP_RANGE                1.5
+#define OBJECT_DRAW_DISTANCE        300.0
 #define D3_DRAW_DISTANCE_DEFAULT    25.0
 #define D3_DRAW_DISTANCE_HOUSES     15.0
 #define HOVER_COLOR_DEFAULT         0xFFFFFF55
