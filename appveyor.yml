@@ -11,7 +11,7 @@ clone_folder: c:\samp-roleplay
 
 # install (after repo cloning)
 install:
-  - git submodule update -q --init --recursive
+  - git submodule update --init --recursive
 
 # custom build scripts
 build_script:
