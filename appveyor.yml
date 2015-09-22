@@ -1,5 +1,5 @@
 version: 1.1.0
-os: Windows Server 2008 R2
+os: Windows Server 2012 R2
 
 # branches to build
 branches:
@@ -16,4 +16,4 @@ install:
 
 # custom build scripts
 build_script:
-  - cmd: c:\samp-roleplay\pawno\pawncc.exe "gamemodes\roleplay.pwn" -o"gamemodes\roleplay.amx" -i"./pawno/include" "-;" "-("
+  - cmd: c:\samp-roleplay\pawno\pawncc.exe "gamemodes\roleplay.pwn" -o"gamemodes\roleplay.amx" -i".\pawno\include" "-;" "-("
